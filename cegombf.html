@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CEGOM BF — Centro Gineco Obstétrico Biofuncional</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #2A8FAB;
+  --primary-dk: #1E6B82;
+  --primary-lt: #EBF7FB;
+  --green: #5BBF8E;
+  --green-lt: #E8F7F0;
+  --rose: #C97A74;
+  --rose-lt: #FBF0EF;
+  --navy: #0C1F2E;
+  --navy-mid: #14304A;
+  --cream: #FAF7F2;
+  --off-white: #F2F7F9;
+  --white: #FFFFFF;
+  --text: #1A2E3B;
+  --text-mid: #4A6070;
+  --text-soft: #7A909E;
+  --border: #DDE8EE;
+  --gold: #BF9440;
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;color:var(--text);background:var(--white);overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+
+/* UTILITY */
+.container{max-width:1120px;margin:0 auto;}
+.fade-in{opacity:0;transform:translateY(22px);transition:opacity 0.65s ease,transform 0.65s ease;}
+.fade-in.visible{opacity:1;transform:none;}
+
+/* SECTION TAGS */
+.section-tag{display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--primary);margin-bottom:16px;}
+.section-tag::before{content:'';width:26px;height:2px;background:var(--green);display:block;}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(32px,3.6vw,44px);font-weight:700;color:var(--text);line-height:1.12;margin-bottom:18px;}
+.section-title span{color:var(--primary);}
+.section-title em{color:var(--primary);font-style:italic;}
+.section-sub{font-size:15.5px;color:var(--text-mid);line-height:1.72;max-width:560px;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;border-radius:9px;font-weight:600;transition:all 0.22s;font-size:14.5px;}
+.btn-primary{background:var(--primary);color:white;padding:13px 26px;box-shadow:0 4px 20px rgba(42,143,171,0.3);}
+.btn-primary:hover{background:var(--primary-dk);transform:translateY(-2px);box-shadow:0 8px 28px rgba(42,143,171,0.38);}
+.btn-outline{border:2px solid var(--primary);color:var(--primary);background:transparent;padding:11px 24px;}
+.btn-outline:hover{background:var(--primary-lt);transform:translateY(-2px);}
+.btn-wa{background:#25D366;color:white;padding:13px 26px;box-shadow:0 4px 20px rgba(37,211,102,0.22);}
+.btn-wa:hover{background:#1ab759;transform:translateY(-2px);}
+.btn-white{background:white;color:var(--primary);padding:11px 24px;font-size:14px;font-weight:700;}
+.btn-white:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,0.12);}
+
+/* ── NAV ─────────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:68px;display:flex;align-items:center;
+  padding:0 48px;justify-content:space-between;
+  background:rgba(255,255,255,0.97);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  transition:box-shadow 0.3s;
+}
+nav.scrolled{box-shadow:0 4px 24px rgba(12,31,46,0.09);}
+.nav-logo{display:flex;align-items:center;gap:11px;text-decoration:none;}
+.nav-logo-mark{
+  width:38px;height:38px;border-radius:10px;
+  background:linear-gradient(135deg,var(--primary),var(--green));
+  display:flex;align-items:center;justify-content:center;
+}
+.nav-logo-mark svg{width:20px;height:20px;fill:white;}
+.nav-logo-text{display:flex;flex-direction:column;}
+.nav-logo-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--text);line-height:1.15;}
+.nav-logo-sub{font-size:9px;color:var(--text-soft);letter-spacing:1.3px;text-transform:uppercase;}
+.nav-links{display:flex;gap:28px;align-items:center;}
+.nav-links a{font-size:13.5px;font-weight:500;color:var(--text-mid);text-decoration:none;transition:color 0.2s;}
+.nav-links a:hover{color:var(--primary);}
+.nav-cta{background:var(--primary)!important;color:white!important;padding:9px 20px!important;border-radius:8px;font-weight:600!important;font-size:13px!important;transition:background 0.2s,transform 0.15s!important;}
+.nav-cta:hover{background:var(--primary-dk)!important;transform:translateY(-1px);}
+.nav-mobile-btn{display:none;background:none;border:none;cursor:pointer;padding:4px;}
+.nav-mobile-btn svg{width:24px;height:24px;stroke:var(--text);}
+
+/* ── HERO ─────────────────────────────────────────── */
+.hero{
+  min-height:100vh;
+  display:grid;grid-template-columns:58% 42%;
+  background:var(--cream);
+  padding-top:68px;
+  position:relative;overflow:hidden;
+}
+.hero-blob1{
+  position:absolute;top:-8%;right:-4%;
+  width:52vw;height:52vw;max-width:680px;max-height:680px;
+  background:radial-gradient(ellipse at 55% 40%,rgba(91,191,142,0.11) 0%,rgba(42,143,171,0.07) 55%,transparent 75%);
+  border-radius:42% 58% 65% 35%/38% 52% 62% 48%;
+  pointer-events:none;
+}
+.hero-blob2{
+  position:absolute;bottom:-15%;left:-4%;
+  width:36vw;height:36vw;max-width:460px;max-height:460px;
+  background:radial-gradient(ellipse,rgba(201,122,116,0.06) 0%,transparent 70%);
+  border-radius:60% 40% 28% 72%/60% 30% 70% 40%;
+  pointer-events:none;
+}
+.hero-left{
+  display:flex;align-items:center;
+  padding:88px 48px 88px 80px;
+  position:relative;z-index:1;
+}
+.hero-right{
+  position:relative;z-index:1;
+  display:flex;align-items:center;justify-content:center;
+  padding:80px 72px 80px 16px;
+}
+
+.hero-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--green-lt);border:1px solid rgba(91,191,142,0.35);
+  color:#2a7a52;font-size:11.5px;font-weight:600;
+  letter-spacing:1.4px;text-transform:uppercase;
+  padding:7px 16px;border-radius:30px;margin-bottom:28px;
+}
+.hero-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;}
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(40px,4.2vw,60px);
+  font-weight:700;line-height:1.07;color:var(--text);
+  margin-bottom:22px;letter-spacing:-0.5px;
+}
+.hero h1 em{font-style:italic;color:var(--primary);}
+.hero-sub{font-size:16.5px;color:var(--text-mid);line-height:1.76;margin-bottom:36px;font-weight:300;max-width:420px;}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:44px;}
+.hero-chips{display:flex;gap:10px;flex-wrap:wrap;}
+.chip{
+  display:inline-flex;align-items:center;gap:7px;
+  background:white;border:1px solid var(--border);
+  border-radius:30px;padding:7px 14px;
+  font-size:12.5px;color:var(--text-mid);
+}
+.chip svg{width:13px;height:13px;stroke:var(--primary);}
+
+/* Hero visual */
+.hero-visual{position:relative;width:100%;max-width:440px;aspect-ratio:1;}
+.hero-circle{
+  width:100%;height:100%;border-radius:50%;
+  background:linear-gradient(145deg,#1E7A9A 0%,var(--primary) 40%,#3aab80 100%);
+  position:relative;overflow:hidden;
+  box-shadow:0 28px 80px rgba(42,143,171,0.28);
+}
+.hero-circle-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+.hero-circle-pattern{
+  position:absolute;inset:0;
+  background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.12) 0%,transparent 50%),
+             radial-gradient(circle at 70% 70%,rgba(0,0,0,0.08) 0%,transparent 50%);
+}
+.hero-illus{width:60%;height:60%;position:relative;z-index:1;}
+.hero-badge-float{
+  position:absolute;background:white;
+  border-radius:14px;padding:14px 18px;
+  box-shadow:0 10px 36px rgba(12,31,46,0.15);
+  display:flex;align-items:center;gap:10px;
+}
+.hero-badge-float.top-left{top:8%;left:-14%;}
+.hero-badge-float.bot-right{bottom:10%;right:-10%;}
+.badge-icon{
+  width:38px;height:38px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.badge-icon.green{background:var(--green-lt);}
+.badge-icon.teal{background:var(--primary-lt);}
+.badge-icon svg{width:20px;height:20px;}
+.badge-num{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--text);line-height:1;}
+.badge-lbl{font-size:10px;color:var(--text-soft);text-transform:uppercase;letter-spacing:0.9px;margin-top:2px;}
+
+/* ── TRUST STRIP ──────────────────────────────────── */
+.trust-strip{background:var(--navy);padding:56px 48px;}
+.trust-strip .container{display:grid;grid-template-columns:repeat(4,1fr);gap:0;}
+.trust-item{
+  text-align:center;padding:28px 20px;
+  border-right:1px solid rgba(255,255,255,0.07);
+}
+.trust-item:last-child{border-right:none;}
+.trust-num{font-family:'Playfair Display',serif;font-size:50px;font-weight:700;line-height:1;color:var(--primary);margin-bottom:8px;}
+.trust-label{font-size:12px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1.2px;line-height:1.5;}
+
+/* ── ABOUT ─────────────────────────────────────────── */
+.about{padding:104px 48px;background:var(--white);}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+.about-text{}
+.about-body p{font-size:15.5px;color:var(--text-mid);line-height:1.82;margin-bottom:14px;}
+.pillars{display:flex;flex-direction:column;gap:12px;margin-top:28px;}
+.pillar{
+  display:flex;align-items:flex-start;gap:14px;
+  background:var(--off-white);border:1px solid var(--border);
+  border-radius:12px;padding:16px 20px;
+}
+.pillar-icon{
+  width:40px;height:40px;border-radius:10px;
+  background:linear-gradient(135deg,var(--primary),var(--green));
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.pillar-icon svg{width:20px;height:20px;fill:white;}
+.pillar-body h4{font-size:13.5px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.pillar-body p{font-size:12.5px;color:var(--text-soft);line-height:1.5;margin:0;}
+.about-card-wrap{position:relative;}
+.about-card{
+  background:linear-gradient(145deg,var(--navy),var(--navy-mid));
+  border-radius:28px;padding:48px 40px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.about-card::before{
+  content:'';position:absolute;top:-50px;right:-50px;
+  width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(42,143,171,0.22) 0%,transparent 70%);
+}
+.about-card::after{
+  content:'';position:absolute;bottom:-60px;left:-40px;
+  width:240px;height:240px;border-radius:50%;
+  background:radial-gradient(circle,rgba(91,191,142,0.14) 0%,transparent 70%);
+}
+.about-card-icon{
+  width:80px;height:80px;border-radius:22px;
+  background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 24px;position:relative;z-index:1;
+}
+.about-card-icon svg{width:40px;height:40px;}
+.about-card h3{font-family:'Playfair Display',serif;font-size:24px;color:white;margin-bottom:14px;position:relative;z-index:1;}
+.about-card p{font-size:14px;color:rgba(255,255,255,0.6);line-height:1.72;position:relative;z-index:1;}
+.about-card-badge{
+  display:inline-block;background:var(--primary);color:white;
+  font-size:11.5px;font-weight:600;padding:7px 20px;
+  border-radius:20px;margin-top:22px;position:relative;z-index:1;
+}
+.about-float{
+  position:absolute;top:-18px;right:-18px;
+  background:var(--green-lt);border:2px solid rgba(91,191,142,0.4);
+  border-radius:14px;padding:14px 18px;text-align:center;
+  box-shadow:0 8px 24px rgba(91,191,142,0.2);
+}
+.about-float-num{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:#2a7a52;line-height:1;}
+.about-float-lbl{font-size:10px;color:#4a9a6a;text-transform:uppercase;letter-spacing:1px;}
+
+/* ── SERVICES ──────────────────────────────────────── */
+.services{padding:104px 48px;background:var(--cream);position:relative;}
+.services-head{text-align:center;margin-bottom:56px;}
+.services-head .section-tag{justify-content:center;}
+.services-head .section-sub{margin:0 auto;}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1120px;margin:0 auto;}
+.service-card{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:16px;padding:28px;
+  position:relative;overflow:hidden;
+  transition:transform 0.25s,box-shadow 0.25s;
+}
+.service-card:hover{transform:translateY(-5px);box-shadow:0 14px 44px rgba(42,143,171,0.13);}
+.service-card::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--primary),var(--green));
+  transform:scaleX(0);transform-origin:left;transition:transform 0.3s;
+}
+.service-card:hover::after{transform:scaleX(1);}
+.service-icon-wrap{
+  width:52px;height:52px;border-radius:14px;
+  background:var(--primary-lt);display:flex;align-items:center;
+  justify-content:center;margin-bottom:18px;
+}
+.service-icon-wrap.green{background:var(--green-lt);}
+.service-icon-wrap.rose{background:var(--rose-lt);}
+.service-icon-wrap svg{width:26px;height:26px;}
+.service-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--text);margin-bottom:8px;}
+.service-desc{font-size:13px;color:var(--text-soft);line-height:1.65;margin-bottom:18px;}
+.service-price{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--primary);}
+.service-price small{font-size:14px;font-weight:400;color:var(--text-soft);}
+.service-price.ask{font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text-soft);font-weight:500;}
+
+/* Promo */
+.promo-wrap{margin-top:28px;max-width:1120px;margin-left:auto;margin-right:auto;}
+.promo-banner{
+  background:linear-gradient(135deg,var(--navy) 0%,#1a3a55 100%);
+  border-radius:22px;padding:40px 48px;
+  display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;
+  position:relative;overflow:hidden;
+}
+.promo-banner::before{
+  content:'';position:absolute;top:-60px;right:220px;
+  width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(42,143,171,0.18) 0%,transparent 70%);
+}
+.promo-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.14);
+  color:rgba(255,255,255,0.8);font-size:11px;font-weight:600;
+  letter-spacing:1.5px;text-transform:uppercase;
+  padding:6px 14px;border-radius:20px;margin-bottom:14px;
+}
+.promo-banner h3{font-family:'Playfair Display',serif;font-size:26px;color:white;margin-bottom:10px;}
+.promo-banner p{font-size:14px;color:rgba(255,255,255,0.68);line-height:1.6;}
+.promo-banner small{font-size:11px;color:rgba(255,255,255,0.38);margin-top:6px;display:block;}
+.promo-right{text-align:right;flex-shrink:0;}
+.promo-price{font-family:'Playfair Display',serif;font-size:64px;font-weight:700;color:white;line-height:1;}
+.promo-price-lbl{font-size:11px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:14px;}
+
+/* ── TESTIMONIALS ─────────────────────────────────── */
+.testimonials{padding:104px 48px;background:var(--navy);position:relative;overflow:hidden;}
+.testimonials::before{
+  content:'"';font-family:'Playfair Display',serif;font-size:400px;
+  color:rgba(255,255,255,0.025);position:absolute;top:-60px;left:-20px;
+  line-height:1;pointer-events:none;select:none;
+}
+.testimonials .section-tag{color:var(--green);}
+.testimonials .section-tag::before{background:rgba(91,191,142,0.4);}
+.testimonials .section-title{color:white;}
+.testi-head{margin-bottom:52px;}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+.testi-card{
+  background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);
+  border-radius:18px;padding:30px;
+  transition:background 0.25s,transform 0.25s;
+}
+.testi-card:hover{background:rgba(255,255,255,0.09);transform:translateY(-3px);}
+.testi-stars{display:flex;gap:3px;margin-bottom:16px;}
+.testi-star{color:#f5c842;font-size:14px;}
+.testi-quote{font-size:14.5px;color:rgba(255,255,255,0.78);line-height:1.72;margin-bottom:22px;font-style:italic;}
+.testi-author{display:flex;align-items:center;gap:12px;}
+.testi-avatar{
+  width:42px;height:42px;border-radius:50%;
+  background:linear-gradient(135deg,var(--primary),var(--green));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:white;flex-shrink:0;
+}
+.testi-name{font-size:14px;font-weight:600;color:white;}
+.testi-sub{font-size:11.5px;color:rgba(255,255,255,0.42);margin-top:2px;}
+
+/* ── INSURANCE ─────────────────────────────────────── */
+.insurance{padding:104px 48px;background:var(--white);}
+.insurance-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:46px;max-width:1120px;margin-left:auto;margin-right:auto;}
+.ins-card{
+  background:var(--off-white);border:1.5px solid var(--border);
+  border-radius:16px;padding:28px 20px;text-align:center;
+  transition:all 0.22s;
+}
+.ins-card:hover{border-color:var(--primary);transform:translateY(-3px);box-shadow:0 8px 28px rgba(42,143,171,0.1);}
+.ins-icon{
+  width:54px;height:54px;border-radius:14px;
+  margin:0 auto 14px;display:flex;align-items:center;justify-content:center;
+}
+.ins-icon.teal{background:var(--primary-lt);}
+.ins-icon.green{background:var(--green-lt);}
+.ins-icon.rose{background:var(--rose-lt);}
+.ins-icon.gold{background:#fef9ec;}
+.ins-icon svg{width:26px;height:26px;}
+.ins-name{font-size:14.5px;font-weight:600;color:var(--text);margin-bottom:4px;}
+.ins-detail{font-size:12.5px;color:var(--text-soft);}
+.insurance-note{text-align:center;margin-top:30px;font-size:13.5px;color:var(--text-mid);max-width:540px;margin-left:auto;margin-right:auto;}
+
+/* ── BOOKING ─────────────────────────────────────────── */
+.booking{padding:104px 48px;background:var(--cream);}
+.booking-grid{display:grid;grid-template-columns:1fr 1.25fr;gap:64px;align-items:start;margin-top:48px;max-width:1120px;margin-left:auto;margin-right:auto;}
+.booking-info h3{font-family:'Playfair Display',serif;font-size:22px;color:var(--text);margin-bottom:22px;}
+.info-row{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid var(--border);font-size:14.5px;color:var(--text);}
+.info-row:last-of-type{border-bottom:none;}
+.info-icon{width:36px;height:36px;border-radius:9px;background:var(--primary-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.info-icon svg{width:17px;height:17px;stroke:var(--primary);}
+.booking-form{background:var(--white);border:1px solid var(--border);border-radius:22px;padding:38px;box-shadow:0 10px 44px rgba(12,31,46,0.08);}
+.booking-form h3{font-family:'Playfair Display',serif;font-size:22px;color:var(--text);margin-bottom:24px;}
+.form-group{margin-bottom:18px;}
+.form-group label{display:block;font-size:11px;font-weight:600;letter-spacing:0.9px;text-transform:uppercase;color:var(--text-soft);margin-bottom:7px;}
+.form-group input,.form-group select,.form-group textarea{
+  width:100%;padding:11px 15px;
+  border:1.5px solid var(--border);border-radius:9px;
+  font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);
+  background:var(--white);outline:none;
+  transition:border-color 0.2s,box-shadow 0.2s;
+  -webkit-appearance:none;appearance:none;
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{
+  border-color:var(--primary);box-shadow:0 0 0 3px rgba(42,143,171,0.1);
+}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-group textarea{resize:vertical;min-height:80px;}
+.form-submit{
+  width:100%;padding:14px;background:var(--primary);color:white;
+  border:none;border-radius:9px;
+  font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;
+  cursor:pointer;transition:all 0.2s;
+  box-shadow:0 4px 18px rgba(42,143,171,0.32);
+}
+.form-submit:hover{background:var(--primary-dk);transform:translateY(-1px);}
+.form-note{font-size:11.5px;color:var(--text-soft);text-align:center;margin-top:10px;}
+.success-msg{display:none;background:var(--green-lt);border:1px solid rgba(91,191,142,0.4);border-radius:10px;padding:18px;text-align:center;margin-top:14px;}
+.success-msg.show{display:block;}
+.success-msg p{font-size:14.5px;color:#2a7a52;font-weight:500;}
+
+/* ── LOCATION ──────────────────────────────────────── */
+.location{padding:104px 48px;background:var(--white);}
+.location-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:64px;align-items:start;margin-top:48px;max-width:1120px;margin-left:auto;margin-right:auto;}
+.loc-detail{display:flex;gap:14px;margin-bottom:22px;align-items:flex-start;}
+.loc-icon{width:42px;height:42px;border-radius:11px;background:var(--primary-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.loc-icon svg{width:18px;height:18px;stroke:var(--primary);}
+.loc-text h4{font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.loc-text p{font-size:13.5px;color:var(--text-mid);line-height:1.55;}
+.map-box{border-radius:18px;overflow:hidden;border:1px solid var(--border);box-shadow:0 10px 36px rgba(12,31,46,0.09);height:380px;}
+.map-box iframe{width:100%;height:100%;border:none;display:block;}
+
+/* ── CONTACT ───────────────────────────────────────── */
+.contact{padding:104px 48px;background:var(--cream);}
+.contact-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:64px;margin-top:48px;align-items:start;max-width:1120px;margin-left:auto;margin-right:auto;}
+.contact-form{background:var(--white);border:1px solid var(--border);border-radius:22px;padding:38px;box-shadow:0 8px 36px rgba(12,31,46,0.07);}
+.contact-form h3{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:24px;color:var(--text);}
+.contact-channels{display:flex;flex-direction:column;gap:12px;}
+.channel-card{
+  display:flex;align-items:center;gap:14px;
+  background:var(--white);border:1.5px solid var(--border);
+  border-radius:14px;padding:18px 20px;text-decoration:none;
+  color:var(--text);transition:all 0.22s;
+}
+.channel-card:hover{border-color:var(--primary);transform:translateX(4px);box-shadow:0 4px 18px rgba(42,143,171,0.09);}
+.ch-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ch-icon.wa{background:#e8faf0;}
+.ch-icon.ph{background:var(--primary-lt);}
+.ch-icon.em{background:#fff3e8;}
+.ch-icon.ig{background:#fff0f6;}
+.ch-icon.tk{background:#f5f0ff;}
+.ch-icon svg{width:22px;height:22px;}
+.ch-text h4{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.ch-text p{font-size:12.5px;color:var(--text-soft);}
+
+/* ── FOOTER ────────────────────────────────────────── */
+footer{background:var(--navy);padding:64px 48px 32px;}
+.footer-inner{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:48px;margin-bottom:48px;}
+.footer-brand .f-logo{display:flex;align-items:center;gap:11px;margin-bottom:18px;}
+.f-logo-mark{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,var(--primary),var(--green));display:flex;align-items:center;justify-content:center;}
+.f-logo-mark svg{width:22px;height:22px;fill:white;}
+.f-logo-name{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:white;}
+.footer-brand p{font-size:13px;color:rgba(255,255,255,0.42);line-height:1.72;}
+.f-col h4{font-size:10.5px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:18px;}
+.f-col a{display:block;font-size:13.5px;color:rgba(255,255,255,0.58);text-decoration:none;margin-bottom:11px;transition:color 0.2s;}
+.f-col a:hover{color:white;}
+.f-col p{font-size:13px;color:rgba(255,255,255,0.52);margin-bottom:8px;}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.07);padding-top:24px;text-align:center;font-size:12px;color:rgba(255,255,255,0.28);}
+
+/* ── WA FLOAT ──────────────────────────────────────── */
+.wa-float{position:fixed;bottom:28px;right:28px;z-index:300;display:flex;align-items:center;gap:10px;}
+.wa-float-tip{
+  background:var(--navy);color:white;font-size:12.5px;font-weight:500;
+  padding:8px 14px;border-radius:8px;white-space:nowrap;
+  opacity:0;pointer-events:none;transition:opacity 0.2s;
+  box-shadow:0 4px 16px rgba(0,0,0,0.2);
+}
+.wa-float:hover .wa-float-tip{opacity:1;}
+.wa-float-btn{
+  width:58px;height:58px;border-radius:50%;background:#25D366;
+  display:flex;align-items:center;justify-content:center;
+  text-decoration:none;box-shadow:0 4px 24px rgba(37,211,102,0.38);
+  transition:transform 0.2s,box-shadow 0.2s;
+}
+.wa-float-btn:hover{transform:scale(1.1);box-shadow:0 8px 32px rgba(37,211,102,0.5);}
+.wa-float-btn svg{width:28px;height:28px;}
+
+/* ── RESPONSIVE ────────────────────────────────────── */
+@media(max-width:1024px){
+  .hero{grid-template-columns:1fr;}
+  .hero-left{padding:80px 48px 60px;}
+  .hero-right{display:none;}
+  .trust-strip .container{grid-template-columns:repeat(2,1fr);}
+  .trust-item{border-right:none;border-bottom:1px solid rgba(255,255,255,0.07);}
+  .trust-item:nth-child(odd){border-right:1px solid rgba(255,255,255,0.07);}
+  .trust-item:nth-last-child(-n+2){border-bottom:none;}
+  .about-grid,.booking-grid,.location-grid,.contact-grid{grid-template-columns:1fr;gap:44px;}
+  .testi-grid{grid-template-columns:1fr;}
+  .services-grid{grid-template-columns:repeat(2,1fr);}
+  .insurance-grid{grid-template-columns:repeat(2,1fr);}
+  .footer-inner{grid-template-columns:1fr 1fr;}
+  .promo-banner{grid-template-columns:1fr;text-align:center;}
+  .promo-right{text-align:center;}
+}
+@media(max-width:768px){
+  nav{padding:0 20px;}
+  .nav-links{display:none;}
+  .nav-mobile-btn{display:flex;}
+  .hero-left{padding:80px 24px 60px;}
+  .about,.services,.testimonials,.insurance,.booking,.location,.contact{padding:72px 24px;}
+  .trust-strip{padding:40px 24px;}
+  footer{padding:48px 24px 24px;}
+  .footer-inner{grid-template-columns:1fr;gap:32px;}
+  .services-grid{grid-template-columns:1fr;}
+  .insurance-grid{grid-template-columns:repeat(2,1fr);}
+  .testi-grid{grid-template-columns:1fr;}
+  .section-title{font-size:32px;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a href="#inicio" class="nav-logo">
+    <div class="nav-logo-mark">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+      </svg>
+    </div>
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">CEGOM BF</span>
+      <span class="nav-logo-sub">Centro Gineco Obstétrico</span>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#sobre-nosotros">Nosotros</a>
+    <a href="#servicios">Servicios</a>
+    <a href="#seguros">Seguros</a>
+    <a href="#ubicacion">Ubicación</a>
+    <a href="#contacto">Contacto</a>
+    <a href="#agendar" class="nav-cta">Agendar cita</a>
+  </div>
+  <button class="nav-mobile-btn" aria-label="Menú">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+      <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-blob1"></div>
+  <div class="hero-blob2"></div>
+
+  <div class="hero-left">
+    <div>
+      <div class="hero-pill fade-in">
+        <span class="hero-pill-dot"></span>
+        Atención ginecológica integral
+      </div>
+
+      <h1 class="fade-in">
+        Tu salud femenina<br>en manos <em>expertas</em>
+      </h1>
+
+      <p class="hero-sub fade-in">
+        Más de 30 años acompañando a la mujer en cada etapa de su vida. Atención personalizada, diagnóstico certero y tecnología de vanguardia en Guayaquil.
+      </p>
+
+      <div class="hero-actions fade-in">
+        <a href="#agendar" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Agendar cita
+        </a>
+        <a href="https://wa.me/593968439869" target="_blank" class="btn btn-wa">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.554 4.122 1.527 5.858L0 24l6.338-1.502A11.96 11.96 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.882a9.856 9.856 0 01-5.031-1.374l-.361-.214-3.741.886.951-3.635-.234-.373A9.849 9.849 0 012.118 12C2.118 6.533 6.533 2.118 12 2.118S21.882 6.533 21.882 12 17.467 21.882 12 21.882z"/></svg>
+          WhatsApp
+        </a>
+      </div>
+
+      <div class="hero-chips fade-in">
+        <span class="chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9 12l2 2 4-4"/><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/></svg>
+          Previo cita
+        </span>
+        <span class="chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Acepta seguros
+        </span>
+        <span class="chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          Lun – Vie · 9–18h
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-visual fade-in">
+      <!-- Main circle -->
+      <div class="hero-circle">
+        <div class="hero-circle-pattern"></div>
+        <div class="hero-circle-inner">
+          <svg class="hero-illus" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Stylized female/health illustration -->
+            <circle cx="100" cy="72" r="28" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+            <path d="M72 72 Q72 110 100 130 Q128 110 128 72" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+            <!-- Heartbeat line -->
+            <polyline points="50,140 65,140 70,125 80,155 90,120 100,145 110,140 160,140" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Small cross -->
+            <line x1="100" y1="162" x2="100" y2="178" stroke="rgba(255,255,255,0.5)" stroke-width="3" stroke-linecap="round"/>
+            <line x1="92" y1="170" x2="108" y2="170" stroke="rgba(255,255,255,0.5)" stroke-width="3" stroke-linecap="round"/>
+            <!-- Decorative leaves -->
+            <path d="M40 60 Q30 45 45 38 Q45 58 40 60Z" fill="rgba(255,255,255,0.2)"/>
+            <path d="M160 60 Q170 45 155 38 Q155 58 160 60Z" fill="rgba(255,255,255,0.2)"/>
+            <path d="M40 90 Q25 80 35 68 Q42 86 40 90Z" fill="rgba(255,255,255,0.15)"/>
+            <path d="M160 90 Q175 80 165 68 Q158 86 160 90Z" fill="rgba(255,255,255,0.15)"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Floating badge: 30+ años -->
+      <div class="hero-badge-float top-left">
+        <div class="badge-icon green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#5BBF8E" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <div>
+          <div class="badge-num">30+</div>
+          <div class="badge-lbl">Años de experiencia</div>
+        </div>
+      </div>
+
+      <!-- Floating badge: Hospital Semedic -->
+      <div class="hero-badge-float bot-right">
+        <div class="badge-icon teal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#2A8FAB" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        </div>
+        <div>
+          <div class="badge-num" style="font-size:14px;font-family:'DM Sans',sans-serif;font-weight:600;">Semedic</div>
+          <div class="badge-lbl">Torre Médica II · Piso 4</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<div class="trust-strip">
+  <div class="container">
+    <div class="trust-item fade-in">
+      <div class="trust-num">30+</div>
+      <div class="trust-label">Años de<br>experiencia</div>
+    </div>
+    <div class="trust-item fade-in">
+      <div class="trust-num">8</div>
+      <div class="trust-label">Servicios<br>especializados</div>
+    </div>
+    <div class="trust-item fade-in">
+      <div class="trust-num">4</div>
+      <div class="trust-label">Seguros<br>aceptados</div>
+    </div>
+    <div class="trust-item fade-in">
+      <div class="trust-num">100%</div>
+      <div class="trust-label">Atención<br>personalizada</div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="sobre-nosotros">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text fade-in">
+        <div class="section-tag">Quiénes somos</div>
+        <h2 class="section-title">Un centro médico dedicado a la <em>mujer</em></h2>
+        <div class="about-body">
+          <p>CEGOM BF — Centro Gineco Obstétrico Biofuncional — es una clínica especializada en salud femenina con más de tres décadas de trayectoria en Guayaquil. Brindamos atención integral desde la adolescencia hasta la menopausia y más allá.</p>
+          <p>Nuestro enfoque biofuncional integra medicina ginecológica de vanguardia con una mirada holística del bienestar de la mujer, combinando tecnología moderna con un trato cercano y personalizado.</p>
+        </div>
+        <div class="pillars">
+          <div class="pillar">
+            <div class="pillar-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+            </div>
+            <div class="pillar-body">
+              <h4>Atención en Hospital Semedic</h4>
+              <p>Consultorio 410, Torre Médica II · Villa Club, Guayaquil</p>
+            </div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402z"/></svg>
+            </div>
+            <div class="pillar-body">
+              <h4>Trato humano y cercano</h4>
+              <p>Cada paciente recibe atención personalizada, con tiempo y escucha real</p>
+            </div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-icon">
+              <svg viewBox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+            </div>
+            <div class="pillar-body">
+              <h4>Tecnología de vanguardia</h4>
+              <p>Equipos modernos de diagnóstico y procedimientos mínimamente invasivos</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-card-wrap fade-in">
+        <div class="about-card">
+          <div class="about-card-icon">
+            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="40" cy="30" r="16" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.6)" stroke-width="2.5"/>
+              <path d="M22 30 Q22 56 40 66 Q58 56 58 30" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+              <line x1="40" y1="68" x2="40" y2="76" stroke="rgba(255,255,255,0.5)" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="34" y1="72" x2="46" y2="72" stroke="rgba(255,255,255,0.5)" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>CEGOM BF</h3>
+          <p>Centro Gineco Obstétrico Biofuncional. Especialistas en salud femenina con más de 30 años cuidando a las mujeres de Guayaquil y Ecuador.</p>
+          <span class="about-card-badge">Más de 30 años de experiencia</span>
+        </div>
+        <div class="about-float">
+          <div class="about-float-num">8</div>
+          <div class="about-float-lbl">Especialidades</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="servicios">
+  <div class="services-head container fade-in">
+    <div class="section-tag">Nuestros servicios</div>
+    <h2 class="section-title">Servicios y <span>Precios</span></h2>
+    <p class="section-sub">Atención ginecológica integral con precios claros y transparentes. Todas las consultas son previo cita.</p>
+  </div>
+
+  <div class="services-grid container">
+    <div class="service-card fade-in">
+      <div class="service-icon-wrap">
+        <!-- Stethoscope -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="#2A8FAB" stroke-width="1.8" stroke-linecap="round">
+          <path d="M4.8 2.3A.3.3 0 104.5 2h-.3C3 2 2 3 2 4.5V6a6 6 0 006 6v2a3 3 0 006 0v-2a6 6 0 006-6V4.5C20 3 19 2 17.8 2h-.3a.3.3 0 100 .6h.3c.7 0 1.2.6 1.2 1.4V6a5.4 5.4 0 01-5.4 5.4H10.2A5.4 5.4 0 014.8 6V3.9c0-.7.5-1.4 1.2-1.4H6V2h-.3z"/>
+          <path d="M12 17a2 2 0 100 4 2 2 0 000-4z"/>
+        </svg>
+      </div>
+      <div class="service-name">Consulta Ginecológica</div>
+      <div class="service-desc">Consulta integral con especialista. Control preventivo, diagnóstico y seguimiento de tu salud femenina en todas las etapas de la vida.</div>
+      <div class="service-price">Consultar<small> · seguro / particular</small></div>
+    </div>
+
+    <div class="service-card fade-in">
+      <div class="service-icon-wrap green">
+        <!-- Microscope -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="#5BBF8E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 18H4a2 2 0 01-2-2v-1h20v1a2 2 0 01-2 2h-2"/>
+          <path d="M6 22h12"/>
+          <path d="M12 11V2"/>
+          <path d="M8 11h8"/>
+          <path d="M12 2l3 3-3 3-3-3 3-3z"/>
+        </svg>
+      </div>
+      <div class="service-name">Papanicolaou</div>
+      <div class="service-desc">Examen rápido e indoloro para detectar a tiempo cambios en el cuello uterino. Realizarlo una vez al año puede marcar la diferencia.</div>
+      <div class="service-price">Consultar<small> · seguro / particular</small></div>
+    </div>
+
+    <div class="service-card fade-in">
+      <div class="service-icon-wrap">
+        <!-- Magnifier eye -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="#2A8FAB" stroke-width="1.8" stroke-linecap="round">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          <circle cx="11" cy="11" r="3"/>
+        </svg>
+      </div>
+      <div class="service-name">Colposcopía</div>
+      <div class="service-desc">Permite observar el cuello uterino con mayor detalle. Procedimiento seguro, rápido y clave para la prevención del cáncer cervical.</div>
+      <div class="service-price">Consultar<small> · seguro / particular</small></div>
+    </div>
+
+    <div class="service-card fade-in">
+      <div class="service-icon-wrap green">
+        <!-- Ultrasound waves -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="#5BBF8E" stroke-width="1.8" stroke-linecap="round">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+      </div>
+      <div class="service-name">Ecografía</div>
+      <div class="service-desc">Ecografías obstétricas, ginecológicas y de mamas. Equipos modernos para acompañarte en cada etapa de tu salud.</div>
+      <div class="service-price">Consultar<small> · seguro / particular</small></div>
+    </div>
+
+    <div class="service-card fade-in">
+      <div class="service-icon-wrap rose">
+        <!-- Lightning / energy -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="#C97A74" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+        </svg>
+      </div>
+      <div class="service-name">Cauterización con Radiofrecuencia</div>
+      <div class="service-desc">Tratamiento ambulatorio para lesiones del cuello uterino. Seguro, moderno y de rápida recuperación.</div>
+      <div class="service-price">$20</div>
+    </div>
+
+    <div class="service-card fade-in">
+      <div class="service-icon-wrap">
+        <!-- Implant/chip -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="#2A8FAB" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="7" y="7" width="10" height="10" rx="1"/>
+          <path d="M7 9H3M7 12H3M7 15H3M17 9h4M17 12h4M17 15h4M9 7V3M12 7V3M15 7V3M9 21v-4M12 21v-4M15 21v-4"/>
+        </svg>
+      </div>
+      <div class="service-name">Aplicación de Implantes</div>
+      <div class="service-desc">Método anticonceptivo subdérmico de larga duración. Aplicación rápida en consultorio por especialista.</div>
+      <div class="service-price">Consultar<small> · seguro / particular</small></div>
+    </div>
+
+    <div class="service-card fade-in" style="grid-column:1 / -1;max-width:480px;">
+      <div class="service-icon-wrap rose">
+        <!-- Hospital/surgery -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="#C97A74" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+          <polyline points="9,22 9,12 15,12 15,22"/>
+          <line x1="12" y1="5" x2="12" y2="9"/>
+          <line x1="10" y1="7" x2="14" y2="7"/>
+        </svg>
+      </div>
+      <div class="service-name">Partos · Cesárea · Histerectomía · Quistes</div>
+      <div class="service-desc">Procedimientos quirúrgicos especializados con más de 30 años de experiencia. Agenda tu consulta para evaluación personalizada.</div>
+      <div class="service-price ask">Consultar con especialista →</div>
+    </div>
+  </div>
+
+  <div class="promo-wrap container fade-in">
+    <div class="promo-banner">
+      <div>
+        <div class="promo-pill">✦ Promoción especial</div>
+        <h3>Consulta + Examen Complementario</h3>
+        <p>Consulta ginecológica con ecografía o colposcopía incluida. Dos servicios en una sola visita, precio especial por tiempo limitado.</p>
+        <small>*Un examen complementario a elección: ecografía O colposcopía. No acumulable. Sujeto a disponibilidad de cupos.</small>
+      </div>
+      <div class="promo-right">
+        <div class="promo-price-lbl">precio especial</div>
+        <div class="promo-price">$20</div>
+        <br>
+        <a href="#agendar" class="btn btn-white" style="margin-top:14px;">Apartar mi cupo →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonios">
+  <div class="container">
+    <div class="testi-head fade-in">
+      <div class="section-tag">Testimonios</div>
+      <h2 class="section-title">Lo que dicen <span style="color:#5BBF8E;">nuestras pacientes</span></h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card fade-in">
+        <div class="testi-stars">
+          <span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span>
+        </div>
+        <p class="testi-quote">"Llevo más de 5 años siendo paciente de CEGOM BF y siempre me han atendido con mucha profesionalidad. El trato es cálido y siempre siento que me escuchan. Recomiendo ampliamente al especialista."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">M</div>
+          <div>
+            <div class="testi-name">María G.</div>
+            <div class="testi-sub">Paciente · Control anual</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card fade-in">
+        <div class="testi-stars">
+          <span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span>
+        </div>
+        <p class="testi-quote">"Me hicieron la ecografía y la colposcopía en la misma visita. Todo fue muy claro, sin apuros, y me explicaron cada paso. El consultorio está muy bien ubicado en el Hospital Semedic. Excelente atención."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,#C97A74,#e0927c);">P</div>
+          <div>
+            <div class="testi-name">Patricia L.</div>
+            <div class="testi-sub">Paciente · Ecografía + Colposcopía</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card fade-in">
+        <div class="testi-stars">
+          <span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span><span class="testi-star">★</span>
+        </div>
+        <p class="testi-quote">"Fui por primera vez y quedé muy tranquila. El especialista tiene mucha experiencia y eso se nota desde el primer momento. La cita fue puntual y el proceso de agendar por WhatsApp es muy sencillo."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,#5BBF8E,#3aab70);">V</div>
+          <div>
+            <div class="testi-name">Valeria T.</div>
+            <div class="testi-sub">Paciente · Primera consulta</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSURANCE -->
+<section class="insurance" id="seguros">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-tag">Convenios</div>
+      <h2 class="section-title">Seguros <span>Médicos</span></h2>
+      <p class="section-sub">Trabajamos con los principales seguros médicos del país. Consulta la disponibilidad de tu seguro antes de tu cita.</p>
+    </div>
+    <div class="insurance-grid">
+      <div class="ins-card fade-in">
+        <div class="ins-icon teal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#2A8FAB" stroke-width="1.8" stroke-linecap="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+            <polyline points="9,22 9,12 15,12 15,22"/>
+          </svg>
+        </div>
+        <div class="ins-name">IESS</div>
+        <div class="ins-detail">Seguro Social</div>
+      </div>
+      <div class="ins-card fade-in">
+        <div class="ins-icon green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#5BBF8E" stroke-width="1.8" stroke-linecap="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <div class="ins-name">Seguros Privados</div>
+        <div class="ins-detail">Principales aseguradoras</div>
+      </div>
+      <div class="ins-card fade-in">
+        <div class="ins-icon rose">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#C97A74" stroke-width="1.8" stroke-linecap="round">
+            <rect x="2" y="7" width="20" height="14" rx="2"/>
+            <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/>
+            <line x1="12" y1="12" x2="12" y2="16"/>
+            <line x1="10" y1="14" x2="14" y2="14"/>
+          </svg>
+        </div>
+        <div class="ins-name">Convenios</div>
+        <div class="ins-detail">Corporativos y empresariales</div>
+      </div>
+      <div class="ins-card fade-in">
+        <div class="ins-icon gold">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#BF9440" stroke-width="1.8" stroke-linecap="round">
+            <rect x="2" y="5" width="20" height="14" rx="2"/>
+            <line x1="2" y1="10" x2="22" y2="10"/>
+          </svg>
+        </div>
+        <div class="ins-name">Pago Particular</div>
+        <div class="ins-detail">Efectivo y transferencia</div>
+      </div>
+    </div>
+    <p class="insurance-note fade-in">Para verificar si tu seguro tiene convenio con CEGOM BF, contáctanos antes de tu cita al <strong>0968439869</strong> o escríbenos por WhatsApp.</p>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section class="booking" id="agendar">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-tag">Reserva tu espacio</div>
+      <h2 class="section-title">Agenda tu <span>Cita</span></h2>
+      <p class="section-sub">Todas las consultas son previo cita. Completa el formulario y te confirmaremos en menos de 24 horas.</p>
+    </div>
+    <div class="booking-grid">
+      <div class="booking-info fade-in">
+        <h3>Información de atención</h3>
+        <div class="info-row">
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <span>Lunes a Viernes</span>
+        </div>
+        <div class="info-row">
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <span>9:00 AM — 6:00 PM</span>
+        </div>
+        <div class="info-row">
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <span>Hospital Semedic, Torre Médica II, Piso 4, Consultorio 410</span>
+        </div>
+        <div class="info-row">
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.22 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          </div>
+          <span>0968439869</span>
+        </div>
+        <div class="info-row">
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <span>cegombf@gmail.com</span>
+        </div>
+        <br>
+        <a href="https://wa.me/593968439869" target="_blank" class="btn btn-wa">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.554 4.122 1.527 5.858L0 24l6.338-1.502A11.96 11.96 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.882a9.856 9.856 0 01-5.031-1.374l-.361-.214-3.741.886.951-3.635-.234-.373A9.849 9.849 0 012.118 12C2.118 6.533 6.533 2.118 12 2.118S21.882 6.533 21.882 12 17.467 21.882 12 21.882z"/></svg>
+          Agendar por WhatsApp
+        </a>
+      </div>
+
+      <div class="fade-in">
+        <div class="booking-form">
+          <h3>Solicitar cita</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nombre</label>
+              <input type="text" id="nombre" placeholder="Tu nombre" required>
+            </div>
+            <div class="form-group">
+              <label>Apellido</label>
+              <input type="text" id="apellido" placeholder="Tu apellido" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Teléfono</label>
+              <input type="tel" id="telefono" placeholder="0999999999" required>
+            </div>
+            <div class="form-group">
+              <label>Correo electrónico</label>
+              <input type="email" id="email" placeholder="tu@correo.com" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Servicio</label>
+            <select id="servicio">
+              <option value="">Selecciona un servicio</option>
+              <option>Consulta Ginecológica</option>
+              <option>Papanicolaou</option>
+              <option>Colposcopía</option>
+              <option>Ecografía</option>
+              <option>Cauterización con Radiofrecuencia — $20</option>
+              <option>Aplicación de Implantes</option>
+              <option>Partos / Cesárea / Histerectomía / Quistes</option>
+              <option>Promoción: Consulta + Examen — $20</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Fecha preferida</label>
+              <input type="date" id="fecha" min="">
+            </div>
+            <div class="form-group">
+              <label>Hora preferida</label>
+              <select id="hora">
+                <option value="">Selecciona hora</option>
+                <option>09:00 AM</option><option>09:30 AM</option>
+                <option>10:00 AM</option><option>10:30 AM</option>
+                <option>11:00 AM</option><option>11:30 AM</option>
+                <option>12:00 PM</option><option>12:30 PM</option>
+                <option>02:00 PM</option><option>02:30 PM</option>
+                <option>03:00 PM</option><option>03:30 PM</option>
+                <option>04:00 PM</option><option>04:30 PM</option>
+                <option>05:00 PM</option><option>05:30 PM</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Mensaje adicional (opcional)</label>
+            <textarea id="mensaje" placeholder="¿Alguna consulta o detalle adicional?"></textarea>
+          </div>
+          <button class="form-submit" onclick="submitForm()">Solicitar cita →</button>
+          <p class="form-note">Te confirmaremos tu cita por correo y WhatsApp en menos de 24 horas.</p>
+          <div class="success-msg" id="successMsg">
+            <p>✅ ¡Solicitud enviada! Te contactaremos pronto para confirmar tu cita.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION -->
+<section class="location" id="ubicacion">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-tag">Dónde estamos</div>
+      <h2 class="section-title">Nuestra <span>Ubicación</span></h2>
+    </div>
+    <div class="location-grid">
+      <div class="fade-in">
+        <div class="loc-detail">
+          <div class="loc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+          </div>
+          <div class="loc-text">
+            <h4>Hospital Semedic</h4>
+            <p>Torre Médica II — Villa Club, Guayaquil</p>
+          </div>
+        </div>
+        <div class="loc-detail">
+          <div class="loc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="18 15 12 9 6 15"/></svg>
+          </div>
+          <div class="loc-text">
+            <h4>Piso 4, Consultorio 410</h4>
+            <p>Al llegar toma el ascensor hasta el piso 4 y busca el consultorio 410.</p>
+          </div>
+        </div>
+        <div class="loc-detail">
+          <div class="loc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="loc-text">
+            <h4>Horario de atención</h4>
+            <p>Lunes a Viernes · 9:00 AM — 6:00 PM<br>Previo cita únicamente</p>
+          </div>
+        </div>
+        <div class="loc-detail">
+          <div class="loc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a2 2 0 011.72-2.18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11l-1.27 1.27a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          </div>
+          <div class="loc-text">
+            <h4>Contacto directo</h4>
+            <p>0968439869 · cegombf@gmail.com</p>
+          </div>
+        </div>
+        <a href="https://wa.me/593968439869" target="_blank" class="btn btn-primary" style="margin-top:8px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Cómo llegar por WhatsApp
+        </a>
+      </div>
+      <div class="map-box fade-in">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3987.1!2d-79.9!3d-2.14!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sHospital+Semedic+Villa+Club+Guayaquil!5e0!3m2!1ses!2sec!4v1"
+          allowfullscreen="" loading="lazy">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contacto">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-tag">Escríbenos</div>
+      <h2 class="section-title">¿Tienes alguna <span>pregunta?</span></h2>
+      <p class="section-sub">Estamos aquí para ayudarte. Escríbenos por el canal que prefieras y te respondemos a la brevedad.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-form fade-in">
+        <h3>Formulario de contacto</h3>
+        <div class="form-group">
+          <label>Nombre completo</label>
+          <input type="text" id="c-nombre" placeholder="Tu nombre completo">
+        </div>
+        <div class="form-group">
+          <label>Correo electrónico</label>
+          <input type="email" id="c-email" placeholder="tu@correo.com">
+        </div>
+        <div class="form-group">
+          <label>Teléfono</label>
+          <input type="tel" id="c-telefono" placeholder="0999999999">
+        </div>
+        <div class="form-group">
+          <label>Mensaje</label>
+          <textarea id="c-mensaje" placeholder="¿En qué podemos ayudarte?" style="min-height:100px;"></textarea>
+        </div>
+        <button class="form-submit" onclick="submitContact()">Enviar mensaje →</button>
+        <div class="success-msg" id="contactSuccessMsg">
+          <p>✅ ¡Mensaje enviado! Te responderemos pronto.</p>
+        </div>
+      </div>
+
+      <div class="contact-channels fade-in">
+        <a href="https://wa.me/593968439869" target="_blank" class="channel-card">
+          <div class="ch-icon wa">
+            <svg viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.554 4.122 1.527 5.858L0 24l6.338-1.502A11.96 11.96 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.882a9.856 9.856 0 01-5.031-1.374l-.361-.214-3.741.886.951-3.635-.234-.373A9.849 9.849 0 012.118 12C2.118 6.533 6.533 2.118 12 2.118S21.882 6.533 21.882 12 17.467 21.882 12 21.882z"/></svg>
+          </div>
+          <div class="ch-text">
+            <h4>WhatsApp</h4>
+            <p>0968439869 · Respuesta inmediata</p>
+          </div>
+        </a>
+        <a href="tel:0968439869" class="channel-card">
+          <div class="ch-icon ph">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2A8FAB" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a2 2 0 011.72-2.18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11l-1.27 1.27a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          </div>
+          <div class="ch-text">
+            <h4>Llamada directa</h4>
+            <p>0968439869 · Lunes a Viernes 9AM–6PM</p>
+          </div>
+        </a>
+        <a href="mailto:cegombf@gmail.com" class="channel-card">
+          <div class="ch-icon em">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#BF9440" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div class="ch-text">
+            <h4>Correo electrónico</h4>
+            <p>cegombf@gmail.com</p>
+          </div>
+        </a>
+        <a href="https://instagram.com/cegombf" target="_blank" class="channel-card">
+          <div class="ch-icon ig">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C97A74" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </div>
+          <div class="ch-text">
+            <h4>Instagram</h4>
+            <p>@cegombf</p>
+          </div>
+        </a>
+        <a href="https://tiktok.com/@cegombf" target="_blank" class="channel-card">
+          <div class="ch-icon tk">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round"><path d="M9 12a4 4 0 104 4V4a5 5 0 005 5"/></svg>
+          </div>
+          <div class="ch-text">
+            <h4>TikTok</h4>
+            <p>@cegombf</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="f-logo">
+          <div class="f-logo-mark">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+          </div>
+          <span class="f-logo-name">CEGOM BF</span>
+        </div>
+        <p>Centro Gineco Obstétrico Biofuncional. Especialistas en salud femenina con más de 30 años de trayectoria en Guayaquil, Ecuador.</p>
+        <p style="margin-top:12px;">Hospital Semedic, Torre Médica II, Piso 4, Consultorio 410</p>
+      </div>
+      <div class="f-col">
+        <h4>Servicios</h4>
+        <a href="#servicios">Consulta Ginecológica</a>
+        <a href="#servicios">Papanicolaou</a>
+        <a href="#servicios">Colposcopía</a>
+        <a href="#servicios">Ecografía</a>
+        <a href="#servicios">Cauterización RF</a>
+        <a href="#servicios">Implantes</a>
+        <a href="#servicios">Cirugías</a>
+      </div>
+      <div class="f-col">
+        <h4>Contacto</h4>
+        <p>📲 0968439869</p>
+        <p>✉️ cegombf@gmail.com</p>
+        <p style="margin-top:8px;">Lunes a Viernes<br>9:00 AM — 6:00 PM</p>
+        <a href="https://wa.me/593968439869" target="_blank" style="margin-top:14px;display:inline-block;background:rgba(37,211,102,0.15);border:1px solid rgba(37,211,102,0.3);color:#4edd8a;padding:8px 16px;border-radius:7px;font-size:13px;font-weight:600;">WhatsApp →</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 CEGOM BF · Centro Gineco Obstétrico Biofuncional · Todos los derechos reservados
+    </div>
+  </div>
+</footer>
+
+<!-- WA FLOAT -->
+<div class="wa-float">
+  <span class="wa-float-tip">¿Necesitas ayuda?</span>
+  <a href="https://wa.me/593968439869?text=Hola%2C%20me%20gustar%C3%ADa%20obtener%20m%C3%A1s%20informaci%C3%B3n%20sobre%20los%20servicios%20de%20CEGOM%20BF" target="_blank" class="wa-float-btn" title="Chatear por WhatsApp">
+    <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.554 4.122 1.527 5.858L0 24l6.338-1.502A11.96 11.96 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.882a9.856 9.856 0 01-5.031-1.374l-.361-.214-3.741.886.951-3.635-.234-.373A9.849 9.849 0 012.118 12C2.118 6.533 6.533 2.118 12 2.118S21.882 6.533 21.882 12 17.467 21.882 12 21.882z"/></svg>
+  </a>
+</div>
+
+<script>
+// Nav scroll shadow
+window.addEventListener('scroll',()=>{
+  document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>20);
+});
+
+// Set min date
+const today=new Date().toISOString().split('T')[0];
+document.getElementById('fecha').min=today;
+
+// Disable weekends
+document.getElementById('fecha').addEventListener('input',function(){
+  const d=new Date(this.value);
+  if(d.getUTCDay()===0||d.getUTCDay()===6){
+    alert('Solo atendemos de lunes a viernes. Por favor elige otro día.');
+    this.value='';
+  }
+});
+
+// Booking form
+function submitForm(){
+  const n=document.getElementById('nombre').value;
+  const a=document.getElementById('apellido').value;
+  const t=document.getElementById('telefono').value;
+  const e=document.getElementById('email').value;
+  const s=document.getElementById('servicio').value;
+  const f=document.getElementById('fecha').value;
+  const h=document.getElementById('hora').value;
+  const m=document.getElementById('mensaje').value;
+  if(!n||!a||!t||!e||!s||!f||!h){alert('Por favor completa todos los campos requeridos.');return;}
+  const msg=encodeURIComponent(
+    'Hola CEGOM BF! Solicito una cita:\n\n'+
+    'Nombre: '+n+' '+a+'\n'+
+    'Teléfono: '+t+'\n'+
+    'Email: '+e+'\n'+
+    'Servicio: '+s+'\n'+
+    'Fecha: '+f+'\n'+
+    'Hora: '+h+'\n'+
+    'Mensaje: '+(m||'Ninguno')
+  );
+  window.open('https://wa.me/593968439869?text='+msg,'_blank');
+  document.getElementById('successMsg').classList.add('show');
+}
+
+// Contact form
+function submitContact(){
+  const n=document.getElementById('c-nombre').value;
+  const e=document.getElementById('c-email').value;
+  const m=document.getElementById('c-mensaje').value;
+  if(!n||!e||!m){alert('Por favor completa todos los campos.');return;}
+  const msg=encodeURIComponent(
+    'Hola CEGOM BF, contacto desde su página web:\n\n'+
+    'Nombre: '+n+'\n'+
+    'Email: '+e+'\n'+
+    'Teléfono: '+(document.getElementById('c-telefono').value||'No indicado')+'\n'+
+    'Mensaje: '+m
+  );
+  window.open('https://wa.me/593968439869?text='+msg,'_blank');
+  document.getElementById('contactSuccessMsg').classList.add('show');
+}
+
+// Intersection observer fade-in
+const obs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+},{threshold:0.08});
+document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
