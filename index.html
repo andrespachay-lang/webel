@@ -1959,44 +1959,51 @@
 
     <!-- PASO 2: PAGO -->
     <div class="checkout-form" id="step-2" style="display:none;">
-      <h2>Método de <em>pago</em></h2>
-      <p>Tu reserva queda confirmada al finalizar el pago.</p>
+      <h2>Confirmar y <em>pagar</em></h2>
+      <p>Serás redirigido a PayPhone para completar el pago de forma segura.</p>
 
-      <div class="pay-methods">
-        <button class="pay-method active" onclick="selectPay(this)">
-          <strong>Tarjeta de crédito</strong>
-          <span>Visa, Mastercard</span>
-        </button>
-        <button class="pay-method" onclick="selectPay(this)">
-          <strong>Transferencia</strong>
-          <span>Banco Pichincha / Pacífico</span>
-        </button>
-      </div>
-
-      <div class="form-group">
-        <label>Número de tarjeta</label>
-        <input type="text" placeholder="•••• •••• •••• ••••" maxlength="19">
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label>Vencimiento</label>
-          <input type="text" placeholder="MM / AA" maxlength="7">
+      <!-- Resumen rápido de lo que se va a cobrar -->
+      <div class="modal-reserva-box" style="margin-bottom:2rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+          <span style="font-size:0.85rem;color:var(--carbon-suave);">Habitación</span>
+          <span style="font-weight:500;" id="pay-hab-nombre">—</span>
         </div>
-        <div class="form-group">
-          <label>CVV</label>
-          <input type="text" placeholder="•••" maxlength="4">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+          <span style="font-size:0.85rem;color:var(--carbon-suave);">Noches × personas</span>
+          <span id="pay-detalle">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+          <span style="font-size:0.85rem;color:var(--carbon-suave);">IVA 15%</span>
+          <span id="pay-iva">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;padding-top:0.75rem;border-top:2px solid var(--pacifico);margin-top:0.5rem;">
+          <span style="font-size:0.8rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--carbon-suave);">Total a pagar</span>
+          <span style="font-family:var(--serif);font-size:1.75rem;color:var(--pacifico);font-weight:500;" id="pay-total">—</span>
         </div>
       </div>
 
-      <div class="form-group">
-        <label>Nombre en la tarjeta</label>
-        <input type="text" placeholder="Como aparece en la tarjeta">
+      <!-- Logos de medios aceptados -->
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.75rem;flex-wrap:wrap;">
+        <span style="font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--carbon-suave);">Acepta:</span>
+        <span style="padding:0.3rem 0.75rem;border:1px solid var(--linea);border-radius:4px;font-size:0.78rem;font-weight:500;">VISA</span>
+        <span style="padding:0.3rem 0.75rem;border:1px solid var(--linea);border-radius:4px;font-size:0.78rem;font-weight:500;">Mastercard</span>
+        <span style="padding:0.3rem 0.75rem;border:1px solid var(--linea);border-radius:4px;font-size:0.78rem;font-weight:500;">Débito</span>
+        <span style="padding:0.3rem 0.75rem;border:1px solid var(--linea);border-radius:4px;font-size:0.78rem;font-weight:500;">Diners</span>
       </div>
+
+      <!-- Nota de seguridad -->
+      <p style="font-size:0.8rem;color:var(--carbon-suave);display:flex;align-items:flex-start;gap:0.5rem;margin-bottom:2rem;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px;color:var(--sol)"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Pago procesado por PayPhone con cifrado SSL. Tus datos bancarios nunca pasan por nuestros servidores.
+      </p>
+
+      <div id="payphone-error" style="display:none;padding:1rem;background:#fdf0f0;border:1px solid #e74c3c;border-radius:6px;color:#c0392b;font-size:0.9rem;margin-bottom:1rem;"></div>
 
       <div class="checkout-cta">
         <button class="btn-prev" onclick="goToStep(1)">← Atrás</button>
-        <button class="btn-next" onclick="goToStep(3)">Confirmar reserva</button>
+        <button class="btn-next" id="btn-pagar-payphone" onclick="pagarConPayPhone()">
+          <span id="btn-pagar-text">Pagar con PayPhone →</span>
+        </button>
       </div>
     </div>
 
@@ -2355,18 +2362,91 @@ function goToStep(n) {
     if (stepNum === n) el.classList.add('active');
   });
 
-  if (n === 3) {
-    // Generar código de reserva
-    const codigo = 'EDS-2026-' + String(Math.floor(Math.random() * 9000) + 1000);
-    document.getElementById('codigo-reserva').textContent = codigo;
+  if (n === 2) {
+    // Poblar resumen del paso 2
+    const resTotal  = document.getElementById('resumen-total')?.textContent || '—';
+    const resIva    = document.getElementById('resumen-iva')?.textContent   || '—';
+    const resDetalle = document.getElementById('resumen-precio-detail')?.textContent || '—';
+    const resHab    = document.getElementById('resumen-title')?.textContent || '—';
+    document.getElementById('pay-hab-nombre').textContent = resHab;
+    document.getElementById('pay-detalle').textContent    = resDetalle;
+    document.getElementById('pay-iva').textContent        = resIva;
+    document.getElementById('pay-total').textContent      = resTotal;
+    document.getElementById('payphone-error').style.display = 'none';
   }
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function selectPay(el) {
-  document.querySelectorAll('.pay-method').forEach(x => x.classList.remove('active'));
-  el.classList.add('active');
+/* ═════════ PAGO CON PAYPHONE ═════════ */
+async function pagarConPayPhone() {
+  const btn      = document.getElementById('btn-pagar-payphone');
+  const btnText  = document.getElementById('btn-pagar-text');
+  const errBox   = document.getElementById('payphone-error');
+  errBox.style.display = 'none';
+
+  // Recoger datos del paso 1
+  const inputs = document.querySelectorAll('#step-1 input, #step-1 select');
+  const nombre   = inputs[0]?.value.trim() + ' ' + (inputs[1]?.value.trim() || '');
+  const cedula   = inputs[2]?.value.trim();
+  const email    = inputs[4]?.value.trim();
+  const telefono = inputs[5]?.value.trim();
+
+  if (!cedula || !email || !telefono) {
+    goToStep(1);
+    return;
+  }
+
+  // Obtener totales del resumen
+  const totalText = document.getElementById('resumen-total')?.textContent || '';
+  const totalNum  = parseFloat(totalText.replace(/[^0-9.]/g, '')) || 0;
+  const ivaText   = document.getElementById('resumen-iva')?.textContent || '';
+  const ivaNum    = parseFloat(ivaText.replace(/[^0-9.]/g, '')) || 0;
+
+  if (totalNum <= 0) {
+    errBox.textContent = 'Error al calcular el total. Vuelve al inicio y selecciona las fechas.';
+    errBox.style.display = 'block';
+    return;
+  }
+
+  const totalCentavos    = Math.round(totalNum * 100);
+  const ivaCentavos      = Math.round(ivaNum * 100);
+  const subtotalCentavos = totalCentavos - ivaCentavos;
+  const clientTxId       = 'EDS-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+  const referencia       = document.getElementById('resumen-sub')?.textContent || 'Reserva Estación del Sol';
+
+  btn.disabled  = true;
+  btnText.textContent = 'Procesando…';
+
+  try {
+    const res = await fetch('payphone.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        totalCentavos, subtotalCentavos, ivaCentavos,
+        clientTransactionId: clientTxId,
+        nombre: nombre.trim(),
+        email, telefono, cedula,
+        referencia,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || !data.payWithPayPhone) {
+      throw new Error(data.error || 'No se pudo iniciar el pago');
+    }
+
+    // Redirigir a PayPhone
+    window.location.href = data.payWithPayPhone;
+
+  } catch (err) {
+    errBox.textContent = 'Error al conectar con PayPhone: ' + err.message
+      + '. Por favor intenta nuevamente o escríbenos por WhatsApp.';
+    errBox.style.display = 'block';
+    btn.disabled  = false;
+    btnText.textContent = 'Pagar con PayPhone →';
+  }
 }
 
 /* ═════════ CURSOR DE OLA ═════════ */
