@@ -1,0 +1,6 @@
+backend/.env
+backend/datos/
+backend/uploads/cedulas/
+backend/node_modules/
+.DS_Store
+*.log

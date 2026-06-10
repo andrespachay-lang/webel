@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Check-in en Línea — Estación del Sol</title>
+<meta name="description" content="Haz tu check-in en línea para Hotel Estación del Sol, Las Núñez, Santa Elena, Ecuador.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --pacifico:      #1B4965;
+    --brisa:         #62B6CB;
+    --crema:         #FAF6F0;
+    --arena:         #E8D5B7;
+    --sol:           #D4A574;
+    --carbon:        #2C3E50;
+    --carbon-suave:  #5A6C7D;
+    --linea:         rgba(27, 73, 101, 0.12);
+    --serif: 'Fraunces', Georgia, serif;
+    --sans:  'DM Sans', system-ui, sans-serif;
+    --max: 760px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); color: var(--carbon); background: var(--crema); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  img  { max-width: 100%; display: block; }
+  a    { color: inherit; text-decoration: none; }
+
+  /* ── Cabecera ── */
+  .cabecera {
+    background: var(--pacifico);
+    padding: 1.25rem 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .marca { display: flex; align-items: center; gap: 0.65rem; color: var(--crema); }
+  .marca svg { width: 32px; height: 32px; }
+  .marca-texto { font-family: var(--serif); font-size: 1.1rem; font-weight: 400; }
+  .marca-texto small { display: block; font-style: italic; font-size: 0.7rem; color: var(--sol); letter-spacing: 0.2em; }
+  .cabecera a.volver { color: rgba(250,246,240,0.7); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; }
+  .cabecera a.volver:hover { color: var(--sol); }
+
+  /* ── Héroe ── */
+  .hero-mini {
+    background: var(--pacifico);
+    padding: 4rem 2rem 3rem;
+    text-align: center;
+    color: var(--crema);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-mini::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1400&q=60') center/cover;
+    opacity: 0.15;
+  }
+  .hero-mini-inner { position: relative; z-index: 1; }
+  .hero-mini h1 { font-family: var(--serif); font-weight: 300; font-size: clamp(2rem,4vw,3rem); margin-bottom: 0.5rem; }
+  .hero-mini p  { color: rgba(250,246,240,0.8); font-size: 1rem; }
+
+  /* ── Formulario ── */
+  main { max-width: var(--max); margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+
+  .form-card {
+    background: #fff;
+    border: 1px solid var(--linea);
+    border-radius: 8px;
+    padding: 2.5rem;
+    box-shadow: 0 2px 20px rgba(27,73,101,0.06);
+  }
+
+  .pasos { display: flex; gap: 0; margin-bottom: 2.5rem; }
+  .paso {
+    flex: 1;
+    text-align: center;
+    padding: 0.75rem 0.5rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--carbon-suave);
+    border-bottom: 2px solid var(--linea);
+    transition: all 0.3s;
+  }
+  .paso.activo { color: var(--sol); border-color: var(--sol); font-weight: 500; }
+  .paso.listo  { color: var(--pacifico); border-color: var(--pacifico); }
+
+  .seccion-form { display: none; }
+  .seccion-form.visible { display: block; animation: aparecer 0.4s ease; }
+  @keyframes aparecer { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  .seccion-form h2 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 1.6rem;
+    color: var(--pacifico);
+    margin-bottom: 0.3rem;
+  }
+  .seccion-form h2 em { font-style: italic; }
+  .seccion-form > p { color: var(--carbon-suave); margin-bottom: 1.75rem; font-size: 0.95rem; }
+
+  .grupo { margin-bottom: 1.25rem; }
+  .grupo label {
+    display: block;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--carbon-suave);
+    margin-bottom: 0.4rem;
+    font-weight: 500;
+  }
+  .grupo input,
+  .grupo select,
+  .grupo textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--linea);
+    border-radius: 6px;
+    background: var(--crema);
+    font-family: var(--sans);
+    font-size: 0.95rem;
+    color: var(--carbon);
+    transition: border-color 0.3s;
+  }
+  .grupo input:focus,
+  .grupo select:focus,
+  .grupo textarea:focus { outline: none; border-color: var(--sol); }
+  .grupo.error input,
+  .grupo.error select { border-color: #e74c3c; }
+  .error-msg { font-size: 0.78rem; color: #e74c3c; margin-top: 0.3rem; display: none; }
+  .grupo.error .error-msg { display: block; }
+
+  .fila-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  /* Subida de foto */
+  .zona-archivo {
+    border: 2px dashed var(--linea);
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: var(--crema);
+  }
+  .zona-archivo:hover, .zona-archivo.activo { border-color: var(--sol); background: rgba(212,165,116,0.05); }
+  .zona-archivo svg { width: 40px; height: 40px; color: var(--sol); margin: 0 auto 0.75rem; }
+  .zona-archivo p { font-size: 0.9rem; color: var(--carbon-suave); }
+  .zona-archivo p strong { color: var(--pacifico); }
+  .zona-archivo input { display: none; }
+  .archivo-nombre { font-size: 0.85rem; color: var(--pacifico); margin-top: 0.5rem; font-weight: 500; display: none; }
+
+  /* Botones */
+  .acciones { display: flex; gap: 1rem; align-items: center; margin-top: 2rem; }
+  .btn-sig {
+    background: var(--pacifico);
+    color: var(--crema);
+    border: none;
+    padding: 0.9rem 2rem;
+    border-radius: 100px;
+    font-family: var(--sans);
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .btn-sig:hover { background: var(--sol); color: var(--carbon); transform: translateY(-2px); }
+  .btn-sig:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  .btn-ant {
+    color: var(--carbon-suave);
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: var(--sans);
+    transition: color 0.3s;
+  }
+  .btn-ant:hover { color: var(--pacifico); }
+
+  /* Alerta de aviso de código */
+  .aviso-codigo {
+    background: rgba(212, 165, 116, 0.12);
+    border: 1px solid rgba(212, 165, 116, 0.4);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--carbon-suave);
+  }
+  .aviso-codigo strong { color: var(--pacifico); }
+
+  /* Pantalla de éxito */
+  .exito {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    display: none;
+  }
+  .exito.visible { display: block; animation: aparecer 0.8s ease; }
+  .exito-icono {
+    width: 90px; height: 90px;
+    margin: 0 auto 1.75rem;
+    border: 2px solid var(--sol);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--sol);
+  }
+  .exito h2 { font-family: var(--serif); font-weight: 300; font-size: 2rem; color: var(--pacifico); margin-bottom: 0.75rem; }
+  .exito p  { color: var(--carbon-suave); margin-bottom: 0.5rem; }
+  .exito .whatsapp-btn {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    background: #25D366; color: #fff;
+    padding: 0.9rem 1.75rem;
+    border-radius: 100px;
+    font-size: 0.85rem; font-weight: 500;
+    margin-top: 1.5rem;
+    transition: transform 0.3s;
+  }
+  .exito .whatsapp-btn:hover { transform: scale(1.04); }
+
+  /* Error global */
+  .alerta-error {
+    background: rgba(231,76,60,0.08);
+    border: 1px solid rgba(231,76,60,0.3);
+    border-radius: 6px;
+    padding: 0.9rem 1.25rem;
+    font-size: 0.9rem;
+    color: #c0392b;
+    margin-bottom: 1.25rem;
+    display: none;
+  }
+  .alerta-error.visible { display: block; }
+
+  /* Footer */
+  .pie {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.8rem;
+    color: var(--carbon-suave);
+    border-top: 1px solid var(--linea);
+  }
+  .pie a { color: var(--sol); }
+
+  @media (max-width: 600px) {
+    .form-card { padding: 1.5rem; }
+    .fila-2 { grid-template-columns: 1fr; }
+    .pasos { gap: 0; }
+    .paso { font-size: 0.68rem; padding: 0.6rem 0.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="cabecera">
+  <a href="index.html" class="marca">
+    <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+      <circle cx="24" cy="28" r="3" fill="currentColor" stroke="none"/>
+      <line x1="24" y1="28" x2="24" y2="4" stroke-linecap="round"/>
+      <path d="M6 28 Q 24 8, 42 28" fill="none"/>
+      <line x1="6" y1="28" x2="42" y2="28" stroke-linecap="round"/>
+      <path d="M8 36 Q 14 33, 20 36 T 32 36 T 44 36" stroke-width="1" opacity="0.6"/>
+    </svg>
+    <span class="marca-texto">Estación del Sol<small>· LAS NÚÑEZ · EC ·</small></span>
+  </a>
+  <a href="index.html" class="volver">← Volver al inicio</a>
+</header>
+
+<div class="hero-mini">
+  <div class="hero-mini-inner">
+    <h1>Check-in <em>en línea</em></h1>
+    <p>Regístrate antes de llegar y agiliza tu llegada al hotel.</p>
+  </div>
+</div>
+
+<main>
+  <div class="form-card" id="form-card">
+
+    <div class="pasos">
+      <div class="paso activo" id="paso-1">1 · Reserva</div>
+      <div class="paso"       id="paso-2">2 · Datos</div>
+      <div class="paso"       id="paso-3">3 · Llegada</div>
+    </div>
+
+    <div class="alerta-error" id="alerta-error"></div>
+
+    <!-- ── Paso 1: Código de reserva ── -->
+    <div class="seccion-form visible" id="s1">
+      <h2>Tu <em>código</em> de reserva</h2>
+      <p>Encuéntralo en el correo de confirmación que recibiste al reservar.</p>
+
+      <div class="aviso-codigo">
+        Si aún no tienes reserva, <strong><a href="index.html#habitaciones" style="color:var(--sol)">reserva aquí</a></strong> primero.
+      </div>
+
+      <div class="grupo" id="g-codigo">
+        <label>Código de reserva</label>
+        <input type="text" id="codigo" placeholder="EDS-2026-0001" maxlength="14" style="text-transform:uppercase;letter-spacing:0.15em;" />
+        <span class="error-msg">Ingresa un código válido (EDS-AAAA-NNNN)</span>
+      </div>
+
+      <div class="acciones">
+        <button class="btn-sig" onclick="validarCodigo()">Continuar →</button>
+      </div>
+    </div>
+
+    <!-- ── Paso 2: Datos personales ── -->
+    <div class="seccion-form" id="s2">
+      <h2>Tus <em>datos</em></h2>
+      <p>Usamos esta información para tu registro de alojamiento.</p>
+
+      <div class="fila-2">
+        <div class="grupo" id="g-nombre">
+          <label>Nombre completo</label>
+          <input type="text" id="nombre" placeholder="Andrés Pérez" />
+          <span class="error-msg">Ingresa tu nombre completo</span>
+        </div>
+        <div class="grupo" id="g-cedula">
+          <label>Cédula / Pasaporte</label>
+          <input type="text" id="cedula" placeholder="0912345678" />
+          <span class="error-msg">Ingresa tu documento de identidad</span>
+        </div>
+      </div>
+
+      <div class="grupo">
+        <label>Foto de cédula o pasaporte (opcional)</label>
+        <div class="zona-archivo" id="zona-archivo" onclick="document.getElementById('foto-cedula').click()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="5" width="18" height="14" rx="2"/>
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M3 9h18"/>
+          </svg>
+          <p><strong>Toca para subir foto</strong><br>JPG, PNG o PDF · máx. 5 MB</p>
+          <input type="file" id="foto-cedula" accept=".jpg,.jpeg,.png,.pdf" onchange="manejarArchivo(event)" />
+          <div class="archivo-nombre" id="archivo-nombre"></div>
+        </div>
+      </div>
+
+      <div class="acciones">
+        <button class="btn-sig" onclick="irAPaso(3)">Continuar →</button>
+        <button class="btn-ant" onclick="irAPaso(1)">← Atrás</button>
+      </div>
+    </div>
+
+    <!-- ── Paso 3: Llegada ── -->
+    <div class="seccion-form" id="s3">
+      <h2>Tu <em>llegada</em></h2>
+      <p>Así podemos estar listos cuando llegues.</p>
+
+      <div class="fila-2">
+        <div class="grupo" id="g-hora">
+          <label>Hora estimada de llegada</label>
+          <input type="time" id="hora-llegada" value="15:00" />
+          <span class="error-msg">Selecciona una hora</span>
+        </div>
+        <div class="grupo" id="g-personas">
+          <label>Número de personas</label>
+          <select id="personas">
+            <option value="1">1 persona</option>
+            <option value="2">2 personas</option>
+            <option value="3" selected>3 personas</option>
+            <option value="4">4 personas</option>
+            <option value="5">5 personas</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grupo">
+        <label>Solicitudes especiales (opcional)</label>
+        <textarea id="solicitudes" rows="3" placeholder="Llegamos con bebé, necesitamos cuna / Cumpleaños / Alergias alimentarias…"></textarea>
+      </div>
+
+      <div class="acciones">
+        <button class="btn-sig" id="btn-enviar" onclick="enviarCheckin()">Completar check-in ☀</button>
+        <button class="btn-ant" onclick="irAPaso(2)">← Atrás</button>
+      </div>
+    </div>
+
+  </div><!-- /form-card -->
+
+  <!-- ── Pantalla de éxito ── -->
+  <div class="exito" id="exito">
+    <div class="exito-icono">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+    <h2>¡Check-in <em>listo</em>!</h2>
+    <p>El anfitrión ya recibió tu información.</p>
+    <p>Te esperamos con las puertas abiertas.</p>
+    <a href="https://wa.me/593986721666" class="whatsapp-btn" target="_blank">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+      </svg>
+      Escribir al hotel
+    </a>
+  </div>
+</main>
+
+<footer class="pie">
+  <a href="index.html">Estación del Sol</a> · Las Núñez · Santa Elena, Ecuador ·
+  <a href="https://wa.me/593986721666">+593 98 672 1666</a> ·
+  <a href="mailto:estaciondelsol.ec@gmail.com">estaciondelsol.ec@gmail.com</a>
+</footer>
+
+<script>
+  // ── Configuración ──────────────────────────────────────────────────────────
+  const API = '';  // mismo origen; si el backend está en otro puerto: 'http://localhost:3000'
+
+  let pasoActual = 1;
+  let codigoValidado = '';
+
+  // Leer código desde URL si viene del correo de confirmación
+  window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(location.search);
+    const codigo = params.get('codigo');
+    if (codigo) {
+      document.getElementById('codigo').value = codigo.toUpperCase();
+    }
+  });
+
+  // ── Navegación entre pasos ─────────────────────────────────────────────────
+  function irAPaso(n) {
+    document.getElementById(`s${pasoActual}`).classList.remove('visible');
+    document.getElementById(`paso-${pasoActual}`).classList.remove('activo');
+
+    pasoActual = n;
+    document.getElementById(`s${pasoActual}`).classList.add('visible');
+    document.getElementById(`paso-${pasoActual}`).classList.add('activo');
+    ocultarError();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Validar código de reserva ──────────────────────────────────────────────
+  async function validarCodigo() {
+    const codigo = document.getElementById('codigo').value.trim().toUpperCase();
+    const grupo  = document.getElementById('g-codigo');
+
+    if (!/^EDS-\d{4}-\d{4}$/.test(codigo)) {
+      grupo.classList.add('error');
+      return;
+    }
+    grupo.classList.remove('error');
+    codigoValidado = codigo;
+    irAPaso(2);
+  }
+
+  // ── Manejar archivo subido ─────────────────────────────────────────────────
+  function manejarArchivo(evento) {
+    const archivo = evento.target.files[0];
+    if (!archivo) return;
+
+    const zona    = document.getElementById('zona-archivo');
+    const nombreEl = document.getElementById('archivo-nombre');
+
+    if (archivo.size > 5 * 1024 * 1024) {
+      mostrarError('El archivo supera los 5 MB permitidos');
+      evento.target.value = '';
+      return;
+    }
+
+    zona.classList.add('activo');
+    nombreEl.textContent = `✔ ${archivo.name}`;
+    nombreEl.style.display = 'block';
+  }
+
+  // ── Enviar check-in ────────────────────────────────────────────────────────
+  async function enviarCheckin() {
+    const nombre   = document.getElementById('nombre').value.trim();
+    const cedula   = document.getElementById('cedula').value.trim();
+    const hora     = document.getElementById('hora-llegada').value;
+    const personas = document.getElementById('personas').value;
+    const solicitudes = document.getElementById('solicitudes').value.trim();
+    const foto     = document.getElementById('foto-cedula').files[0];
+
+    // Validación
+    let hayError = false;
+    if (!nombre) { document.getElementById('g-nombre').classList.add('error'); hayError = true; }
+    else          document.getElementById('g-nombre').classList.remove('error');
+    if (!cedula) { document.getElementById('g-cedula').classList.add('error'); hayError = true; }
+    else          document.getElementById('g-cedula').classList.remove('error');
+    if (!hora)   { document.getElementById('g-hora').classList.add('error');   hayError = true; }
+    else          document.getElementById('g-hora').classList.remove('error');
+
+    if (hayError) return;
+
+    const btn = document.getElementById('btn-enviar');
+    btn.disabled = true;
+    btn.textContent = 'Enviando…';
+    ocultarError();
+
+    try {
+      const formData = new FormData();
+      formData.append('codigo_reserva', codigoValidado);
+      formData.append('nombre',         nombre);
+      formData.append('cedula',         cedula);
+      formData.append('hora_llegada',   hora);
+      formData.append('personas',       personas);
+      formData.append('solicitudes',    solicitudes);
+      if (foto) formData.append('foto_cedula', foto);
+
+      const resp = await fetch(`${API}/api/checkin`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      const datos = await resp.json();
+
+      if (!resp.ok) {
+        throw new Error(datos.error || 'Error al registrar el check-in');
+      }
+
+      // Mostrar éxito
+      document.getElementById('form-card').style.display = 'none';
+      document.getElementById('exito').classList.add('visible');
+
+    } catch (err) {
+      mostrarError(err.message);
+      btn.disabled = false;
+      btn.textContent = 'Completar check-in ☀';
+    }
+  }
+
+  // ── Helpers ────────────────────────────────────────────────────────────────
+  function mostrarError(msg) {
+    const el = document.getElementById('alerta-error');
+    el.textContent = msg;
+    el.classList.add('visible');
+  }
+  function ocultarError() {
+    document.getElementById('alerta-error').classList.remove('visible');
+  }
+</script>
+</body>
+</html>
