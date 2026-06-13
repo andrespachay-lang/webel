@@ -59,7 +59,7 @@ app.use(express.urlencoded({ extended: true }));
 // Sirve archivos estáticos del frontend
 app.use(express.static(path.join(__dirname, '../frontend')));
 
-// Sirve fotos de cédulas subidas (solo en desarrollo; en producción usar nginx)
+// Sirve archivos subidos — solo accesible con la API key de admin en producción
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ── Rate limiting ─────────────────────────────────────────────────────────────

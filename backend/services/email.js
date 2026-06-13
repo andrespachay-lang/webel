@@ -48,8 +48,8 @@ function plantillaBase(contenido) {
       </div>
       <div class="cuerpo">${contenido}</div>
       <div class="pie">
-        <a href="https://wa.me/593986721666">WhatsApp +593 98 672 1666</a> ·
-        <a href="mailto:estaciondelsol.ec@gmail.com">estaciondelsol.ec@gmail.com</a><br>
+        <a href="https://wa.me/593963750763">WhatsApp +593 96 375 0763</a> ·
+        <a href="mailto:Andres.pachay@gmail.com">Andres.pachay@gmail.com</a><br>
         Las Núñez · Santa Elena · Ruta del Spondylus, Ecuador
       </div>
     </div>
@@ -89,7 +89,7 @@ async function enviarConfirmacionHuesped(reserva) {
 
     <p style="margin-top:24px;font-size:0.9rem;color:#5A6C7D;">
       ¿Tienes preguntas? Escríbenos al
-      <a href="https://wa.me/593986721666" style="color:#D4A574;">+593 98 672 1666</a>
+      <a href="https://wa.me/593963750763" style="color:#D4A574;">+593 96 375 0763</a>
       o a este correo. Con gusto te ayudamos.
     </p>`;
 
@@ -102,8 +102,12 @@ async function enviarConfirmacionHuesped(reserva) {
 }
 
 // ── Notificación interna al hotel ─────────────────────────────────────────────
-async function enviarNotificacionHotel(reserva) {
+async function enviarNotificacionHotel(reserva, rutaComprobante = null) {
   const transporte = crearTransporte();
+
+  const filaComprobante = reserva.comprobante_pago
+    ? `<tr><td>Comprobante</td><td style="color:#27ae60;font-weight:600;">✔ Adjunto en este correo</td></tr>`
+    : `<tr><td>Comprobante</td><td style="color:#e67e22;">Pendiente de envío</td></tr>`;
 
   const contenido = `
     <p><strong>Nueva reserva recibida.</strong></p>
@@ -120,15 +124,25 @@ async function enviarNotificacionHotel(reserva) {
       <tr><td>Noches</td><td>${reserva.noches}</td></tr>
       <tr><td>Huéspedes</td><td>${reserva.huespedes}</td></tr>
       <tr><td>Método de pago</td><td>${reserva.metodo_pago}</td></tr>
+      ${filaComprobante}
       <tr class="total-fila"><td>Total</td><td>$${reserva.total.toFixed(2)}</td></tr>
     </table>
     ${reserva.mensaje_anfitrion ? `<p><strong>Mensaje del huésped:</strong> ${reserva.mensaje_anfitrion}</p>` : ''}`;
+
+  const adjuntos = [];
+  if (rutaComprobante) {
+    adjuntos.push({
+      path: rutaComprobante,
+      filename: `comprobante-${reserva.codigo}${require('path').extname(rutaComprobante)}`,
+    });
+  }
 
   await transporte.sendMail({
     from: `"Estación del Sol Sistema" <${process.env.EMAIL_USER}>`,
     to: process.env.EMAIL_USER,
     subject: `🏨 Nueva reserva ${reserva.codigo} — ${reserva.nombre} ${reserva.apellido}`,
     html: plantillaBase(contenido),
+    attachments: adjuntos,
   });
 }
 
@@ -150,7 +164,7 @@ async function enviarConfirmacionCheckin(checkin, reserva) {
     ${checkin.solicitudes ? `<p><strong>Solicitudes registradas:</strong> ${checkin.solicitudes}</p>` : ''}
 
     <p>El anfitrión ya tiene tu información. Si necesitas algo antes de llegar, escríbenos.</p>
-    <a href="https://wa.me/593986721666" class="btn">Contactar por WhatsApp</a>`;
+    <a href="https://wa.me/593963750763" class="btn">Contactar por WhatsApp</a>`;
 
   await transporte.sendMail({
     from: `"Estación del Sol" <${process.env.EMAIL_USER}>`,
