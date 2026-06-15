@@ -85,6 +85,7 @@ app.use('/api/reservas',    require('./routes/reservas'));
 app.use('/api/checkin',     require('./routes/checkin'));
 app.use('/api/admin',       require('./routes/admin'));
 app.use('/api/contacto',    require('./routes/contacto'));
+app.use('/api/webhook',     require('./routes/webhook'));
 
 // Ruta de salud
 app.get('/api/salud', (req, res) => {

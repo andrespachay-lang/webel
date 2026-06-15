@@ -1973,64 +1973,101 @@
     <!-- PASO 2: PAGO -->
     <div class="checkout-form" id="step-2" style="display:none;">
       <h2>Método de <em>pago</em></h2>
-      <p>Tu reserva queda confirmada al finalizar el pago.</p>
+      <p>Elige cómo quieres pagar tu reserva.</p>
 
       <div class="pay-methods">
-        <button class="pay-method active" onclick="selectPay(this)">
-          <strong>Tarjeta de crédito</strong>
-          <span>Visa, Mastercard</span>
+        <button class="pay-method active" onclick="selectPay(this)" data-metodo="PayPhone">
+          <strong>PayPhone</strong>
+          <span>Pago en tu app · seguro</span>
         </button>
-        <button class="pay-method" onclick="selectPay(this)">
+        <button class="pay-method" onclick="selectPay(this)" data-metodo="Transferencia">
           <strong>Transferencia</strong>
           <span>Banco Pichincha / Pacífico</span>
         </button>
       </div>
 
-      <div class="form-group">
-        <label>Número de tarjeta</label>
-        <input type="text" placeholder="•••• •••• •••• ••••" maxlength="19">
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label>Vencimiento</label>
-          <input type="text" placeholder="MM / AA" maxlength="7">
+      <!-- Bloque PayPhone -->
+      <div id="bloque-payphone">
+        <div style="background:rgba(212,165,116,0.1);border:1px solid rgba(212,165,116,0.35);border-radius:8px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;">
+          <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--sol)" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="17" r="1" fill="var(--sol)" stroke="none"/></svg>
+            <strong style="color:var(--pacifico);font-size:0.95rem;">Cómo funciona</strong>
+          </div>
+          <ol style="padding-left:1.25rem;font-size:0.88rem;color:var(--carbon-suave);line-height:1.8;">
+            <li>Haz clic en <strong style="color:var(--pacifico);">Confirmar reserva</strong></li>
+            <li>Recibirás una notificación en tu app <strong>PayPhone</strong></li>
+            <li>Aprueba el pago desde la app en segundos</li>
+            <li>Tu reserva queda confirmada automáticamente</li>
+          </ol>
         </div>
         <div class="form-group">
-          <label>CVV</label>
-          <input type="text" placeholder="•••" maxlength="4">
+          <label>Tu número registrado en PayPhone</label>
+          <input type="tel" id="payphone-phone" placeholder="0984 111 222"
+            style="font-size:1.1rem;letter-spacing:0.05em;"
+            oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+          <div style="font-size:0.75rem;color:var(--carbon-suave);margin-top:0.35rem;">
+            Debe ser el número con el que creaste tu cuenta PayPhone
+          </div>
         </div>
       </div>
 
-      <div class="form-group">
-        <label>Nombre en la tarjeta</label>
-        <input type="text" placeholder="Como aparece en la tarjeta">
-      </div>
-
-      <!-- Comprobante de transferencia (se muestra solo si eligieron Transferencia) -->
-      <div class="form-group" id="bloque-comprobante" style="display:none;">
-        <label>Comprobante de transferencia</label>
-        <div class="comprobante-zona" id="comprobante-zona" onclick="document.getElementById('comprobante-input').click()">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="display:block;margin:0 auto 0.6rem;color:var(--sol);">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="17 8 12 3 7 8"/>
-            <line x1="12" y1="3" x2="12" y2="15"/>
-          </svg>
-          <p style="font-size:0.85rem;color:var(--carbon-suave);margin:0;">
-            <strong style="color:var(--pacifico);">Toca para adjuntar</strong><br>
-            JPG, PNG o PDF · máx. 2 MB
-          </p>
+      <!-- Bloque Transferencia -->
+      <div id="bloque-transferencia" style="display:none;">
+        <div style="background:rgba(27,73,101,0.06);border-radius:8px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;font-size:0.9rem;">
+          <div style="font-weight:600;color:var(--pacifico);margin-bottom:0.5rem;">Datos para transferencia</div>
+          <div style="color:var(--carbon-suave);line-height:1.9;">
+            Banco: <strong style="color:var(--carbon);">Banco Pichincha</strong><br>
+            Tipo: <strong style="color:var(--carbon);">Cuenta de Ahorros</strong><br>
+            Número: <strong style="color:var(--carbon);">2209XXXXXX</strong><br>
+            Titular: <strong style="color:var(--carbon);">Andrés Pachay</strong>
+          </div>
+        </div>
+        <!-- Comprobante de transferencia -->
+        <div class="form-group" id="bloque-comprobante">
+          <label>Comprobante de transferencia</label>
+          <div class="comprobante-zona" id="comprobante-zona" onclick="document.getElementById('comprobante-input').click()">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="display:block;margin:0 auto 0.6rem;color:var(--sol);">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <p style="font-size:0.85rem;color:var(--carbon-suave);margin:0;">
+              <strong style="color:var(--pacifico);">Toca para adjuntar comprobante</strong><br>
+              JPG, PNG o PDF · máx. 2 MB
+            </p>
           <input type="file" id="comprobante-input" accept=".jpg,.jpeg,.png,.pdf" style="display:none;" onchange="mostrarComprobante(event)">
+          </div>
+          <div id="comprobante-nombre" style="font-size:0.82rem;color:var(--pacifico);margin-top:0.4rem;display:none;"></div>
         </div>
-        <div id="comprobante-nombre" style="font-size:0.82rem;color:var(--pacifico);margin-top:0.4rem;display:none;"></div>
-        <p style="font-size:0.78rem;color:var(--carbon-suave);margin-top:0.4rem;">
-          Datos para transferencia: <strong>Banco Pichincha Cta. Ahorro 2209XXXXXX — Andrés Pachay</strong>
-        </p>
-      </div>
+      </div><!-- /bloque-transferencia -->
 
       <div class="checkout-cta">
         <button class="btn-prev" onclick="goToStep(1)">← Atrás</button>
         <button class="btn-next" id="btn-confirmar" onclick="enviarReserva()">Confirmar reserva</button>
+      </div>
+    </div>
+
+    <!-- ESPERA PAYPHONE (pantalla intermedia) -->
+    <div class="checkout-form" id="step-espera" style="display:none;">
+      <div style="text-align:center;padding:3rem 1rem;">
+        <div style="width:80px;height:80px;border:3px solid var(--sol);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 2rem;animation:pulseRing 2s ease-in-out infinite;">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--sol)" stroke-width="1.5">
+            <rect x="5" y="2" width="14" height="20" rx="2"/>
+            <circle cx="12" cy="17" r="1" fill="var(--sol)" stroke="none"/>
+            <path d="M9 7h6M9 11h4"/>
+          </svg>
+        </div>
+        <h2 style="font-family:var(--serif);font-weight:300;font-size:1.8rem;color:var(--pacifico);margin-bottom:0.75rem;">
+          Esperando <em style="font-style:italic;">tu aprobación</em>
+        </h2>
+        <p style="color:var(--carbon-suave);margin-bottom:0.5rem;">Revisa tu app <strong>PayPhone</strong> y aprueba el pago.</p>
+        <p style="color:var(--carbon-suave);font-size:0.9rem;margin-bottom:2rem;">Tu código de reserva: <strong id="codigo-espera" style="color:var(--pacifico);letter-spacing:0.1em;"></strong></p>
+        <div style="display:flex;align-items:center;justify-content:center;gap:0.5rem;color:var(--carbon-suave);font-size:0.85rem;" id="msg-espera">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spinSlow 1.5s linear infinite;flex-shrink:0">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+          </svg>
+          Verificando estado del pago…
+        </div>
       </div>
     </div>
 
@@ -2042,8 +2079,8 @@
         </svg>
       </div>
       <h2>Reserva <em>confirmada</em></h2>
-      <p>Te enviamos los detalles a tu correo y WhatsApp.</p>
-      <p style="margin-bottom: 2rem;">Christian te contactará pronto para coordinar tu llegada.</p>
+      <p>Revisa tu correo — te enviamos todos los detalles.</p>
+      <p style="margin-bottom: 2rem;">Te esperamos con las puertas abiertas.</p>
       <div class="codigo" id="codigo-reserva">EDS-2026-0000</div>
       <div>
         <button class="btn btn-primary" onclick="closeCheckout()">Volver al inicio</button>
@@ -2403,10 +2440,9 @@ function selectPay(el) {
   document.querySelectorAll('.pay-method').forEach(x => x.classList.remove('active'));
   el.classList.add('active');
 
-  // Mostrar u ocultar sección de comprobante según método elegido
-  const esTransferencia = el.querySelector('strong')?.textContent.toLowerCase().includes('transfer');
-  const bloque = document.getElementById('bloque-comprobante');
-  if (bloque) bloque.style.display = esTransferencia ? 'block' : 'none';
+  const metodo = el.dataset.metodo || '';
+  document.getElementById('bloque-payphone').style.display     = metodo === 'PayPhone'     ? 'block' : 'none';
+  document.getElementById('bloque-transferencia').style.display = metodo === 'Transferencia' ? 'block' : 'none';
 }
 
 function mostrarComprobante(evento) {
@@ -2421,6 +2457,54 @@ function mostrarComprobante(evento) {
   const nombreEl = document.getElementById('comprobante-nombre');
   nombreEl.textContent = `✔ ${archivo.name}`;
   nombreEl.style.display = 'block';
+}
+
+/* ═════════ POLLING — espera confirmación PayPhone ═════════ */
+let pollingTimer = null;
+
+async function iniciarPolling(codigo) {
+  // Muestra pantalla de espera
+  document.getElementById('step-2').style.display       = 'none';
+  document.getElementById('step-espera').style.display  = 'block';
+  document.getElementById('codigo-espera').textContent  = codigo;
+
+  let intentos = 0;
+  const MAX    = 120; // 10 minutos (cada 5 s)
+
+  pollingTimer = setInterval(async () => {
+    intentos++;
+    if (intentos > MAX) {
+      clearInterval(pollingTimer);
+      document.getElementById('msg-espera').innerHTML =
+        '⏱ El tiempo de espera expiró. <a href="#" onclick="closeCheckout();return false;" style="color:var(--sol)">Vuelve a intentarlo</a> o contáctanos.';
+      return;
+    }
+
+    try {
+      const resp  = await fetch(`${API_BASE}/api/reservas/${codigo}/estado`);
+      const datos = await resp.json();
+
+      if (datos.estado === 'confirmada') {
+        clearInterval(pollingTimer);
+        document.getElementById('codigo-reserva').textContent = codigo;
+        document.getElementById('step-espera').style.display  = 'none';
+        document.getElementById('step-3').classList.add('show');
+        document.getElementById('resumen-aside').style.display = 'none';
+        document.getElementById('checkout-body').style.gridTemplateColumns = '1fr';
+        document.querySelectorAll('.checkout-step').forEach(s => {
+          s.classList.remove('active','done');
+          if (parseInt(s.dataset.step) < 3) s.classList.add('done');
+          if (parseInt(s.dataset.step) === 3) s.classList.add('active');
+        });
+      } else if (datos.estado === 'cancelada' || datos.estado === 'error_pago') {
+        clearInterval(pollingTimer);
+        document.getElementById('msg-espera').innerHTML =
+          `❌ El pago fue ${datos.estado === 'cancelada' ? 'cancelado' : 'rechazado'}.
+           <a href="#" onclick="closeCheckout();return false;" style="color:var(--sol)">Intentar de nuevo</a>`;
+      }
+      // Si sigue en pendiente_pago, seguimos esperando
+    } catch { /* red — seguir intentando */ }
+  }, 5000);
 }
 
 /* ═════════ API BASE ═════════ */
@@ -2443,20 +2527,31 @@ async function enviarReserva() {
   const checkin  = document.getElementById('resumen-checkin').dataset.raw  || '';
   const checkout = document.getElementById('resumen-checkout').dataset.raw || '';
   const guests   = document.getElementById('resumen-guests').dataset.raw   || '1';
-  const metodoPago = document.querySelector('.pay-method.active strong')?.textContent || 'Tarjeta de crédito';
+  const metodoPago = document.querySelector('.pay-method.active')?.dataset.metodo || 'PayPhone';
+  // Si es PayPhone, el teléfono de cobro es el que ingresó en el campo específico
+  const telefonoPayphone = document.getElementById('payphone-phone')?.value?.trim();
+  if (metodoPago === 'PayPhone' && !telefonoPayphone) {
+    alert('Ingresa tu número de teléfono registrado en PayPhone');
+    btn.disabled = false;
+    btn.textContent = 'Confirmar reserva';
+    return;
+  }
 
   const cuerpo = {
-    habitacion:       currentHab?.id || '',
-    fecha_entrada:    checkin,
-    fecha_salida:     checkout,
-    huespedes:        guests,
-    nombre:           document.querySelector('#step-1 input[placeholder="Andrés"]')?.value || '',
-    apellido:         document.querySelector('#step-1 input[placeholder="Pérez"]')?.value || '',
-    cedula:           document.querySelector('#step-1 input[placeholder="0912345678"]')?.value || '',
-    pais:             document.querySelector('#step-1 select')?.value || 'Ecuador',
-    correo:           document.querySelector('#step-1 input[type="email"]')?.value || '',
-    telefono:         document.querySelector('#step-1 input[type="tel"]')?.value || '',
-    metodo_pago:      metodoPago,
+    habitacion:        currentHab?.id || '',
+    fecha_entrada:     checkin,
+    fecha_salida:      checkout,
+    huespedes:         guests,
+    nombre:            document.querySelector('#step-1 input[placeholder="Andrés"]')?.value || '',
+    apellido:          document.querySelector('#step-1 input[placeholder="Pérez"]')?.value || '',
+    cedula:            document.querySelector('#step-1 input[placeholder="0912345678"]')?.value || '',
+    pais:              document.querySelector('#step-1 select')?.value || 'Ecuador',
+    correo:            document.querySelector('#step-1 input[type="email"]')?.value || '',
+    // Para PayPhone usamos el teléfono de la app; para otros, el del formulario
+    telefono:          metodoPago === 'PayPhone'
+                         ? (telefonoPayphone || document.querySelector('#step-1 input[type="tel"]')?.value || '')
+                         : (document.querySelector('#step-1 input[type="tel"]')?.value || ''),
+    metodo_pago:       metodoPago,
     mensaje_anfitrion: document.querySelector('#step-1 textarea')?.value || '',
   };
 
@@ -2492,9 +2587,14 @@ async function enviarReserva() {
       return;
     }
 
-    // Mostrar confirmación con el código real
-    document.getElementById('codigo-reserva').textContent = datos.codigo;
-    goToStep(3);
+    if (datos.estado === 'pendiente_pago') {
+      // PayPhone — iniciar polling y mostrar pantalla de espera
+      iniciarPolling(datos.codigo);
+    } else {
+      // Transferencia u otro — confirmación directa
+      document.getElementById('codigo-reserva').textContent = datos.codigo;
+      goToStep(3);
+    }
 
   } catch (err) {
     alert('No se pudo conectar con el servidor. Intenta de nuevo o contáctanos por WhatsApp.');

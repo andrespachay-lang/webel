@@ -36,9 +36,11 @@ function crearTablaReservas(db) {
       subtotal         REAL    NOT NULL,
       iva              REAL    NOT NULL,
       total            REAL    NOT NULL,
-      estado            TEXT    NOT NULL DEFAULT 'pendiente',
+      estado            TEXT    NOT NULL DEFAULT 'pendiente_pago',
       mensaje_anfitrion TEXT,
       comprobante_pago  TEXT,
+      payphone_transaction_id TEXT,
+      payphone_status   TEXT,
       creado_en         TEXT    NOT NULL DEFAULT (datetime('now'))
     )
   `);
