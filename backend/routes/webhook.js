@@ -27,7 +27,7 @@ router.post('/payphone', async (req, res) => {
 
   let resultado;
   try {
-    resultado = await payphone.verificarCobro(id, clientTransactionId);
+    resultado = await payphone.verificarCobro(id);
   } catch (err) {
     console.error('[Webhook] Error verificando con PayPhone:', err.message);
     return res.status(500).send('Error verificando pago');

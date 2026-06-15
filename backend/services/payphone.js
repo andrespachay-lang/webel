@@ -6,13 +6,13 @@
  *   1. POST /api/Sale  → PayPhone notifica al cliente en su app
  *   2. Cliente aprueba en la app PayPhone
  *   3. PayPhone llama a nuestro responseUrl con ?id=X&clientTransactionId=Y
- *   4. Verificamos el estado con GET /api/Sale?id=X&clientTransactionId=Y
+ *   4. Verificamos el estado con GET /api/Sale/{transactionId}
  */
 
 const https = require('https');
 
 const PAYPHONE_URL   = 'https://pay.payphonetodoesposible.com/api/Sale';
-const PAYPHONE_CHECK = 'https://pay.payphonetodoesposible.com/api/Sale';
+const PAYPHONE_BASE  = 'https://pay.payphonetodoesposible.com/api/Sale';
 
 // ── Solicitar cobro al cliente ────────────────────────────────────────────────
 async function iniciarCobro({
@@ -81,9 +81,10 @@ async function iniciarCobro({
 }
 
 // ── Verificar estado de un cobro ──────────────────────────────────────────────
-async function verificarCobro(id, clientTransactionId) {
+// Usa GET /api/Sale/{transactionId} donde id es el transactionId de PayPhone
+async function verificarCobro(id) {
   const token = process.env.PAYPHONE_TOKEN;
-  const url   = `${PAYPHONE_CHECK}?id=${encodeURIComponent(id)}&clientTransactionId=${encodeURIComponent(clientTransactionId)}`;
+  const url   = `${PAYPHONE_BASE}/${encodeURIComponent(id)}`;
   return llamarPayphone('GET', url, token, null);
 }
 
