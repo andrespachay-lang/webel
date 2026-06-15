@@ -44,9 +44,9 @@ router.post('/payphone', async (req, res) => {
     return res.status(404).send('Reserva no encontrada');
   }
 
-  // Estados de PayPhone: Approved, Cancelled, Rejected, etc.
-  const estadoPago = resultado.transactionStatus || resultado.statusCode || '';
-  const aprobado   = estadoPago === 'Approved' || estadoPago === '1';
+  // statusCode: 1=pendiente, 2=cancelado/rechazado, 3=aprobado
+  const aprobado = resultado.transactionStatus === 'Approved' || resultado.statusCode === 3;
+  const estadoPago = resultado.transactionStatus || String(resultado.statusCode || '');
 
   const nuevoEstado = aprobado ? 'confirmada' : 'cancelada';
   const payphoneId  = resultado.transactionId || id;
