@@ -8,15 +8,14 @@ Hotel Estación del Sol · Las Núñez, Santa Elena, Ruta del Spondylus, Ecuador
 
 ```
 /
-├── frontend/
-│   ├── index.html       — Página principal del hotel
-│   ├── checkin.html     — Formulario de check-in en línea
-│   └── images/          — Fotos propias del hotel (opcional)
-│
 ├── backend/
-│   ├── server.js        — Servidor Express principal
+│   ├── server.js        — Servidor Express principal (sirve también el frontend)
 │   ├── .env.example     — Variables de entorno (copiar a .env)
 │   ├── package.json
+│   ├── frontend/
+│   │   ├── index.html   — Página principal del hotel
+│   │   ├── checkin.html — Formulario de check-in en línea
+│   │   └── images/      — Fotos propias del hotel (opcional)
 │   ├── routes/
 │   │   ├── reservas.js  — POST /api/reservas, GET /api/disponibilidad
 │   │   ├── checkin.js   — POST /api/checkin
@@ -35,6 +34,8 @@ Hotel Estación del Sol · Las Núñez, Santa Elena, Ruta del Spondylus, Ecuador
 │
 └── README.md
 ```
+
+> Todo el proyecto vive dentro de `backend/` para que en hosting con apps Node.js administradas (ej. Hostinger Business) baste con apuntar la app a esta única carpeta — el frontend queda protegido bajo el mismo control de acceso del servidor.
 
 ---
 
