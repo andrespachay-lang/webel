@@ -2071,6 +2071,42 @@
 </div>
 
 <script>
+/* ═════════ LÍMITES DE FECHA (no permitir días pasados) ═════════ */
+function hoyISO() {
+  const d = new Date();
+  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+  return d.toISOString().slice(0, 10);
+}
+
+function sumarDias(fechaISO, dias) {
+  const d = new Date(fechaISO + 'T00:00:00');
+  d.setDate(d.getDate() + dias);
+  return d.toISOString().slice(0, 10);
+}
+
+function configurarLimitesFecha(idEntrada, idSalida) {
+  const elEntrada = document.getElementById(idEntrada);
+  const elSalida  = document.getElementById(idSalida);
+  if (!elEntrada || !elSalida) return;
+
+  const min = hoyISO();
+  elEntrada.min = min;
+  elSalida.min = min;
+
+  elEntrada.addEventListener('change', () => {
+    if (!elEntrada.value) return;
+    const minSalida = sumarDias(elEntrada.value, 1);
+    elSalida.min = minSalida;
+    if (elSalida.value && elSalida.value < minSalida) {
+      elSalida.value = minSalida;
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  configurarLimitesFecha('hero-checkin', 'hero-checkout');
+});
+
 /* ═════════ DATOS DE HABITACIONES ═════════ */
 const HABITACIONES = {
   mar: [
@@ -2278,7 +2314,9 @@ function openModal(vista, id) {
   if (heroIn) document.getElementById('m-checkin').value = heroIn;
   if (heroOut) document.getElementById('m-checkout').value = heroOut;
 
-  document.getElementById('m-checkin').onchange = updateModalTotal;
+  configurarLimitesFecha('m-checkin', 'm-checkout');
+
+  document.getElementById('m-checkin').onchange = () => { updateModalTotal(); };
   document.getElementById('m-checkout').onchange = updateModalTotal;
 
   updateModalTotal();
