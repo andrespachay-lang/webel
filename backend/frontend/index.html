@@ -651,13 +651,19 @@
 
   /* ───────── DESCONEXIÓN ───────── */
   .desconexion {
-    background: var(--crema);
-    padding: 8rem 2rem;
+    position: relative;
+    background:
+      linear-gradient(180deg, rgba(15,35,48,0.55) 0%, rgba(15,35,48,0.65) 100%),
+      url('https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=2000&q=80') center/cover;
+    padding: 9rem 2rem;
+    color: var(--crema);
   }
   .desconexion-inner {
     max-width: 780px;
     margin: 0 auto;
     text-align: center;
+    position: relative;
+    z-index: 1;
   }
   .desconexion-mark {
     font-family: var(--serif);
@@ -672,7 +678,7 @@
     font-family: var(--serif);
     font-size: clamp(1.5rem, 2.5vw, 2.25rem);
     font-weight: 300;
-    color: var(--pacifico);
+    color: var(--crema);
     line-height: 1.3;
     margin-bottom: 1.5rem;
     font-style: italic;
@@ -681,7 +687,7 @@
     font-size: 0.8rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--carbon-suave);
+    color: rgba(250, 246, 240, 0.75);
   }
 
   /* ───────── RESEÑAS ───────── */
@@ -1730,7 +1736,7 @@
 <section class="desconexion">
   <div class="desconexion-inner reveal">
     <div class="desconexion-mark">"</div>
-    <blockquote data-i18n="desc_cita">Aquí no hay televisores en las habitaciones. Hay olas, viento, conversaciones que se alargan. Eso es lo que viniste a buscar.</blockquote>
+    <blockquote data-i18n="desc_cita">Fui al mar para ser feliz.</blockquote>
     <div class="desconexion-cite">— Estación del Sol</div>
   </div>
 </section>
@@ -2217,7 +2223,7 @@ const i18n = {
     exp4_titulo: 'Anfitrión presente',
     exp4_texto: 'Recomendaciones reales de quien conoce la costa como su patio.',
 
-    desc_cita: 'Aquí no hay televisores en las habitaciones. Hay olas, viento, conversaciones que se alargan. Eso es lo que viniste a buscar.',
+    desc_cita: 'Fui al mar para ser feliz.',
 
     terraza_kicker: 'Terraza panorámica',
     terraza_titulo: 'El mirador <em style="color:var(--arena);">más alto</em> del sector.',
@@ -2455,7 +2461,7 @@ const i18n = {
     exp4_titulo: 'A host who is present',
     exp4_texto: 'Real recommendations from someone who knows the coast like the back of their hand.',
 
-    desc_cita: "There are no TVs in the rooms here. There's waves, wind, and conversations that run long. That's what you came looking for.",
+    desc_cita: "I went to the sea to be happy.",
 
     terraza_kicker: 'Panoramic terrace',
     terraza_titulo: 'The <em style="color:var(--arena);">highest</em> lookout point around.',
