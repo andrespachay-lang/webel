@@ -1,12 +1,14 @@
 /**
- * Servicio de correo — Nodemailer con Gmail
+ * Servicio de correo — Nodemailer vía SMTP de Hostinger
  */
 
 const nodemailer = require('nodemailer');
 
 function crearTransporte() {
   return nodemailer.createTransport({
-    service: 'gmail',
+    host:   process.env.EMAIL_HOST || 'smtp.hostinger.com',
+    port:   Number(process.env.EMAIL_PORT) || 465,
+    secure: true,
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
