@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Estación del Sol — Como tu casa en la playa</title>
 <meta name="description" content="Hotel Estación del Sol en Las Núñez, Santa Elena, Ruta del Spondylus, Ecuador. Habitaciones con vista al mar, a la montaña y a la piscina. Más de 15 años recibiendo huéspedes como en casa." />
+<link rel="icon" type="image/png" href="images/favicon-180.png" />
+<link rel="apple-touch-icon" href="images/favicon-180.png" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -62,10 +64,11 @@
   }
   .nav.scrolled .nav-brand { color: var(--pacifico); }
   .nav-brand-mark {
-    width: 36px; height: 36px;
-    transition: transform 0.6s ease;
+    width: 38px; height: 38px;
+    object-fit: contain;
+    transition: transform 0.4s ease;
   }
-  .nav-brand:hover .nav-brand-mark { transform: rotate(45deg); }
+  .nav-brand:hover .nav-brand-mark { transform: scale(1.08); }
   .nav-brand-text {
     font-family: var(--serif);
     font-weight: 400;
@@ -1501,7 +1504,7 @@
 <!-- NAV -->
 <nav class="nav" id="nav">
   <a href="#" class="nav-brand">
-    <svg class="nav-brand-mark"><use href="#sundial"/></svg>
+    <img class="nav-brand-mark" src="images/isotipo.png" alt="Estación del Sol" />
     <span class="nav-brand-text">Estación del Sol<small>· LAS NÚÑEZ · EC ·</small></span>
   </a>
   <ul class="nav-menu">
