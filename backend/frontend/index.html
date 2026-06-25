@@ -332,6 +332,100 @@
   section { padding: 7rem 2rem; }
   .container { max-width: var(--max); margin: 0 auto; }
 
+  /* ───────── GALERÍA (slider) ───────── */
+  .galeria { padding: 7rem 0; }
+  .galeria-slider {
+    max-width: var(--max);
+    margin: 0 auto;
+    position: relative;
+    aspect-ratio: 3 / 1;
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--pacifico);
+  }
+  .galeria-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 1.2s ease;
+  }
+  .galeria-slide.activo { opacity: 1; }
+  .galeria-slide img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .galeria-slide::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(27,73,101,0.45) 0%, transparent 60%);
+  }
+  .galeria-info {
+    position: absolute;
+    bottom: 1.75rem; left: 1.75rem;
+    z-index: 2;
+    color: var(--crema);
+  }
+  .galeria-numero {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+    font-weight: 400;
+    color: var(--sol);
+    line-height: 1;
+  }
+  .galeria-nombre {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-top: 0.35rem;
+  }
+  .galeria-dots {
+    position: absolute;
+    top: 1.5rem; right: 1.75rem;
+    z-index: 2;
+    display: flex;
+    gap: 0.55rem;
+  }
+  .galeria-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    border: 0;
+    padding: 0;
+    background: rgba(250,246,240,0.4);
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+  }
+  .galeria-dot:hover { background: rgba(250,246,240,0.7); }
+  .galeria-dot.activo { background: var(--sol); transform: scale(1.2); }
+  .galeria-arrows {
+    position: absolute;
+    bottom: 1.5rem; right: 1.75rem;
+    z-index: 2;
+    display: flex;
+    gap: 0.75rem;
+  }
+  .galeria-arrow {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    border: 1px solid rgba(250,246,240,0.4);
+    background: rgba(27,73,101,0.25);
+    color: var(--crema);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .galeria-arrow:hover { background: rgba(212,165,116,0.35); border-color: var(--sol); }
+  .galeria-arrow svg { width: 16px; height: 16px; }
+  @media (max-width: 900px) {
+    .galeria { padding: 5rem 0; }
+    .galeria-slider { aspect-ratio: 4 / 3; border-radius: 4px; }
+    .galeria-info { left: 1.1rem; bottom: 1.1rem; }
+    .galeria-dots { right: 1.1rem; top: 1.1rem; }
+    .galeria-arrows { right: 1.1rem; bottom: 1.1rem; }
+    .galeria-arrow { width: 32px; height: 32px; }
+  }
+
   .section-kicker {
     font-size: 0.75rem;
     letter-spacing: 0.3em;
@@ -1595,6 +1689,95 @@
   </div>
   <div class="hero-scroll" data-i18n="hero_descubre">Descubre ↓</div>
 </header>
+
+<!-- GALERÍA -->
+<section class="galeria">
+  <div class="galeria-slider reveal" id="galeria-slider">
+    <!-- FOTO REAL: piscina del hotel -->
+    <div class="galeria-slide activo" data-nombre="Piscina">
+      <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?w=1200&q=80" alt="Piscina — Estación del Sol">
+    </div>
+    <!-- FOTO REAL: vista al mar -->
+    <div class="galeria-slide" data-nombre="Vista al mar">
+      <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&q=80" alt="Vista al mar — Estación del Sol">
+    </div>
+    <!-- FOTO REAL: terraza panorámica -->
+    <div class="galeria-slide" data-nombre="Terraza panorámica">
+      <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1200&q=80" alt="Terraza panorámica — Estación del Sol">
+    </div>
+    <!-- FOTO REAL: playa Las Núñez -->
+    <div class="galeria-slide" data-nombre="Playa Las Núñez">
+      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80" alt="Playa Las Núñez — Estación del Sol">
+    </div>
+    <!-- FOTO REAL: habitaciones -->
+    <div class="galeria-slide" data-nombre="Habitaciones">
+      <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1200&q=80" alt="Habitaciones — Estación del Sol">
+    </div>
+
+    <div class="galeria-info">
+      <div class="galeria-numero" id="galeria-numero">01</div>
+      <div class="galeria-nombre" id="galeria-nombre">Piscina</div>
+    </div>
+
+    <div class="galeria-dots" id="galeria-dots"></div>
+
+    <div class="galeria-arrows">
+      <button class="galeria-arrow" id="galeria-prev" aria-label="Anterior">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="galeria-arrow" id="galeria-next" aria-label="Siguiente">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+<script>
+(() => {
+  const slider = document.getElementById('galeria-slider');
+  if (!slider) return;
+  const slides = [...slider.querySelectorAll('.galeria-slide')];
+  const numeroEl = document.getElementById('galeria-numero');
+  const nombreEl = document.getElementById('galeria-nombre');
+  const dotsEl = document.getElementById('galeria-dots');
+  let indice = 0;
+  let intervalo = null;
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'galeria-dot' + (i === 0 ? ' activo' : '');
+    dot.setAttribute('aria-label', `Foto ${i + 1}`);
+    dot.addEventListener('click', () => irA(i));
+    dotsEl.appendChild(dot);
+  });
+  const dots = [...dotsEl.querySelectorAll('.galeria-dot')];
+
+  function irA(i) {
+    indice = (i + slides.length) % slides.length;
+    slides.forEach((s, j) => s.classList.toggle('activo', j === indice));
+    dots.forEach((d, j) => d.classList.toggle('activo', j === indice));
+    numeroEl.textContent = String(indice + 1).padStart(2, '0');
+    nombreEl.textContent = slides[indice].dataset.nombre;
+  }
+
+  function siguiente() { irA(indice + 1); }
+  function anterior() { irA(indice - 1); }
+
+  function iniciarAutoplay() {
+    detenerAutoplay();
+    intervalo = setInterval(siguiente, 4000);
+  }
+  function detenerAutoplay() {
+    if (intervalo) clearInterval(intervalo);
+  }
+
+  document.getElementById('galeria-next').addEventListener('click', () => { siguiente(); iniciarAutoplay(); });
+  document.getElementById('galeria-prev').addEventListener('click', () => { anterior(); iniciarAutoplay(); });
+  slider.addEventListener('mouseenter', detenerAutoplay);
+  slider.addEventListener('mouseleave', iniciarAutoplay);
+
+  iniciarAutoplay();
+})();
+</script>
 
 <!-- HISTORIA -->
 <section class="historia" id="historia">
