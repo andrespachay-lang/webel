@@ -36,41 +36,10 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
-    cursor: none;
-  }
-  @media (pointer: coarse) {
-    body { cursor: auto; }
   }
   img { max-width: 100%; display: block; }
-  a, button { color: inherit; text-decoration: none; cursor: none; }
-  @media (pointer: coarse) {
-    a, button { cursor: pointer; }
-  }
-  button { background: none; border: 0; font-family: inherit; }
-
-  /* ───────── CURSOR DE OLA ───────── */
-  .wave-cursor {
-    position: fixed;
-    width: 48px; height: 24px;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: transform 0.15s ease-out, width 0.25s, height 0.25s, opacity 0.25s;
-    mix-blend-mode: multiply;
-  }
-  .wave-cursor.hover { width: 64px; height: 32px; }
-  .wave-cursor.hidden { opacity: 0; }
-  .wave-cursor svg {
-    width: 100%; height: 100%;
-    animation: waveBob 2s ease-in-out infinite;
-  }
-  @keyframes waveBob {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(-3px); }
-  }
-  @media (pointer: coarse) {
-    .wave-cursor { display: none; }
-  }
+  a, button { color: inherit; text-decoration: none; }
+  button { background: none; border: 0; font-family: inherit; cursor: pointer; }
 
   /* ───────── NAV ───────── */
   .nav {
@@ -1453,14 +1422,6 @@
 
 <body>
 
-<!-- CURSOR DE OLA -->
-<div class="wave-cursor" id="cursor">
-  <svg viewBox="0 0 48 24" fill="none" stroke="#1B4965" stroke-width="2" stroke-linecap="round">
-    <path d="M2 12 Q 8 4, 14 12 T 26 12 T 38 12 T 46 12"/>
-    <path d="M2 18 Q 8 10, 14 18 T 26 18 T 38 18 T 46 18" opacity="0.5"/>
-  </svg>
-</div>
-
 <!-- LOGO/MONOGRAMA SVG (reutilizable) -->
 <svg width="0" height="0" style="position:absolute;">
   <symbol id="sundial" viewBox="0 0 48 48">
@@ -2612,28 +2573,6 @@ async function consultarDisponibilidad(habitacion, fechaEntrada, fechaSalida) {
     );
     return await resp.json();
   } catch { return null; }
-}
-
-/* ═════════ CURSOR DE OLA ═════════ */
-const cursor = document.getElementById('cursor');
-if (window.matchMedia('(pointer: fine)').matches) {
-  let cx = 0, cy = 0, tx = 0, ty = 0;
-  document.addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY; });
-  function animateCursor() {
-    cx += (tx - cx) * 0.18;
-    cy += (ty - cy) * 0.18;
-    cursor.style.left = cx + 'px';
-    cursor.style.top = cy + 'px';
-    requestAnimationFrame(animateCursor);
-  }
-  animateCursor();
-
-  document.querySelectorAll('a, button, .hab-card, input, select, textarea').forEach(el => {
-    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-  });
-  document.addEventListener('mouseleave', () => cursor.classList.add('hidden'));
-  document.addEventListener('mouseenter', () => cursor.classList.remove('hidden'));
 }
 
 /* ═════════ NAV SCROLL ═════════ */
