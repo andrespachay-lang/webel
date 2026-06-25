@@ -378,6 +378,25 @@
         <span class="error-msg">Ingresa tu documento de identidad</span>
       </div>
 
+      <div class="grupo" id="g-direccion">
+        <label>Dirección</label>
+        <input type="text" id="direccion" placeholder="Ciudad, calle, número" />
+        <span class="error-msg">Ingresa tu dirección</span>
+      </div>
+
+      <div class="fila-2">
+        <div class="grupo" id="g-telefono">
+          <label>Teléfono</label>
+          <input type="text" id="telefono" placeholder="09XXXXXXXX" />
+          <span class="error-msg">Ingresa tu teléfono</span>
+        </div>
+        <div class="grupo" id="g-emergencia">
+          <label>Contacto de emergencia</label>
+          <input type="text" id="contacto-emergencia" placeholder="Nombre y teléfono" />
+          <span class="error-msg">Ingresa un contacto de emergencia</span>
+        </div>
+      </div>
+
       <div class="grupo" id="g-foto">
         <label>Foto de cédula o pasaporte (lado frontal)</label>
         <div class="zona-archivo" id="zona-archivo" onclick="document.getElementById('foto-cedula').click()">
@@ -411,6 +430,11 @@
     <div class="seccion-form" id="s3">
       <h2>Tu <em>llegada</em></h2>
       <p>Así podemos estar listos cuando llegues.</p>
+
+      <div class="aviso-codigo">
+        Horario de <strong>check-in</strong>: a partir de las <strong>15:00</strong>.
+        Horario de <strong>check-out</strong>: hasta las <strong>11:00</strong>.
+      </div>
 
       <div class="fila-2">
         <div class="grupo" id="g-hora">
@@ -542,11 +566,14 @@
 
   // ── Validar Paso 2 (datos personales) ──────────────────────────────────────
   function validarPaso2() {
-    const nombre   = document.getElementById('nombre').value.trim();
-    const apellido = document.getElementById('apellido').value.trim();
-    const cedula   = document.getElementById('cedula').value.trim();
-    const foto     = document.getElementById('foto-cedula').files[0];
-    const acepta   = document.getElementById('acepto-terminos').checked;
+    const nombre      = document.getElementById('nombre').value.trim();
+    const apellido     = document.getElementById('apellido').value.trim();
+    const cedula       = document.getElementById('cedula').value.trim();
+    const direccion    = document.getElementById('direccion').value.trim();
+    const telefono     = document.getElementById('telefono').value.trim();
+    const emergencia   = document.getElementById('contacto-emergencia').value.trim();
+    const foto         = document.getElementById('foto-cedula').files[0];
+    const acepta       = document.getElementById('acepto-terminos').checked;
 
     let hayError = false;
     const marcar = (id, condicion) => {
@@ -555,11 +582,14 @@
       if (condicion) hayError = true;
     };
 
-    marcar('g-nombre',   !nombre);
-    marcar('g-apellido', !apellido);
-    marcar('g-cedula',   !cedula);
-    marcar('g-foto',     !foto);
-    marcar('g-terminos', !acepta);
+    marcar('g-nombre',     !nombre);
+    marcar('g-apellido',   !apellido);
+    marcar('g-cedula',     !cedula);
+    marcar('g-direccion',  !direccion);
+    marcar('g-telefono',   !telefono);
+    marcar('g-emergencia', !emergencia);
+    marcar('g-foto',       !foto);
+    marcar('g-terminos',   !acepta);
 
     if (hayError) return;
     irAPaso(3);
@@ -567,18 +597,21 @@
 
   // ── Enviar check-in ────────────────────────────────────────────────────────
   async function enviarCheckin() {
-    const nombre   = document.getElementById('nombre').value.trim();
-    const apellido = document.getElementById('apellido').value.trim();
-    const cedula   = document.getElementById('cedula').value.trim();
-    const hora     = document.getElementById('hora-llegada').value;
-    const personas = document.getElementById('personas').value;
-    const solicitudes = document.getElementById('solicitudes').value.trim();
-    const foto     = document.getElementById('foto-cedula').files[0];
-    const acepta   = document.getElementById('acepto-terminos').checked;
+    const nombre      = document.getElementById('nombre').value.trim();
+    const apellido     = document.getElementById('apellido').value.trim();
+    const cedula       = document.getElementById('cedula').value.trim();
+    const direccion    = document.getElementById('direccion').value.trim();
+    const telefono     = document.getElementById('telefono').value.trim();
+    const emergencia   = document.getElementById('contacto-emergencia').value.trim();
+    const hora         = document.getElementById('hora-llegada').value;
+    const personas     = document.getElementById('personas').value;
+    const solicitudes  = document.getElementById('solicitudes').value.trim();
+    const foto         = document.getElementById('foto-cedula').files[0];
+    const acepta       = document.getElementById('acepto-terminos').checked;
 
     // Validación
     let hayError = false;
-    if (!nombre || !apellido || !cedula || !foto || !acepta) {
+    if (!nombre || !apellido || !cedula || !direccion || !telefono || !emergencia || !foto || !acepta) {
       // Datos del paso 2 incompletos: regresa para corregirlos
       irAPaso(2);
       validarPaso2();
@@ -596,14 +629,17 @@
 
     try {
       const formData = new FormData();
-      formData.append('codigo_reserva',   codigoValidado);
-      formData.append('nombre',           nombre);
-      formData.append('apellido',         apellido);
-      formData.append('cedula',           cedula);
-      formData.append('hora_llegada',     hora);
-      formData.append('personas',         personas);
-      formData.append('solicitudes',      solicitudes);
-      formData.append('acepto_terminos',  acepta ? 'true' : 'false');
+      formData.append('codigo_reserva',      codigoValidado);
+      formData.append('nombre',              nombre);
+      formData.append('apellido',            apellido);
+      formData.append('cedula',              cedula);
+      formData.append('direccion',           direccion);
+      formData.append('telefono',            telefono);
+      formData.append('contacto_emergencia', emergencia);
+      formData.append('hora_llegada',        hora);
+      formData.append('personas',            personas);
+      formData.append('solicitudes',         solicitudes);
+      formData.append('acepto_terminos',     acepta ? 'true' : 'false');
       formData.append('foto_cedula', foto);
 
       const resp = await fetch(`${API}/api/checkin`, {

@@ -45,6 +45,9 @@ router.post('/', subida.single('foto_cedula'), async (req, res) => {
     nombre,
     apellido,
     cedula,
+    direccion,
+    telefono,
+    contacto_emergencia,
     hora_llegada,
     personas,
     solicitudes,
@@ -52,7 +55,10 @@ router.post('/', subida.single('foto_cedula'), async (req, res) => {
   } = req.body;
 
   // ── Validación ───────────────────────────────────────────────────────────
-  const camposObligatorios = { codigo_reserva, nombre, apellido, cedula, hora_llegada, personas };
+  const camposObligatorios = {
+    codigo_reserva, nombre, apellido, cedula, direccion, telefono,
+    contacto_emergencia, hora_llegada, personas,
+  };
   for (const [campo, valor] of Object.entries(camposObligatorios)) {
     if (!valor) {
       return res.status(400).json({ error: `El campo "${campo}" es obligatorio` });
@@ -88,13 +94,16 @@ router.post('/', subida.single('foto_cedula'), async (req, res) => {
   // ── Guardar check-in ─────────────────────────────────────────────────────
   try {
     db.prepare(`
-      INSERT INTO checkins (codigo_reserva, nombre, apellido, cedula, hora_llegada, personas, solicitudes, foto_cedula, acepto_terminos)
-      VALUES (@codigo_reserva, @nombre, @apellido, @cedula, @hora_llegada, @personas, @solicitudes, @foto_cedula, @acepto_terminos)
+      INSERT INTO checkins (codigo_reserva, nombre, apellido, cedula, direccion, telefono, contacto_emergencia, hora_llegada, personas, solicitudes, foto_cedula, acepto_terminos)
+      VALUES (@codigo_reserva, @nombre, @apellido, @cedula, @direccion, @telefono, @contacto_emergencia, @hora_llegada, @personas, @solicitudes, @foto_cedula, @acepto_terminos)
     `).run({
       codigo_reserva,
       nombre,
       apellido,
       cedula,
+      direccion,
+      telefono,
+      contacto_emergencia,
       hora_llegada,
       personas: numPersonas,
       solicitudes: solicitudes || null,

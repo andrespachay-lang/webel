@@ -161,9 +161,17 @@ async function enviarConfirmacionCheckin(checkin, reserva) {
       <tr><td>Llegada</td><td>${formatearFecha(reserva.fecha_entrada)}</td></tr>
       <tr><td>Hora estimada</td><td>${checkin.hora_llegada}</td></tr>
       <tr><td>Personas</td><td>${checkin.personas}</td></tr>
+      <tr><td>Dirección registrada</td><td>${checkin.direccion}</td></tr>
+      <tr><td>Teléfono</td><td>${checkin.telefono}</td></tr>
+      <tr><td>Contacto de emergencia</td><td>${checkin.contacto_emergencia}</td></tr>
     </table>
 
     ${checkin.solicitudes ? `<p><strong>Solicitudes registradas:</strong> ${checkin.solicitudes}</p>` : ''}
+
+    <p style="font-size:0.85rem;color:#5A6C7D;">
+      Recuerda: el horario de <strong>check-in</strong> es a partir de las <strong>15:00</strong>
+      y el <strong>check-out</strong> hasta las <strong>11:00</strong>.
+    </p>
 
     <p>El anfitrión ya tiene tu información. Si necesitas algo antes de llegar, escríbenos.</p>
     <a href="https://wa.me/593963750763" class="btn">Contactar por WhatsApp</a>`;
@@ -186,6 +194,9 @@ async function enviarNotificacionCheckinHotel(checkin, reserva, rutaFotoCedula =
       <tr><td>Reserva</td><td>${checkin.codigo_reserva}</td></tr>
       <tr><td>Huésped</td><td>${checkin.nombre} ${checkin.apellido}</td></tr>
       <tr><td>Cédula / Pasaporte</td><td>${checkin.cedula}</td></tr>
+      <tr><td>Dirección</td><td>${checkin.direccion}</td></tr>
+      <tr><td>Teléfono</td><td>${checkin.telefono}</td></tr>
+      <tr><td>Contacto de emergencia</td><td>${checkin.contacto_emergencia}</td></tr>
       <tr><td>Habitación</td><td>${reserva.habitacion}</td></tr>
       <tr><td>Llegada</td><td>${formatearFecha(reserva.fecha_entrada)}</td></tr>
       <tr><td>Hora estimada</td><td>${checkin.hora_llegada}</td></tr>

@@ -10,6 +10,9 @@ function crearTablaCheckins(db) {
       nombre               TEXT    NOT NULL,
       apellido             TEXT    NOT NULL DEFAULT '',
       cedula               TEXT    NOT NULL,
+      direccion            TEXT    NOT NULL DEFAULT '',
+      telefono             TEXT    NOT NULL DEFAULT '',
+      contacto_emergencia  TEXT    NOT NULL DEFAULT '',
       hora_llegada         TEXT    NOT NULL,
       personas             INTEGER NOT NULL,
       solicitudes          TEXT,
@@ -22,11 +25,15 @@ function crearTablaCheckins(db) {
 
   // ── Migración: agregar columnas nuevas si la tabla ya existía ────────────
   const columnas = db.prepare(`PRAGMA table_info(checkins)`).all().map(c => c.name);
-  if (!columnas.includes('apellido')) {
-    db.exec(`ALTER TABLE checkins ADD COLUMN apellido TEXT NOT NULL DEFAULT ''`);
-  }
-  if (!columnas.includes('acepto_terminos')) {
-    db.exec(`ALTER TABLE checkins ADD COLUMN acepto_terminos INTEGER NOT NULL DEFAULT 0`);
+  const nuevas = {
+    apellido:            `ALTER TABLE checkins ADD COLUMN apellido TEXT NOT NULL DEFAULT ''`,
+    acepto_terminos:     `ALTER TABLE checkins ADD COLUMN acepto_terminos INTEGER NOT NULL DEFAULT 0`,
+    direccion:           `ALTER TABLE checkins ADD COLUMN direccion TEXT NOT NULL DEFAULT ''`,
+    telefono:            `ALTER TABLE checkins ADD COLUMN telefono TEXT NOT NULL DEFAULT ''`,
+    contacto_emergencia: `ALTER TABLE checkins ADD COLUMN contacto_emergencia TEXT NOT NULL DEFAULT ''`,
+  };
+  for (const [columna, sql] of Object.entries(nuevas)) {
+    if (!columnas.includes(columna)) db.exec(sql);
   }
 }
 
