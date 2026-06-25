@@ -112,6 +112,12 @@
   }
   .nav-toggle { display: none; }
 
+  .nav-social { display: flex; gap: 0.9rem; align-items: center; }
+  .nav-social a { display: flex; color: var(--crema); opacity: 0.9; transition: color 0.3s, opacity 0.3s; }
+  .nav-social a:hover { opacity: 1; color: var(--sol); }
+  .nav-social svg { width: 19px; height: 19px; }
+  .nav.scrolled .nav-social a { color: var(--pacifico); }
+
   /* ───────── HERO ───────── */
   .hero {
     position: relative;
@@ -1451,10 +1457,17 @@
   <ul class="nav-menu">
     <li><a href="#historia">Historia</a></li>
     <li><a href="#habitaciones">Habitaciones</a></li>
-    <li><a href="#experiencia">Experiencia</a></li>
     <li><a href="#resenas">Reseñas</a></li>
     <li><a href="#ubicacion">Ubicación</a></li>
     <li><a href="#reservar" class="nav-cta">Reservar</a></li>
+    <li class="nav-social">
+      <a href="https://www.instagram.com/estaciondelsol.ec/" target="_blank" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a href="https://www.facebook.com/estaciondelsol.ec/" target="_blank" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.5 9.95v-7.05H8v-2.9h2.5V9.5c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87H17l-.4 2.9h-2.1v7.05A10 10 0 0 0 22 12"/></svg>
+      </a>
+    </li>
   </ul>
   <button class="nav-toggle" aria-label="Menú">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -1817,8 +1830,8 @@
     <div class="foot">
       <h5>Contacto</h5>
       <ul>
-        <li><a href="https://wa.me/593963750763">WhatsApp +593 96 375 0763</a></li>
-        <li><a href="mailto:Andres.pachay@gmail.com">Andres.pachay@gmail.com</a></li>
+        <li><a href="https://wa.me/593986721666">WhatsApp +593 98 672 1666</a></li>
+        <li><a href="mailto:arena@hotelestaciondelsol.com">arena@hotelestaciondelsol.com</a></li>
         <li>Las Núñez · Santa Elena</li>
       </ul>
     </div>
@@ -1837,7 +1850,7 @@
 </footer>
 
 <!-- WHATSAPP FLOAT -->
-<a href="https://wa.me/593963750763?text=Hola%2C%20quisiera%20info%20sobre%20Estaci%C3%B3n%20del%20Sol" class="wa-btn" target="_blank" aria-label="WhatsApp">
+<a href="https://wa.me/593986721666?text=Hola%2C%20quisiera%20info%20sobre%20Estaci%C3%B3n%20del%20Sol" class="wa-btn" target="_blank" aria-label="WhatsApp">
   <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
 </a>
 

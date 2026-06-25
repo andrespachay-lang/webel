@@ -50,7 +50,7 @@ function plantillaBase(contenido) {
       </div>
       <div class="cuerpo">${contenido}</div>
       <div class="pie">
-        <a href="https://wa.me/593963750763">WhatsApp +593 96 375 0763</a> ·
+        <a href="https://wa.me/593986721666">WhatsApp +593 98 672 1666</a> ·
         <a href="mailto:Andres.pachay@gmail.com">Andres.pachay@gmail.com</a><br>
         Las Núñez · Santa Elena · Ruta del Spondylus, Ecuador
       </div>
@@ -91,7 +91,7 @@ async function enviarConfirmacionHuesped(reserva) {
 
     <p style="margin-top:24px;font-size:0.9rem;color:#5A6C7D;">
       ¿Tienes preguntas? Escríbenos al
-      <a href="https://wa.me/593963750763" style="color:#D4A574;">+593 96 375 0763</a>
+      <a href="https://wa.me/593986721666" style="color:#D4A574;">+593 98 672 1666</a>
       o a este correo. Con gusto te ayudamos.
     </p>`;
 
@@ -174,7 +174,7 @@ async function enviarConfirmacionCheckin(checkin, reserva) {
     </p>
 
     <p>El anfitrión ya tiene tu información. Si necesitas algo antes de llegar, escríbenos.</p>
-    <a href="https://wa.me/593963750763" class="btn">Contactar por WhatsApp</a>`;
+    <a href="https://wa.me/593986721666" class="btn">Contactar por WhatsApp</a>`;
 
   await transporte.sendMail({
     from: `"Estación del Sol" <${process.env.EMAIL_USER}>`,
