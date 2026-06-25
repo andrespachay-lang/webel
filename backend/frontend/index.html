@@ -1394,11 +1394,39 @@
   /* ───────── RESPONSIVE ───────── */
   @media (max-width: 900px) {
     .nav { padding: 1rem 1.25rem; }
-    .nav-menu { display: none; }
+    .nav-menu {
+      display: none;
+      position: absolute;
+      top: 100%; left: 0; right: 0;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+      background: var(--crema);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+      padding: 0.5rem 0;
+    }
+    .nav-menu.abierto { display: flex; }
+    .nav-menu li { width: 100%; }
+    .nav-menu a, .nav-menu .lang-switch, .nav-menu .nav-social {
+      color: var(--carbon) !important;
+    }
+    .nav-menu a {
+      display: block;
+      width: 100%;
+      padding: 0.9rem 1.5rem;
+    }
+    .nav-menu .nav-cta {
+      border: 0;
+      padding: 0.9rem 1.5rem;
+    }
+    .nav-menu .lang-switch, .nav-menu .nav-social {
+      padding: 0.9rem 1.5rem;
+    }
     .nav-toggle {
       display: block; background: none; border: 0;
       width: 32px; height: 32px;
       color: var(--crema);
+      position: relative; z-index: 1;
     }
     .nav.scrolled .nav-toggle { color: var(--pacifico); }
     .historia-grid, .ubic-grid { grid-template-columns: 1fr; gap: 2.5rem; }
@@ -1496,12 +1524,33 @@
       </a>
     </li>
   </ul>
-  <button class="nav-toggle" aria-label="Menú">
+  <button class="nav-toggle" id="nav-toggle" aria-label="Menú" aria-expanded="false">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
       <line x1="4" y1="8" x2="20" y2="8"/><line x1="4" y1="16" x2="20" y2="16"/>
     </svg>
   </button>
 </nav>
+
+<script>
+(() => {
+  const toggle = document.getElementById('nav-toggle');
+  const menu = document.querySelector('.nav-menu');
+  if (!toggle || !menu) return;
+  const cerrar = () => {
+    menu.classList.remove('abierto');
+    toggle.setAttribute('aria-expanded', 'false');
+  };
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const abierto = menu.classList.toggle('abierto');
+    toggle.setAttribute('aria-expanded', String(abierto));
+  });
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', cerrar));
+  document.addEventListener('click', (e) => {
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) cerrar();
+  });
+})();
+</script>
 
 <!-- HERO -->
 <header class="hero">
