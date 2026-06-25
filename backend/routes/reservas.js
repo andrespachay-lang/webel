@@ -13,6 +13,7 @@ const router   = express.Router();
 const { HABITACIONES, generarCodigo, calcularTotal } = require('../models/Reserva');
 const payphone = require('../services/payphone');
 const whatsapp = require('../services/whatsapp');
+const email    = require('../services/email');
 
 // ── Multer para comprobante de transferencia ──────────────────────────────────
 const almacenamientoComprobante = multer.diskStorage({
@@ -158,8 +159,16 @@ router.post('/', subirComprobante.single('comprobante_pago'), async (req, res) =
   if (esTransfer) {
     // El hotel confirma manualmente al revisar el comprobante
     db.prepare('UPDATE reservas SET estado = ? WHERE codigo = ?').run('pendiente_confirmacion', codigo);
+    const reservaGuardada = db.prepare('SELECT * FROM reservas WHERE codigo = ?').get(codigo);
+
+    const rutaComprobante = archivoComprobante
+      ? path.join(__dirname, '../uploads/comprobantes', archivoComprobante)
+      : null;
+
+    email.enviarConfirmacionHuesped(reservaGuardada).catch(e => console.error('[Email]', e.message));
+    email.enviarNotificacionHotel(reservaGuardada, rutaComprobante).catch(e => console.error('[Email hotel]', e.message));
     whatsapp.enviarWhatsApp(
-      whatsapp.mensajeNuevaReserva({ ...db.prepare('SELECT * FROM reservas WHERE codigo = ?').get(codigo) })
+      whatsapp.mensajeNuevaReserva({ ...reservaGuardada })
     ).catch(e => console.error('[WA]', e.message));
 
     return res.status(201).json({
