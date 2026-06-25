@@ -6,6 +6,7 @@
 const express = require('express');
 const multer  = require('multer');
 const path    = require('path');
+const fs      = require('fs');
 const router  = express.Router();
 const email     = require('../services/email');
 const whatsapp  = require('../services/whatsapp');
@@ -13,7 +14,9 @@ const whatsapp  = require('../services/whatsapp');
 // ── Configuración de Multer (subida de foto de cédula) ────────────────────────
 const almacenamiento = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, '../uploads/cedulas'));
+    const dir = path.join(__dirname, '../uploads/cedulas');
+    fs.mkdirSync(dir, { recursive: true });
+    cb(null, dir);
   },
   filename: (req, file, cb) => {
     const ext  = path.extname(file.originalname).toLowerCase();
