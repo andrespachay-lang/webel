@@ -237,6 +237,51 @@
   }
   .alerta-error.visible { display: block; }
 
+  /* Checkbox de términos */
+  .grupo-check { margin-top: 0.25rem; }
+  .check-terminos {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    font-size: 0.88rem;
+    color: var(--carbon-suave);
+    cursor: pointer;
+  }
+  .check-terminos input { width: 18px; height: 18px; margin-top: 0.15rem; accent-color: var(--pacifico); flex-shrink: 0; }
+  .grupo-check.error .check-terminos { color: #c0392b; }
+
+  /* Modal de términos */
+  .modal-terminos {
+    position: fixed; inset: 0;
+    background: rgba(27,73,101,0.55);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 200;
+    padding: 1.5rem;
+  }
+  .modal-terminos.open { display: flex; }
+  .modal-terminos-card {
+    background: #fff;
+    border-radius: 10px;
+    max-width: 560px;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 2rem;
+  }
+  .modal-terminos-card h3 { font-family: var(--serif); color: var(--pacifico); font-weight: 400; margin-bottom: 1rem; }
+  .modal-terminos-card p { font-size: 0.9rem; color: var(--carbon-suave); margin-bottom: 0.85rem; line-height: 1.6; }
+  .modal-terminos-card button {
+    margin-top: 0.5rem;
+    background: var(--pacifico);
+    color: var(--crema);
+    border: none;
+    padding: 0.75rem 1.75rem;
+    border-radius: 100px;
+    font-family: var(--sans);
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+
   /* Footer */
   .pie {
     text-align: center;
@@ -316,19 +361,25 @@
 
       <div class="fila-2">
         <div class="grupo" id="g-nombre">
-          <label>Nombre completo</label>
-          <input type="text" id="nombre" placeholder="Andrés Pérez" />
-          <span class="error-msg">Ingresa tu nombre completo</span>
+          <label>Nombre</label>
+          <input type="text" id="nombre" placeholder="Andrés" />
+          <span class="error-msg">Ingresa tu nombre</span>
         </div>
-        <div class="grupo" id="g-cedula">
-          <label>Cédula / Pasaporte</label>
-          <input type="text" id="cedula" placeholder="0912345678" />
-          <span class="error-msg">Ingresa tu documento de identidad</span>
+        <div class="grupo" id="g-apellido">
+          <label>Apellido</label>
+          <input type="text" id="apellido" placeholder="Pérez" />
+          <span class="error-msg">Ingresa tu apellido</span>
         </div>
       </div>
 
-      <div class="grupo">
-        <label>Foto de cédula o pasaporte (opcional)</label>
+      <div class="grupo" id="g-cedula">
+        <label>Cédula / Pasaporte</label>
+        <input type="text" id="cedula" placeholder="0912345678" />
+        <span class="error-msg">Ingresa tu documento de identidad</span>
+      </div>
+
+      <div class="grupo" id="g-foto">
+        <label>Foto de cédula o pasaporte (lado frontal)</label>
         <div class="zona-archivo" id="zona-archivo" onclick="document.getElementById('foto-cedula').click()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <rect x="3" y="5" width="18" height="14" rx="2"/>
@@ -339,10 +390,19 @@
           <input type="file" id="foto-cedula" accept=".jpg,.jpeg,.png,.pdf" onchange="manejarArchivo(event)" />
           <div class="archivo-nombre" id="archivo-nombre"></div>
         </div>
+        <span class="error-msg">Debes subir la foto de tu cédula o pasaporte</span>
+      </div>
+
+      <div class="grupo grupo-check" id="g-terminos">
+        <label class="check-terminos">
+          <input type="checkbox" id="acepto-terminos" />
+          <span>He leído y acepto las <a href="#" onclick="event.preventDefault(); document.getElementById('modal-terminos').classList.add('open');" style="color:var(--sol);text-decoration:underline;">condiciones de la estancia</a> del hotel.</span>
+        </label>
+        <span class="error-msg">Debes aceptar las condiciones para continuar</span>
       </div>
 
       <div class="acciones">
-        <button class="btn-sig" onclick="irAPaso(3)">Continuar →</button>
+        <button class="btn-sig" onclick="validarPaso2()">Continuar →</button>
         <button class="btn-ant" onclick="irAPaso(1)">← Atrás</button>
       </div>
     </div>
@@ -401,6 +461,16 @@
     </a>
   </div>
 </main>
+
+<div class="modal-terminos" id="modal-terminos">
+  <div class="modal-terminos-card">
+    <h3>Condiciones de la <em>estancia</em></h3>
+    <p>Al realizar el check-in, el huésped declara que la información proporcionada (nombre, apellido, documento de identidad y fotografía de la cédula o pasaporte) es verídica y corresponde a la persona que se alojará en Hotel Estación del Sol, Las Núñez, Santa Elena, Ecuador.</p>
+    <p>Esta información se solicita por motivos de registro legal de huéspedes y será tratada de forma confidencial, utilizada únicamente para fines de control interno del hotel y los requerimientos que exija la normativa ecuatoriana vigente para establecimientos de alojamiento turístico.</p>
+    <p>El huésped se compromete a respetar las normas de convivencia y horarios del hotel, y reconoce que el check-in en línea no sustituye la presentación del documento de identidad original al momento de la llegada.</p>
+    <button onclick="document.getElementById('modal-terminos').classList.remove('open')">Entendido</button>
+  </div>
+</div>
 
 <footer class="pie">
   <a href="index.html">Estación del Sol</a> · Las Núñez · Santa Elena, Ecuador ·
@@ -467,23 +537,53 @@
     zona.classList.add('activo');
     nombreEl.textContent = `✔ ${archivo.name}`;
     nombreEl.style.display = 'block';
+    document.getElementById('g-foto').classList.remove('error');
+  }
+
+  // ── Validar Paso 2 (datos personales) ──────────────────────────────────────
+  function validarPaso2() {
+    const nombre   = document.getElementById('nombre').value.trim();
+    const apellido = document.getElementById('apellido').value.trim();
+    const cedula   = document.getElementById('cedula').value.trim();
+    const foto     = document.getElementById('foto-cedula').files[0];
+    const acepta   = document.getElementById('acepto-terminos').checked;
+
+    let hayError = false;
+    const marcar = (id, condicion) => {
+      const grupo = document.getElementById(id);
+      grupo.classList.toggle('error', condicion);
+      if (condicion) hayError = true;
+    };
+
+    marcar('g-nombre',   !nombre);
+    marcar('g-apellido', !apellido);
+    marcar('g-cedula',   !cedula);
+    marcar('g-foto',     !foto);
+    marcar('g-terminos', !acepta);
+
+    if (hayError) return;
+    irAPaso(3);
   }
 
   // ── Enviar check-in ────────────────────────────────────────────────────────
   async function enviarCheckin() {
     const nombre   = document.getElementById('nombre').value.trim();
+    const apellido = document.getElementById('apellido').value.trim();
     const cedula   = document.getElementById('cedula').value.trim();
     const hora     = document.getElementById('hora-llegada').value;
     const personas = document.getElementById('personas').value;
     const solicitudes = document.getElementById('solicitudes').value.trim();
     const foto     = document.getElementById('foto-cedula').files[0];
+    const acepta   = document.getElementById('acepto-terminos').checked;
 
     // Validación
     let hayError = false;
-    if (!nombre) { document.getElementById('g-nombre').classList.add('error'); hayError = true; }
-    else          document.getElementById('g-nombre').classList.remove('error');
-    if (!cedula) { document.getElementById('g-cedula').classList.add('error'); hayError = true; }
-    else          document.getElementById('g-cedula').classList.remove('error');
+    if (!nombre || !apellido || !cedula || !foto || !acepta) {
+      // Datos del paso 2 incompletos: regresa para corregirlos
+      irAPaso(2);
+      validarPaso2();
+      return;
+    }
     if (!hora)   { document.getElementById('g-hora').classList.add('error');   hayError = true; }
     else          document.getElementById('g-hora').classList.remove('error');
 
@@ -496,13 +596,15 @@
 
     try {
       const formData = new FormData();
-      formData.append('codigo_reserva', codigoValidado);
-      formData.append('nombre',         nombre);
-      formData.append('cedula',         cedula);
-      formData.append('hora_llegada',   hora);
-      formData.append('personas',       personas);
-      formData.append('solicitudes',    solicitudes);
-      if (foto) formData.append('foto_cedula', foto);
+      formData.append('codigo_reserva',   codigoValidado);
+      formData.append('nombre',           nombre);
+      formData.append('apellido',         apellido);
+      formData.append('cedula',           cedula);
+      formData.append('hora_llegada',     hora);
+      formData.append('personas',         personas);
+      formData.append('solicitudes',      solicitudes);
+      formData.append('acepto_terminos',  acepta ? 'true' : 'false');
+      formData.append('foto_cedula', foto);
 
       const resp = await fetch(`${API}/api/checkin`, {
         method: 'POST',

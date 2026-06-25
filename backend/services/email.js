@@ -153,7 +153,7 @@ async function enviarConfirmacionCheckin(checkin, reserva) {
   const transporte = crearTransporte();
 
   const contenido = `
-    <p>Hola <strong>${checkin.nombre}</strong>,</p>
+    <p>Hola <strong>${checkin.nombre} ${checkin.apellido}</strong>,</p>
     <p>Tu check-in para la reserva <strong>${checkin.codigo_reserva}</strong> ha sido recibido. ¡Ya tienes todo listo para llegar!</p>
 
     <table class="tabla">
@@ -173,6 +173,42 @@ async function enviarConfirmacionCheckin(checkin, reserva) {
     to: reserva.correo,
     subject: `☀ Check-in recibido ${checkin.codigo_reserva} — Estación del Sol`,
     html: plantillaBase(contenido),
+  });
+}
+
+// ── Notificación interna de check-in al hotel (con foto de cédula) ────────────
+async function enviarNotificacionCheckinHotel(checkin, reserva, rutaFotoCedula = null) {
+  const transporte = crearTransporte();
+
+  const contenido = `
+    <p><strong>Nuevo check-in en línea registrado.</strong></p>
+    <table class="tabla">
+      <tr><td>Reserva</td><td>${checkin.codigo_reserva}</td></tr>
+      <tr><td>Huésped</td><td>${checkin.nombre} ${checkin.apellido}</td></tr>
+      <tr><td>Cédula / Pasaporte</td><td>${checkin.cedula}</td></tr>
+      <tr><td>Habitación</td><td>${reserva.habitacion}</td></tr>
+      <tr><td>Llegada</td><td>${formatearFecha(reserva.fecha_entrada)}</td></tr>
+      <tr><td>Hora estimada</td><td>${checkin.hora_llegada}</td></tr>
+      <tr><td>Personas</td><td>${checkin.personas}</td></tr>
+      <tr><td>Condiciones de la estancia</td><td style="color:#27ae60;font-weight:600;">✔ Aceptadas</td></tr>
+      <tr><td>Foto de identificación</td><td>${rutaFotoCedula ? '✔ Adjunta en este correo' : 'No adjuntada'}</td></tr>
+    </table>
+    ${checkin.solicitudes ? `<p><strong>Solicitudes:</strong> ${checkin.solicitudes}</p>` : ''}`;
+
+  const adjuntos = [];
+  if (rutaFotoCedula) {
+    adjuntos.push({
+      path: rutaFotoCedula,
+      filename: `cedula-${checkin.codigo_reserva}${require('path').extname(rutaFotoCedula)}`,
+    });
+  }
+
+  await transporte.sendMail({
+    from: `"Estación del Sol Sistema" <${process.env.EMAIL_USER}>`,
+    to: process.env.EMAIL_USER,
+    subject: `🪪 Check-in ${checkin.codigo_reserva} — ${checkin.nombre} ${checkin.apellido}`,
+    html: plantillaBase(contenido),
+    attachments: adjuntos,
   });
 }
 
@@ -205,5 +241,6 @@ module.exports = {
   enviarConfirmacionHuesped,
   enviarNotificacionHotel,
   enviarConfirmacionCheckin,
+  enviarNotificacionCheckinHotel,
   enviarMensajeContacto,
 };

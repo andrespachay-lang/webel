@@ -43,18 +43,28 @@ router.post('/', subida.single('foto_cedula'), async (req, res) => {
   const {
     codigo_reserva,
     nombre,
+    apellido,
     cedula,
     hora_llegada,
     personas,
     solicitudes,
+    acepto_terminos,
   } = req.body;
 
   // ── Validación ───────────────────────────────────────────────────────────
-  const camposObligatorios = { codigo_reserva, nombre, cedula, hora_llegada, personas };
+  const camposObligatorios = { codigo_reserva, nombre, apellido, cedula, hora_llegada, personas };
   for (const [campo, valor] of Object.entries(camposObligatorios)) {
     if (!valor) {
       return res.status(400).json({ error: `El campo "${campo}" es obligatorio` });
     }
+  }
+
+  if (!req.file) {
+    return res.status(400).json({ error: 'Debes subir la foto de tu cédula o pasaporte' });
+  }
+
+  if (acepto_terminos !== 'true' && acepto_terminos !== '1') {
+    return res.status(400).json({ error: 'Debes aceptar las condiciones de la estancia para continuar' });
   }
 
   // Verificar que la reserva existe y no está cancelada
@@ -78,16 +88,18 @@ router.post('/', subida.single('foto_cedula'), async (req, res) => {
   // ── Guardar check-in ─────────────────────────────────────────────────────
   try {
     db.prepare(`
-      INSERT INTO checkins (codigo_reserva, nombre, cedula, hora_llegada, personas, solicitudes, foto_cedula)
-      VALUES (@codigo_reserva, @nombre, @cedula, @hora_llegada, @personas, @solicitudes, @foto_cedula)
+      INSERT INTO checkins (codigo_reserva, nombre, apellido, cedula, hora_llegada, personas, solicitudes, foto_cedula, acepto_terminos)
+      VALUES (@codigo_reserva, @nombre, @apellido, @cedula, @hora_llegada, @personas, @solicitudes, @foto_cedula, @acepto_terminos)
     `).run({
       codigo_reserva,
       nombre,
+      apellido,
       cedula,
       hora_llegada,
       personas: numPersonas,
       solicitudes: solicitudes || null,
       foto_cedula: fotoCedula,
+      acepto_terminos: 1,
     });
   } catch (err) {
     console.error('[Checkin] Error guardando:', err);
@@ -95,9 +107,11 @@ router.post('/', subida.single('foto_cedula'), async (req, res) => {
   }
 
   const checkin = db.prepare('SELECT * FROM checkins WHERE codigo_reserva = ?').get(codigo_reserva);
+  const rutaFotoCedula = fotoCedula ? path.join(__dirname, '../uploads/cedulas', fotoCedula) : null;
 
   // ── Notificaciones ───────────────────────────────────────────────────────
   email.enviarConfirmacionCheckin(checkin, reserva).catch(e => console.error('[Email checkin]', e.message));
+  email.enviarNotificacionCheckinHotel(checkin, reserva, rutaFotoCedula).catch(e => console.error('[Email checkin hotel]', e.message));
   whatsapp.enviarWhatsApp(whatsapp.mensajeCheckin(checkin, reserva)).catch(e => console.error('[WA checkin]', e.message));
 
   return res.status(201).json({
