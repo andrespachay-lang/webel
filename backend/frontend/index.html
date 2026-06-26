@@ -1084,6 +1084,8 @@
     padding: 3rem 2.5rem;
     overflow-y: auto;
     max-height: 90vh;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
   .modal-badge {
     display: inline-block;
@@ -1551,8 +1553,8 @@
     .hs-field:nth-last-child(2) { border-bottom: 0; }
     .hs-btn { width: 100%; margin-top: 0.5rem; }
     .modal { grid-template-columns: 1fr; max-height: 95vh; }
-    .modal-gallery { min-height: 250px; max-height: 280px; }
-    .modal-body { padding: 1.5rem; }
+    .modal-gallery { min-height: 200px; max-height: 220px; flex-shrink: 0; }
+    .modal-body { padding: 1.5rem; max-height: calc(95vh - 200px); }
     .checkout-body { grid-template-columns: 1fr; gap: 2rem; padding: 2rem 1.25rem; }
     .checkout-resumen { position: relative; top: 0; order: -1; }
     .checkout-progress { display: none; }
@@ -2939,9 +2941,20 @@ function configurarLimitesFecha(idEntrada, idSalida) {
 
   elEntrada.addEventListener('change', () => {
     if (!elEntrada.value) return;
+    if (elEntrada.value < min) {
+      elEntrada.value = min;
+    }
     const minSalida = sumarDias(elEntrada.value, 1);
     elSalida.min = minSalida;
     if (elSalida.value && elSalida.value < minSalida) {
+      elSalida.value = minSalida;
+    }
+  });
+
+  elSalida.addEventListener('change', () => {
+    if (!elSalida.value) return;
+    const minSalida = elEntrada.value ? sumarDias(elEntrada.value, 1) : min;
+    if (elSalida.value < minSalida) {
       elSalida.value = minSalida;
     }
   });
