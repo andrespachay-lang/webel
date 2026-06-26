@@ -234,4 +234,27 @@ router.get('/disponibilidad', (req, res) => {
   });
 });
 
+// ── GET /api/disponibilidad/ocupadas — rangos ya reservados de una habitación ─
+router.get('/disponibilidad/ocupadas', (req, res) => {
+  const db = req.app.get('db');
+  const { habitacion } = req.query;
+
+  if (!habitacion) {
+    return res.status(400).json({ error: 'Parámetro requerido: habitacion' });
+  }
+  if (!HABITACIONES[habitacion]) {
+    return res.status(400).json({ error: `Habitación "${habitacion}" no existe` });
+  }
+
+  const filas = db.prepare(`
+    SELECT fecha_entrada, fecha_salida FROM reservas
+    WHERE habitacion = ?
+      AND estado NOT IN ('cancelada', 'pendiente_pago', 'error_pago')
+      AND fecha_salida >= date('now')
+    ORDER BY fecha_entrada
+  `).all(habitacion);
+
+  return res.json({ habitacion, rangos: filas });
+});
+
 module.exports = router;

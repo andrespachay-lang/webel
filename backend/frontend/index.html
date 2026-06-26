@@ -2224,7 +2224,7 @@
         </button>
         <button class="pay-method" onclick="selectPay(this)" data-metodo="Transferencia">
           <strong data-i18n="pago_transferencia">Transferencia</strong>
-          <span>Banco Pichincha / Pacífico</span>
+          <span>Banco Pichincha / Guayaquil</span>
         </button>
       </div>
 
@@ -2255,13 +2255,24 @@
 
       <!-- Bloque Transferencia -->
       <div id="bloque-transferencia" style="display:none;">
-        <div style="background:rgba(27,73,101,0.06);border-radius:8px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;font-size:0.9rem;">
+        <div style="background:rgba(27,73,101,0.06);border-radius:8px;padding:1.25rem 1.5rem;margin-bottom:0.85rem;font-size:0.9rem;">
           <div style="font-weight:600;color:var(--pacifico);margin-bottom:0.5rem;" data-i18n="transf_datos_titulo">Datos para transferencia</div>
           <div style="color:var(--carbon-suave);line-height:1.9;">
             <span data-i18n="transf_banco">Banco:</span> <strong style="color:var(--carbon);">Banco Pichincha</strong><br>
             <span data-i18n="transf_tipo">Tipo:</span> <strong style="color:var(--carbon);">Cuenta de Ahorros</strong><br>
-            <span data-i18n="transf_numero">Número:</span> <strong style="color:var(--carbon);">2209XXXXXX</strong><br>
-            <span data-i18n="transf_titular">Titular:</span> <strong style="color:var(--carbon);">Andrés Pachay</strong>
+            <span data-i18n="transf_numero">Número:</span> <strong style="color:var(--carbon);">3466750600</strong><br>
+            <span data-i18n="transf_titular">Titular:</span> <strong style="color:var(--carbon);">Víctor Pachay Alcívar</strong><br>
+            <span data-i18n="transf_cedula">Cédula:</span> <strong style="color:var(--carbon);">1301370605</strong>
+          </div>
+        </div>
+        <div style="background:rgba(27,73,101,0.06);border-radius:8px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;font-size:0.9rem;">
+          <div style="color:var(--carbon-suave);line-height:1.9;">
+            <span data-i18n="transf_banco">Banco:</span> <strong style="color:var(--carbon);">Banco Guayaquil</strong><br>
+            <span data-i18n="transf_tipo">Tipo:</span> <strong style="color:var(--carbon);">Cuenta de Ahorros</strong><br>
+            <span data-i18n="transf_numero">Número:</span> <strong style="color:var(--carbon);">42559169</strong><br>
+            <span data-i18n="transf_titular">Titular:</span> <strong style="color:var(--carbon);">María Chávez</strong><br>
+            <span data-i18n="transf_cedula">Cédula:</span> <strong style="color:var(--carbon);">0906499454</strong><br>
+            <span data-i18n="transf_correo">Correo:</span> <strong style="color:var(--carbon);">mantonieta59.mc@gmail.com</strong>
           </div>
         </div>
         <!-- Comprobante de transferencia -->
@@ -2473,6 +2484,7 @@ const i18n = {
     modal_camas_label: 'Camas:',
     modal_llegada: 'Llegada',
     modal_salida: 'Salida',
+    modal_horarios: 'Check-in a partir de las 15:00 · Check-out hasta las 12:00 mediodía',
     modal_huespedes: 'Huéspedes',
     modal_precio: 'Precio',
     modal_precio_valor: '$20 / persona / noche',
@@ -2487,6 +2499,7 @@ const i18n = {
     noche_plural: 'noches',
 
     alert_fechas_invalidas: 'Por favor selecciona fechas válidas',
+    alert_fechas_ocupadas: 'Esta habitación ya está reservada en esas fechas. Por favor elige otras fechas.',
     resumen_precio_detail: 'Subtotal ($20 × {g} × {noches})',
     resumen_total_iva: '${total} USD (incl. IVA 15%)',
 
@@ -2530,6 +2543,8 @@ const i18n = {
     transf_tipo: 'Tipo:',
     transf_numero: 'Número:',
     transf_titular: 'Titular:',
+    transf_cedula: 'Cédula:',
+    transf_correo: 'Correo:',
     comprobante_label: 'Comprobante de transferencia',
     comprobante_toca: 'Toca para adjuntar comprobante',
     comprobante_formatos: 'JPG, PNG o PDF · máx. 2 MB',
@@ -2710,6 +2725,7 @@ const i18n = {
     modal_camas_label: 'Beds:',
     modal_llegada: 'Check-in',
     modal_salida: 'Check-out',
+    modal_horarios: 'Check-in from 3:00 PM · Check-out by 12:00 noon',
     modal_huespedes: 'Guests',
     modal_precio: 'Price',
     modal_precio_valor: '$20 / person / night',
@@ -2724,6 +2740,7 @@ const i18n = {
     noche_plural: 'nights',
 
     alert_fechas_invalidas: 'Please select valid dates',
+    alert_fechas_ocupadas: 'This room is already booked for those dates. Please choose different dates.',
     resumen_precio_detail: 'Subtotal ($20 × {g} × {noches})',
     resumen_total_iva: '${total} USD (incl. 15% VAT)',
 
@@ -2767,6 +2784,8 @@ const i18n = {
     transf_tipo: 'Type:',
     transf_numero: 'Account number:',
     transf_titular: 'Account holder:',
+    transf_cedula: 'ID number:',
+    transf_correo: 'Email:',
     comprobante_label: 'Transfer receipt',
     comprobante_toca: 'Tap to attach receipt',
     comprobante_formatos: 'JPG, PNG or PDF · max. 2 MB',
@@ -3072,12 +3091,36 @@ function scrollCarrusel(vista, dir) {
 /* ═════════ MODAL DE HABITACIÓN ═════════ */
 let currentHab = null;
 let galleryIdx = 0;
+let habitacionOcupada = [];
+
+async function cargarRangosOcupados(habitacionId) {
+  try {
+    const resp = await fetch(`${API_BASE}/api/reservas/disponibilidad/ocupadas?habitacion=${habitacionId}`);
+    const data = await resp.json();
+    return Array.isArray(data.rangos) ? data.rangos : [];
+  } catch {
+    return [];
+  }
+}
+
+function rangosSeSolapan(entradaA, salidaA, entradaB, salidaB) {
+  return entradaA < salidaB && salidaA > entradaB;
+}
+
+function fechasEnConflicto(fechaEntrada, fechaSalida) {
+  return habitacionOcupada.some(r => rangosSeSolapan(fechaEntrada, fechaSalida, r.fecha_entrada, r.fecha_salida));
+}
 
 function openModal(vista, id) {
   const h = HABITACIONES[vista].find(x => x.id === id);
   if (!h) return;
   currentHab = h;
   galleryIdx = 0;
+  habitacionOcupada = [];
+  cargarRangosOcupados(h.id).then(rangos => {
+    habitacionOcupada = rangos;
+    updateModalTotal();
+  });
 
   // Gallery
   const gal = document.getElementById('modal-gallery');
@@ -3100,6 +3143,7 @@ function openModal(vista, id) {
       ${habFeats(h).map(f => `<li>${f}</li>`).join('')}
     </ul>
     <div class="modal-reserva-box">
+      <div style="font-size:0.8rem;color:var(--carbon-suave);margin-bottom:0.5rem;">${t('modal_horarios')}</div>
       <div class="modal-reserva-row">
         <div>
           <label>${t('modal_llegada')}</label>
@@ -3173,6 +3217,12 @@ function updateModalTotal() {
     document.getElementById('m-total').textContent = '—';
     return;
   }
+  if (fechasEnConflicto(inEl.value, outEl.value)) {
+    document.getElementById('m-detalle').innerHTML = `<span style="color:#c0392b;">${t('alert_fechas_ocupadas')}</span>`;
+    document.getElementById('m-total').textContent = '—';
+    return;
+  }
+
   const noches = Math.round((co - ci) / 86400000);
   const subtotal = noches * g * 20;
   const iva = subtotal * 0.15;
@@ -3196,6 +3246,10 @@ function iniciarCheckout() {
   const g = document.getElementById('m-guests').value;
   if (!ci || !co || new Date(co) <= new Date(ci)) {
     alert(t('alert_fechas_invalidas'));
+    return;
+  }
+  if (fechasEnConflicto(ci, co)) {
+    alert(t('alert_fechas_ocupadas'));
     return;
   }
   const noches = Math.round((new Date(co) - new Date(ci)) / 86400000);

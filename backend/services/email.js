@@ -84,6 +84,11 @@ async function enviarConfirmacionHuesped(reserva) {
       <tr class="total-fila"><td>Total</td><td>$${reserva.total.toFixed(2)}</td></tr>
     </table>
 
+    <p style="font-size:0.85rem;color:#5A6C7D;">
+      Recuerda: el horario de <strong>check-in</strong> es a partir de las <strong>15:00</strong>
+      y el <strong>check-out</strong> hasta las <strong>12:00</strong> mediodía.
+    </p>
+
     <p>Para hacer tu check-in en línea y agilizar tu llegada, puedes hacerlo desde:</p>
     <a href="${process.env.FRONTEND_URL}/checkin.html?codigo=${reserva.codigo}" class="btn">
       Hacer check-in en línea
