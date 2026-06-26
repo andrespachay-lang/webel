@@ -1436,18 +1436,35 @@
     padding-top: 1rem;
     margin-top: 0.75rem;
     border-top: 2px solid var(--pacifico);
+    gap: 0.75rem;
   }
-  .resumen-total span:first-child {
+  .resumen-total > span:first-child {
     font-size: 0.85rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--carbon-suave);
+    flex-shrink: 0;
   }
-  .resumen-total span:last-child {
+  .resumen-total-monto {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+  }
+  .resumen-total-monto #resumen-total {
     font-family: var(--serif);
-    font-size: 1.75rem;
+    font-size: 1.5rem;
     color: var(--pacifico);
     font-weight: 500;
+    white-space: nowrap;
+  }
+  .resumen-total-monto small {
+    font-size: 0.7rem;
+    color: var(--carbon-suave);
+    letter-spacing: 0.04em;
+  }
+  @media (max-width: 768px) {
+    .resumen-total-monto #resumen-total { font-size: 1.25rem; }
   }
 
   /* Pantalla de confirmación */
@@ -2357,7 +2374,10 @@
 
       <div class="resumen-total">
         <span data-i18n="resumen_total_label">Total</span>
-        <span id="resumen-total">$ —</span>
+        <span class="resumen-total-monto">
+          <span id="resumen-total">$ —</span>
+          <small id="resumen-total-nota" data-i18n="resumen_total_nota">incl. IVA 15%</small>
+        </span>
       </div>
     </aside>
 
@@ -2504,6 +2524,7 @@ const i18n = {
     alert_fechas_ocupadas: 'Esta habitación ya está reservada en esas fechas. Por favor elige otras fechas.',
     resumen_precio_detail: 'Subtotal ($20 × {g} × {noches})',
     resumen_total_iva: '${total} USD (incl. IVA 15%)',
+    resumen_total_nota: 'incl. IVA 15%',
 
     checkout_paso1: 'Datos',
     checkout_paso2: 'Pago',
@@ -2745,6 +2766,7 @@ const i18n = {
     alert_fechas_ocupadas: 'This room is already booked for those dates. Please choose different dates.',
     resumen_precio_detail: 'Subtotal ($20 × {g} × {noches})',
     resumen_total_iva: '${total} USD (incl. 15% VAT)',
+    resumen_total_nota: 'incl. 15% VAT',
 
     checkout_paso1: 'Details',
     checkout_paso2: 'Payment',
@@ -2930,6 +2952,17 @@ function sumarDias(fechaISO, dias) {
   return d.toISOString().slice(0, 10);
 }
 
+function sincronizarLimitesFecha(elEntrada, elSalida, min) {
+  if (elEntrada.value && elEntrada.value < min) {
+    elEntrada.value = min;
+  }
+  const minSalida = elEntrada.value ? sumarDias(elEntrada.value, 1) : min;
+  elSalida.min = minSalida;
+  if (elSalida.value && elSalida.value < minSalida) {
+    elSalida.value = minSalida;
+  }
+}
+
 function configurarLimitesFecha(idEntrada, idSalida) {
   const elEntrada = document.getElementById(idEntrada);
   const elSalida  = document.getElementById(idSalida);
@@ -2939,17 +2972,11 @@ function configurarLimitesFecha(idEntrada, idSalida) {
   elEntrada.min = min;
   elSalida.min = min;
 
-  elEntrada.addEventListener('change', () => {
-    if (!elEntrada.value) return;
-    if (elEntrada.value < min) {
-      elEntrada.value = min;
-    }
-    const minSalida = sumarDias(elEntrada.value, 1);
-    elSalida.min = minSalida;
-    if (elSalida.value && elSalida.value < minSalida) {
-      elSalida.value = minSalida;
-    }
-  });
+  // Por si los campos ya tienen un valor precargado (ej. desde el buscador del hero)
+  sincronizarLimitesFecha(elEntrada, elSalida, min);
+
+  elEntrada.addEventListener('change',  () => sincronizarLimitesFecha(elEntrada, elSalida, min));
+  elEntrada.addEventListener('input',   () => sincronizarLimitesFecha(elEntrada, elSalida, min));
 
   elSalida.addEventListener('change', () => {
     if (!elSalida.value) return;
@@ -3284,7 +3311,7 @@ function iniciarCheckout() {
   document.getElementById('resumen-precio-detail').textContent = t('resumen_precio_detail', { g, noches });
   document.getElementById('resumen-subtotal').textContent = `$${subtotal.toFixed(2)}`;
   document.getElementById('resumen-iva').textContent = `$${iva.toFixed(2)}`;
-  document.getElementById('resumen-total').textContent = t('resumen_total_iva', { total: total.toFixed(2) });
+  document.getElementById('resumen-total').textContent = `$${total.toFixed(2)} USD`;
 
   closeModal();
   document.getElementById('checkout').classList.add('open');
