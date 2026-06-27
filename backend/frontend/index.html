@@ -817,8 +817,14 @@
   }
   .resenas-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.25rem;
+  }
+  @media (max-width: 1100px) {
+    .resenas-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 700px) {
+    .resenas-grid { grid-template-columns: 1fr; }
   }
   .resena {
     background: var(--crema);
@@ -1926,46 +1932,6 @@
   </div>
 </section>
 
-<!-- DESCONEXIÓN -->
-<section class="desconexion">
-  <div class="desconexion-inner reveal">
-    <div class="desconexion-mark">"</div>
-    <blockquote data-i18n="desc_cita">Fui al mar para ser feliz.</blockquote>
-    <div class="desconexion-cite">— Estación del Sol</div>
-  </div>
-</section>
-
-<!-- TERRAZA -->
-<section style="background: var(--pacifico); padding: 7rem 2rem; position: relative; overflow: hidden;">
-  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1518541430176-4c5b4e27f328?w=2000&q=80') center/cover; opacity:0.2;"></div>
-  <div class="container" style="position:relative;z-index:2;">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;" class="reveal">
-      <div>
-        <div class="section-kicker" data-i18n="terraza_kicker">Terraza panorámica</div>
-        <h2 class="section-title" style="color:var(--crema);" data-i18n="terraza_titulo">El mirador <em style="color:var(--arena);">más alto</em> del sector.</h2>
-        <p style="color:rgba(250,246,240,0.85);margin-bottom:1.5rem;font-size:1.05rem;" data-i18n="terraza_p1">Desde nuestra terraza se domina una vista de 360° que pocas propiedades de la zona pueden ofrecer. El Pacífico de un lado, las colinas verdes del otro, y el atardecer directo enfrente.</p>
-        <p style="color:rgba(250,246,240,0.7);margin-bottom:2rem;" data-i18n="terraza_p2">Es el lugar perfecto para el café de la mañana, para leer al atardecer, o para quedarse en silencio mirando cómo el sol cae sobre el mar.</p>
-        <div style="display:flex;gap:2rem;padding-top:1.5rem;border-top:1px solid rgba(250,246,240,0.2);">
-          <div style="text-align:center;">
-            <div style="font-family:var(--serif);font-size:2.5rem;color:var(--sol);font-weight:400;line-height:1;">360°</div>
-            <div style="font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(250,246,240,0.6);margin-top:0.25rem;" data-i18n="terraza_360">Vista panorámica</div>
-          </div>
-          <div style="text-align:center;">
-            <div style="font-family:var(--serif);font-size:2.5rem;color:var(--sol);font-weight:400;line-height:1;">2°</div>
-            <div style="font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(250,246,240,0.6);margin-top:0.25rem;" data-i18n="terraza_2do">Piso alto</div>
-          </div>
-          <div style="text-align:center;">
-            <div style="font-family:var(--serif);font-size:2.5rem;color:var(--sol);font-weight:400;line-height:1;">∞</div>
-            <div style="font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(250,246,240,0.6);margin-top:0.25rem;" data-i18n="terraza_inf">Horizonte libre</div>
-          </div>
-        </div>
-      </div>
-      <div style="aspect-ratio:4/3;border-radius:6px;overflow:hidden;">
-        <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1200&q=80" alt="Terraza panorámica Estación del Sol" style="width:100%;height:100%;object-fit:cover;">
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- RESEÑAS -->
 <section class="resenas" id="resenas">
@@ -2062,7 +2028,7 @@
           <li><span>Manglaralto</span><span class="dist" data-i18n="ubic_li4_d">15 minutos</span></li>
           <li><span data-i18n="ubic_li5">Aeropuerto Guayaquil</span><span class="dist" data-i18n="ubic_li5_d">2 h 30 min</span></li>
         </ul>
-        <a href="https://maps.app.goo.gl/LJf74vuH3ujppHXg9" target="_blank" class="btn btn-primary" style="margin-top:2rem; display:inline-flex;">
+        <a href="https://maps.app.goo.gl/A3ijRn4pwix1nKKU7" target="_blank" class="btn btn-primary" style="margin-top:2rem; display:inline-flex;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:0.4rem">
             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
           </svg>
@@ -2070,7 +2036,11 @@
         </a>
       </div>
       <div class="ubic-img">
-        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1000&q=80" alt="Costa de Las Núñez Ruta del Spondylus">
+        <iframe
+          src="https://maps.google.com/maps?q=Hotel%20Estaci%C3%B3n%20del%20Sol%2C%20Las%20N%C3%BA%C3%B1ez%2C%20Santa%20Elena%2C%20Ecuador&output=embed"
+          width="100%" height="100%" style="border:0;" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Ubicación de Estación del Sol en Las Núñez"></iframe>
       </div>
     </div>
   </div>
