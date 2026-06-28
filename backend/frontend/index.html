@@ -2004,13 +2004,31 @@
   $('hsv2-listo').addEventListener('click', closeDD);
   window.addEventListener('resize', () => { if ($('hsv2-dropdown').classList.contains('open')) posicionarDD(); });
   window.addEventListener('scroll', () => { if ($('hsv2-dropdown').classList.contains('open')) posicionarDD(); }, true);
-  $('hsv2-buscar').addEventListener('click', () => {
+  $('hsv2-buscar').addEventListener('click', async () => {
     const ci=$('hsv2-checkin').value, co=$('hsv2-checkout').value;
     if (!ci||!co) { alert('Selecciona fechas de llegada y salida'); return; }
     if (new Date(co)<=new Date(ci)) { alert('La salida debe ser posterior a la llegada'); return; }
     closeDD();
-    const hab=document.getElementById('habitaciones');
-    if (hab) hab.scrollIntoView({behavior:'smooth'});
+    const totalHuespedes = st.adultos + st.ninos;
+    const btn = $('hsv2-buscar');
+    const textoOriginal = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Buscando...';
+    try {
+      const resultado = await buscarMejorHabitacion(totalHuespedes, ci, co);
+      const seccion = document.getElementById('habitaciones');
+      if (!resultado) {
+        alert('No hay habitaciones disponibles para esas fechas y número de huéspedes. Intenta con otras fechas.');
+        if (seccion) seccion.scrollIntoView({behavior:'smooth'});
+        return;
+      }
+      habitacionOcupada = resultado.rangos;
+      const exito = iniciarCheckoutConDatos(resultado.hab, ci, co, totalHuespedes);
+      if (!exito && seccion) seccion.scrollIntoView({behavior:'smooth'});
+    } finally {
+      btn.disabled = false;
+      btn.textContent = textoOriginal;
+    }
   });
   document.addEventListener('click', closeDD);
 
@@ -3367,6 +3385,19 @@ function fechasEnConflicto(fechaEntrada, fechaSalida) {
   return habitacionOcupada.some(r => rangosSeSolapan(fechaEntrada, fechaSalida, r.fecha_entrada, r.fecha_salida));
 }
 
+async function buscarMejorHabitacion(totalHuespedes, fechaEntrada, fechaSalida) {
+  const candidatas = Object.values(HABITACIONES)
+    .flat()
+    .filter(h => h.capacidad >= totalHuespedes)
+    .sort((a, b) => a.capacidad - b.capacidad);
+  for (const h of candidatas) {
+    const rangos = await cargarRangosOcupados(h.id);
+    const libre = !rangos.some(r => rangosSeSolapan(fechaEntrada, fechaSalida, r.fecha_entrada, r.fecha_salida));
+    if (libre) return { hab: h, rangos };
+  }
+  return null;
+}
+
 function openModal(vista, id) {
   const h = HABITACIONES[vista].find(x => x.id === id);
   if (!h) return;
@@ -3525,21 +3556,27 @@ function iniciarCheckout() {
   const ci = document.getElementById('m-checkin').value;
   const co = document.getElementById('m-checkout').value;
   const g = document.getElementById('m-guests').value;
+  if (!iniciarCheckoutConDatos(currentHab, ci, co, g)) return;
+  closeModal();
+}
+
+function iniciarCheckoutConDatos(hab, ci, co, g) {
   if (!ci || !co || new Date(co) <= new Date(ci)) {
     alert(t('alert_fechas_invalidas'));
-    return;
+    return false;
   }
   if (fechasEnConflicto(ci, co)) {
     alert(t('alert_fechas_ocupadas'));
-    return;
+    return false;
   }
+  currentHab = hab;
   const noches = Math.round((new Date(co) - new Date(ci)) / 86400000);
   checkoutSubtotalBase = calcularSubtotalHabitacion(parseInt(g), noches);
 
   // Llenar resumen
-  document.getElementById('resumen-img').src = currentHab.img;
-  document.getElementById('resumen-title').textContent = habNombre(currentHab);
-  document.getElementById('resumen-sub').textContent = `${currentHab.codigo} · ${habVista(currentHab)}`;
+  document.getElementById('resumen-img').src = hab.img;
+  document.getElementById('resumen-title').textContent = habNombre(hab);
+  document.getElementById('resumen-sub').textContent = `${hab.codigo} · ${habVista(hab)}`;
   const rci = document.getElementById('resumen-checkin');
   const rco = document.getElementById('resumen-checkout');
   const rg  = document.getElementById('resumen-guests');
@@ -3553,10 +3590,10 @@ function iniciarCheckout() {
   document.getElementById('resumen-precio-detail').textContent = t('resumen_precio_detail', { precio: resumenPrecioLabel, noches });
   recalcularResumen(document.querySelector('.pay-method.active')?.dataset.metodo || 'PayPhone');
 
-  closeModal();
   document.getElementById('checkout').classList.add('open');
   document.body.style.overflow = 'hidden';
   goToStep(1);
+  return true;
 }
 
 function formatFecha(s) {
