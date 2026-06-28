@@ -706,7 +706,7 @@
     padding: 0 2rem;
   }
 
-  .vista-grupo { margin-bottom: 5rem; }
+  .vista-grupo { display: none; margin-bottom: 5rem; }
   .vista-grupo:last-child { margin-bottom: 0; }
 
   .vista-header {
@@ -2848,6 +2848,12 @@
 </div>
 
 <script>
+/* ═════════ MODAL DE HABITACIÓN / CATÁLOGO — declarado antes que su uso ═════════ */
+let currentHab = null;
+let galleryIdx = 0;
+let habitacionOcupada = [];
+let pendingBusqueda = null;
+
 /* ═════════ INTERNACIONALIZACIÓN (ES/EN) ═════════ */
 let idiomaActual = 'es';
 
@@ -3593,6 +3599,7 @@ function renderCarruseles() {
   });
 }
 renderCarruseles();
+mostrarTodoElCatalogo();
 
 document.getElementById('hab-grid-flat').addEventListener('click', e => {
   const card = e.target.closest('.hab-card');
@@ -3614,10 +3621,6 @@ function scrollCarrusel(vista, dir) {
 }
 
 /* ═════════ MODAL DE HABITACIÓN ═════════ */
-let currentHab = null;
-let galleryIdx = 0;
-let habitacionOcupada = [];
-
 async function cargarRangosOcupados(habitacionId) {
   try {
     const resp = await fetch(`${API_BASE}/api/reservas/disponibilidad/ocupadas?habitacion=${habitacionId}`);
@@ -3649,8 +3652,6 @@ async function buscarHabitacionesDisponibles(requerimientos, fechaEntrada, fecha
   return resultados.filter(Boolean);
 }
 
-let pendingBusqueda = null;
-
 function mostrarCatalogoFiltrado(disponibles, ci, co, requerimientos) {
   pendingBusqueda = { ci, co, requerimientos };
 
@@ -3679,10 +3680,10 @@ function mostrarCatalogoFiltrado(disponibles, ci, co, requerimientos) {
 
 function mostrarTodoElCatalogo() {
   pendingBusqueda = null;
-  document.querySelectorAll('.vista-grupo').forEach(grupo => { grupo.style.display = ''; });
   const flat = document.getElementById('hab-grid-flat');
-  flat.style.display = 'none';
   flat.innerHTML = '';
+  document.querySelectorAll('.carrusel .hab-card').forEach(card => flat.appendChild(card.cloneNode(true)));
+  flat.style.display = 'flex';
   const banner = document.getElementById('catalogo-filtro-banner');
   if (banner) banner.style.display = 'none';
 }
