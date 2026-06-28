@@ -44,7 +44,7 @@ router.post('/', subirComprobante.single('comprobante_pago'), async (req, res) =
   const {
     habitacion, fecha_entrada, fecha_salida, huespedes,
     nombre, apellido, cedula, telefono, pais, correo,
-    metodo_pago, mensaje_anfitrion,
+    metodo_pago, mensaje_anfitrion, acepta_marketing,
   } = req.body;
 
   // ── Validación ───────────────────────────────────────────────────────────
@@ -98,11 +98,11 @@ router.post('/', subirComprobante.single('comprobante_pago'), async (req, res) =
       INSERT INTO reservas
         (codigo, habitacion, fecha_entrada, fecha_salida, noches, huespedes,
          nombre, apellido, cedula, telefono, pais, correo, metodo_pago,
-         subtotal, iva, total, mensaje_anfitrion, comprobante_pago, estado)
+         subtotal, iva, total, mensaje_anfitrion, comprobante_pago, estado, acepta_marketing)
       VALUES
         (@codigo, @habitacion, @fecha_entrada, @fecha_salida, @noches, @huespedes,
          @nombre, @apellido, @cedula, @telefono, @pais, @correo, @metodo_pago,
-         @subtotal, @iva, @total, @mensaje_anfitrion, @comprobante_pago, @estado)
+         @subtotal, @iva, @total, @mensaje_anfitrion, @comprobante_pago, @estado, @acepta_marketing)
     `).run({
       codigo, habitacion, fecha_entrada, fecha_salida, noches, huespedes: numHuespedes,
       nombre, apellido, cedula, telefono, pais, correo, metodo_pago,
@@ -110,6 +110,7 @@ router.post('/', subirComprobante.single('comprobante_pago'), async (req, res) =
       mensaje_anfitrion:  mensaje_anfitrion  || null,
       comprobante_pago:   archivoComprobante || null,
       estado:             'pendiente_pago',
+      acepta_marketing:   (acepta_marketing === 'true' || acepta_marketing === '1' || acepta_marketing === true) ? 1 : 0,
     });
   } catch (err) {
     console.error('[Reserva] Error guardando:', err);

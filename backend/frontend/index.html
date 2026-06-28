@@ -2461,6 +2461,11 @@
         <textarea rows="3" data-i18n-placeholder="checkout_mensaje_placeholder" placeholder="Llegamos en la noche, ¿pueden dejarnos algo de cenar?"></textarea>
       </div>
 
+      <div class="form-group" style="display:flex;align-items:flex-start;gap:0.6rem;">
+        <input type="checkbox" id="acepta-marketing" style="width:auto;margin-top:0.2rem;">
+        <label for="acepta-marketing" style="font-size:0.82rem;color:var(--carbon-suave);font-weight:400;" data-i18n="checkout_acepta_marketing">Quiero recibir promociones y novedades de Estación del Sol por correo.</label>
+      </div>
+
       <div class="checkout-cta">
         <button class="btn-next" onclick="goToStep(2)" data-i18n="checkout_continuar_pago">Continuar al pago →</button>
       </div>
@@ -2766,6 +2771,7 @@ const i18n = {
     checkout_telefono: 'Teléfono / WhatsApp',
     checkout_mensaje: 'Mensaje para el anfitrión (opcional)',
     checkout_mensaje_placeholder: 'Llegamos en la noche, ¿pueden dejarnos algo de cenar?',
+    checkout_acepta_marketing: 'Quiero recibir promociones y novedades de Estación del Sol por correo.',
     checkout_continuar_pago: 'Continuar al pago →',
     opt_pais_ec: 'Ecuador',
     opt_pais_co: 'Colombia',
@@ -2996,6 +3002,7 @@ const i18n = {
     checkout_telefono: 'Phone / WhatsApp',
     checkout_mensaje: 'Message for the host (optional)',
     checkout_mensaje_placeholder: "We're arriving at night, could you leave us something for dinner?",
+    checkout_acepta_marketing: "I'd like to receive promotions and news from Estación del Sol by email.",
     checkout_continuar_pago: 'Continue to payment →',
     opt_pais_ec: 'Ecuador',
     opt_pais_co: 'Colombia',
@@ -3750,6 +3757,7 @@ async function enviarReserva() {
                          : (document.querySelector('#step-1 input[type="tel"]')?.value || ''),
     metodo_pago:       metodoPago,
     mensaje_anfitrion: document.querySelector('#step-1 textarea')?.value || '',
+    acepta_marketing:  document.getElementById('acepta-marketing')?.checked ? 'true' : 'false',
   };
 
   // Validar campos mínimos antes de enviar

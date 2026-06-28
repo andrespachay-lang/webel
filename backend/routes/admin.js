@@ -5,6 +5,7 @@
  *   PUT  /api/admin/reservas/:id/estado          — cambia estado de reserva
  *   GET  /api/admin/disponibilidad/calendario    — mapa de ocupación por habitación
  *   GET  /api/admin/checkins                     — lista check-ins registrados
+ *   GET  /api/admin/contactos/export             — CSV de correos con opt-in de marketing
  */
 
 const express   = require('express');
@@ -103,6 +104,33 @@ router.get('/disponibilidad/calendario', (req, res) => {
   }
 
   return res.json({ desde, hasta, calendario });
+});
+
+// ── GET /api/admin/contactos/export — CSV de correos con opt-in de marketing ──
+router.get('/contactos/export', (req, res) => {
+  const db = req.app.get('db');
+
+  const contactos = db.prepare(`
+    SELECT correo, nombre, apellido, pais, MAX(creado_en) as ultima_reserva
+    FROM reservas
+    WHERE acepta_marketing = 1
+      AND estado != 'cancelada'
+    GROUP BY correo
+    ORDER BY ultima_reserva DESC
+  `).all();
+
+  const filas = [['correo', 'nombre', 'apellido', 'pais', 'ultima_reserva']];
+  for (const c of contactos) {
+    filas.push([c.correo, c.nombre, c.apellido, c.pais, c.ultima_reserva]);
+  }
+
+  const csv = filas
+    .map(fila => fila.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(','))
+    .join('\n');
+
+  res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+  res.setHeader('Content-Disposition', 'attachment; filename="contactos_marketing.csv"');
+  return res.send('﻿' + csv);
 });
 
 // ── GET /api/admin/checkins ───────────────────────────────────────────────────
