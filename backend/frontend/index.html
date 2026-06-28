@@ -1280,6 +1280,113 @@
     color: var(--carbon);
     transform: translateY(-2px);
   }
+  .modal-carrito-btn {
+    width: 100%;
+    padding: 0.85rem;
+    margin-bottom: 0.6rem;
+    background: transparent;
+    border: 1.5px solid var(--pacifico);
+    color: var(--pacifico);
+    border-radius: 100px;
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition: all 0.3s;
+  }
+  .modal-carrito-btn:hover { background: rgba(0,0,0,0.04); }
+  .modal-carrito-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  /* ── Carrito flotante ── */
+  .carrito-fab {
+    position: fixed;
+    bottom: 1.5rem; right: 1.5rem;
+    z-index: 500;
+    background: var(--pacifico);
+    color: var(--crema);
+    border-radius: 100px;
+    padding: 0.85rem 1.4rem;
+    display: none;
+    align-items: center;
+    gap: 0.6rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .carrito-fab.show { display: flex; }
+  .carrito-fab:hover { transform: translateY(-2px); }
+  .carrito-fab .carrito-badge {
+    background: var(--sol);
+    color: var(--carbon);
+    border-radius: 100px;
+    min-width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem;
+  }
+  .carrito-panel {
+    position: fixed;
+    inset: 0;
+    background: rgba(20,20,20,0.55);
+    z-index: 900;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  .carrito-panel.open { display: flex; }
+  .carrito-box {
+    background: var(--crema);
+    border-radius: 12px;
+    max-width: 480px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 1.75rem;
+    position: relative;
+  }
+  .carrito-box h3 {
+    font-family: var(--serif);
+    color: var(--pacifico);
+    margin-bottom: 1rem;
+  }
+  .carrito-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--linea);
+    font-size: 0.88rem;
+  }
+  .carrito-item-info strong { color: var(--carbon); display: block; }
+  .carrito-item-info span { color: var(--carbon-suave); font-size: 0.82rem; }
+  .carrito-item-quitar {
+    background: none; border: none; color: #c0392b;
+    font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;
+    cursor: pointer; white-space: nowrap;
+  }
+  .carrito-total {
+    display: flex; justify-content: space-between;
+    font-weight: 600; color: var(--carbon);
+    padding-top: 1rem; margin-top: 0.5rem;
+  }
+  .carrito-acciones { display: flex; gap: 0.75rem; margin-top: 1.25rem; }
+  .carrito-acciones button { flex: 1; }
+  .carrito-cerrar {
+    position: absolute; top: 1rem; right: 1.25rem;
+    background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--carbon-suave);
+  }
+  .resumen-items { margin-bottom: 1.25rem; }
+  .resumen-item-linea {
+    display: flex; justify-content: space-between;
+    font-size: 0.85rem; padding: 0.5rem 0;
+    border-bottom: 1px solid var(--linea);
+  }
+  .resumen-item-linea strong { color: var(--carbon); }
+  .resumen-item-linea span.sub { color: var(--carbon-suave); display: block; font-size: 0.78rem; }
   .modal-close {
     position: absolute;
     top: 1rem; right: 1rem;
@@ -2606,14 +2713,16 @@
 
     <!-- RESUMEN LATERAL -->
     <aside class="checkout-resumen" id="resumen-aside">
-      <div class="resumen-img"><img id="resumen-img" src="" alt=""></div>
+      <div class="resumen-items" id="resumen-items" style="display:none;"></div>
+
+      <div class="resumen-img" id="resumen-img-box"><img id="resumen-img" src="" alt=""></div>
       <div class="resumen-title" id="resumen-title">—</div>
       <div class="resumen-sub" id="resumen-sub">—</div>
 
-      <div class="resumen-linea"><span data-i18n="resumen_llegada">Llegada</span><span id="resumen-checkin">—</span></div>
-      <div class="resumen-linea"><span data-i18n="resumen_salida">Salida</span><span id="resumen-checkout">—</span></div>
-      <div class="resumen-linea"><span data-i18n="resumen_huespedes">Huéspedes</span><span id="resumen-guests">—</span></div>
-      <div class="resumen-linea"><span data-i18n="resumen_noches">Noches</span><span id="resumen-noches">—</span></div>
+      <div class="resumen-linea" id="resumen-llegada-linea"><span data-i18n="resumen_llegada">Llegada</span><span id="resumen-checkin">—</span></div>
+      <div class="resumen-linea" id="resumen-salida-linea"><span data-i18n="resumen_salida">Salida</span><span id="resumen-checkout">—</span></div>
+      <div class="resumen-linea" id="resumen-guests-linea"><span data-i18n="resumen_huespedes">Huéspedes</span><span id="resumen-guests">—</span></div>
+      <div class="resumen-linea" id="resumen-noches-linea"><span data-i18n="resumen_noches">Noches</span><span id="resumen-noches">—</span></div>
       <div class="resumen-linea"><span id="resumen-precio-detail">—</span><span id="resumen-subtotal">—</span></div>
       <div class="resumen-linea" id="resumen-descuento-linea" style="display:none;color:#2e7d4f;"><span data-i18n="resumen_descuento">Descuento transferencia (5%)</span><span id="resumen-descuento">—</span></div>
       <div class="resumen-linea"><span data-i18n="resumen_iva">IVA 15%</span><span id="resumen-iva">—</span></div>
@@ -2627,6 +2736,27 @@
       </div>
     </aside>
 
+  </div>
+</div>
+
+<!-- CARRITO FLOTANTE -->
+<div class="carrito-fab" id="carrito-fab" onclick="abrirCarrito()">
+  🛒 <span data-i18n="carrito_fab_label">Carrito</span>
+  <span class="carrito-badge" id="carrito-badge">0</span>
+</div>
+
+<div class="carrito-panel" id="carrito-panel">
+  <div class="carrito-box">
+    <button class="carrito-cerrar" onclick="cerrarCarrito()">&times;</button>
+    <h3 data-i18n="carrito_titulo">Tu carrito</h3>
+    <div id="carrito-items"></div>
+    <div class="carrito-total">
+      <span data-i18n="carrito_total">Total estimado</span>
+      <span id="carrito-total-monto">$0.00</span>
+    </div>
+    <div class="carrito-acciones">
+      <button class="btn-next" id="carrito-pagar-btn" onclick="iniciarCheckoutGrupo()" data-i18n="carrito_pagar">Reservar todo</button>
+    </div>
   </div>
 </div>
 
@@ -2739,6 +2869,7 @@ const i18n = {
     modal_precio_valor_individual: '$25 / habitación / noche (1 persona)',
     modal_selecciona_fechas: 'Selecciona fechas para ver total',
     modal_reservar_ahora: 'Reservar ahora →',
+    modal_agregar_carrito: 'Agregar al carrito',
     modal_huesped_1: 'huésped',
     modal_huespedes_n: 'huéspedes',
     modal_detalle_total: '{precio} × {noches} {nochesLabel} + IVA 15%',
@@ -2748,6 +2879,15 @@ const i18n = {
     persona_plural: 'personas',
     noche_singular: 'noche',
     noche_plural: 'noches',
+
+    carrito_fab_label: 'Carrito',
+    carrito_titulo: 'Tu carrito',
+    carrito_total: 'Total estimado',
+    carrito_pagar: 'Reservar todo',
+    carrito_vacio: 'Tu carrito está vacío. Agrega una habitación desde su ficha.',
+    carrito_quitar: 'Quitar',
+    carrito_subtotal_label: 'Subtotal ({n} habitaciones)',
+    alert_carrito_vacio: 'Tu carrito está vacío.',
 
     alert_fechas_invalidas: 'Por favor selecciona fechas válidas',
     alert_fechas_ocupadas: 'Esta habitación ya está reservada en esas fechas. Por favor elige otras fechas.',
@@ -2970,6 +3110,7 @@ const i18n = {
     modal_precio_valor_individual: '$25 / room / night (1 person)',
     modal_selecciona_fechas: 'Select dates to see the total',
     modal_reservar_ahora: 'Book now →',
+    modal_agregar_carrito: 'Add to cart',
     modal_huesped_1: 'guest',
     modal_huespedes_n: 'guests',
     modal_detalle_total: '{precio} × {noches} {nochesLabel} + 15% VAT',
@@ -2979,6 +3120,15 @@ const i18n = {
     persona_plural: 'people',
     noche_singular: 'night',
     noche_plural: 'nights',
+
+    carrito_fab_label: 'Cart',
+    carrito_titulo: 'Your cart',
+    carrito_total: 'Estimated total',
+    carrito_pagar: 'Book everything',
+    carrito_vacio: 'Your cart is empty. Add a room from its details page.',
+    carrito_quitar: 'Remove',
+    carrito_subtotal_label: 'Subtotal ({n} rooms)',
+    alert_carrito_vacio: 'Your cart is empty.',
 
     alert_fechas_invalidas: 'Please select valid dates',
     alert_fechas_ocupadas: 'This room is already booked for those dates. Please choose different dates.',
@@ -3465,6 +3615,7 @@ function openModal(vista, id) {
         <div class="modal-resumen-total" id="m-total">—</div>
       </div>
     </div>
+    <button class="modal-carrito-btn" id="modal-carrito-btn" onclick="agregarAlCarrito()">${t('modal_agregar_carrito')}</button>
     <button class="modal-reserva-btn" onclick="iniciarCheckout()">${t('modal_reservar_ahora')}</button>
   `;
 
@@ -3541,8 +3692,80 @@ document.getElementById('modal').addEventListener('click', (e) => {
   if (e.target.id === 'modal') closeModal();
 });
 
+/* ═════════ CARRITO (varias habitaciones, un solo pago) ═════════ */
+let carrito = [];
+
+function agregarAlCarrito() {
+  const inEl = document.getElementById('m-checkin');
+  const outEl = document.getElementById('m-checkout');
+  const guestsEl = document.getElementById('m-guests');
+  const ci = inEl.value, co = outEl.value;
+  const g = parseInt(guestsEl.value || 1);
+
+  if (!ci || !co || new Date(co) <= new Date(ci)) {
+    alert(t('alert_fechas_invalidas'));
+    return;
+  }
+  if (fechasEnConflicto(ci, co)) {
+    alert(t('alert_fechas_ocupadas'));
+    return;
+  }
+
+  const noches = Math.round((new Date(co) - new Date(ci)) / 86400000);
+  const subtotal = calcularSubtotalHabitacion(g, noches);
+
+  carrito.push({ hab: currentHab, ci, co, guests: g, noches, subtotal });
+  renderCarritoFab();
+  closeModal();
+  abrirCarrito();
+}
+
+function quitarDelCarrito(idx) {
+  carrito.splice(idx, 1);
+  renderCarritoFab();
+  renderCarrito();
+}
+
+function renderCarritoFab() {
+  const fab = document.getElementById('carrito-fab');
+  document.getElementById('carrito-badge').textContent = carrito.length;
+  fab.classList.toggle('show', carrito.length > 0);
+}
+
+function renderCarrito() {
+  const cont = document.getElementById('carrito-items');
+  if (!carrito.length) {
+    cont.innerHTML = `<p style="color:var(--carbon-suave);font-size:0.88rem;">${t('carrito_vacio')}</p>`;
+  } else {
+    cont.innerHTML = carrito.map((item, i) => `
+      <div class="carrito-item">
+        <div class="carrito-item-info">
+          <strong>${habNombre(item.hab)} · ${item.hab.codigo}</strong>
+          <span>${formatFecha(item.ci)} — ${formatFecha(item.co)} · ${item.guests} ${item.guests==1?t('persona_singular'):t('persona_plural')}</span>
+          <span>$${item.subtotal.toFixed(2)}</span>
+        </div>
+        <button class="carrito-item-quitar" onclick="quitarDelCarrito(${i})">${t('carrito_quitar')}</button>
+      </div>
+    `).join('');
+  }
+  const total = carrito.reduce((s, item) => s + item.subtotal * 1.15, 0);
+  document.getElementById('carrito-total-monto').textContent = `$${total.toFixed(2)}`;
+  document.getElementById('carrito-pagar-btn').disabled = carrito.length === 0;
+}
+
+function abrirCarrito() {
+  renderCarrito();
+  document.getElementById('carrito-panel').classList.add('open');
+}
+
+function cerrarCarrito() {
+  document.getElementById('carrito-panel').classList.remove('open');
+}
+
 /* ═════════ CHECKOUT ═════════ */
 let checkoutSubtotalBase = 0;
+let modoGrupo = false;
+let carritoActivo = [];
 
 function recalcularResumen(metodo) {
   const subtotal = checkoutSubtotalBase;
@@ -3577,8 +3800,11 @@ function iniciarCheckoutConDatos(hab, ci, co, g) {
     return false;
   }
   currentHab = hab;
+  modoGrupo = false;
   const noches = Math.round((new Date(co) - new Date(ci)) / 86400000);
   checkoutSubtotalBase = calcularSubtotalHabitacion(parseInt(g), noches);
+
+  mostrarResumenModoUnico();
 
   // Llenar resumen
   document.getElementById('resumen-img').src = hab.img;
@@ -3603,6 +3829,52 @@ function iniciarCheckoutConDatos(hab, ci, co, g) {
   return true;
 }
 
+function mostrarResumenModoUnico() {
+  document.getElementById('resumen-items').style.display = 'none';
+  ['resumen-img-box', 'resumen-title', 'resumen-sub', 'resumen-llegada-linea',
+   'resumen-salida-linea', 'resumen-guests-linea', 'resumen-noches-linea'].forEach(id => {
+    document.getElementById(id).style.display = '';
+  });
+}
+
+function mostrarResumenModoGrupo() {
+  document.getElementById('resumen-items').style.display = 'block';
+  ['resumen-img-box', 'resumen-title', 'resumen-sub', 'resumen-llegada-linea',
+   'resumen-salida-linea', 'resumen-guests-linea', 'resumen-noches-linea'].forEach(id => {
+    document.getElementById(id).style.display = 'none';
+  });
+}
+
+function iniciarCheckoutGrupo() {
+  if (!carrito.length) return;
+
+  modoGrupo = true;
+  carritoActivo = [...carrito];
+
+  const totalNoches = Math.max(...carritoActivo.map(i => i.noches));
+  checkoutSubtotalBase = carritoActivo.reduce((s, i) => s + i.subtotal, 0);
+
+  mostrarResumenModoGrupo();
+
+  document.getElementById('resumen-items').innerHTML = carritoActivo.map(item => `
+    <div class="resumen-item-linea">
+      <div>
+        <strong>${habNombre(item.hab)} · ${item.hab.codigo}</strong>
+        <span class="sub">${formatFecha(item.ci)} — ${formatFecha(item.co)} · ${item.guests} ${item.guests==1?t('persona_singular'):t('persona_plural')}</span>
+      </div>
+      <span>$${item.subtotal.toFixed(2)}</span>
+    </div>
+  `).join('');
+
+  document.getElementById('resumen-precio-detail').textContent = t('carrito_subtotal_label', { n: carritoActivo.length });
+  recalcularResumen(document.querySelector('.pay-method.active')?.dataset.metodo || 'PayPhone');
+
+  cerrarCarrito();
+  document.getElementById('checkout').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  goToStep(1);
+}
+
 function formatFecha(s) {
   const d = new Date(s);
   const locale = idiomaActual === 'en' ? 'en-US' : 'es-EC';
@@ -3612,6 +3884,9 @@ function formatFecha(s) {
 function closeCheckout() {
   document.getElementById('checkout').classList.remove('open');
   document.body.style.overflow = '';
+  modoGrupo = false;
+  carritoActivo = [];
+  mostrarResumenModoUnico();
   goToStep(1);
 }
 
@@ -3741,11 +4016,7 @@ async function enviarReserva() {
     return;
   }
 
-  const cuerpo = {
-    habitacion:        currentHab?.id || '',
-    fecha_entrada:     checkin,
-    fecha_salida:      checkout,
-    huespedes:         guests,
+  const datosHuesped = {
     nombre:            document.querySelector('#step-1 input[placeholder="Andrés"]')?.value || '',
     apellido:          document.querySelector('#step-1 input[placeholder="Pérez"]')?.value || '',
     cedula:            document.querySelector('#step-1 input[placeholder="0912345678"]')?.value || '',
@@ -3760,8 +4031,13 @@ async function enviarReserva() {
     acepta_marketing:  document.getElementById('acepta-marketing')?.checked ? 'true' : 'false',
   };
 
+  const cuerpo = modoGrupo
+    ? { ...datosHuesped }
+    : { habitacion: currentHab?.id || '', fecha_entrada: checkin, fecha_salida: checkout, huespedes: guests, ...datosHuesped };
+
   // Validar campos mínimos antes de enviar
-  const requeridos = ['habitacion','fecha_entrada','fecha_salida','huespedes','nombre','apellido','cedula','pais','correo','telefono','metodo_pago'];
+  const requeridosComunes = ['nombre','apellido','cedula','pais','correo','telefono','metodo_pago'];
+  const requeridos = modoGrupo ? requeridosComunes : ['habitacion','fecha_entrada','fecha_salida','huespedes', ...requeridosComunes];
   for (const campo of requeridos) {
     if (!cuerpo[campo]) {
       alert(t('alert_falta_campo', { campo: campo.replace(/_/g,' ') }));
@@ -3770,15 +4046,26 @@ async function enviarReserva() {
       return;
     }
   }
+  if (modoGrupo && !carritoActivo.length) {
+    alert(t('alert_carrito_vacio'));
+    btn.disabled = false;
+    btn.textContent = t('checkout_confirmar_reserva');
+    return;
+  }
 
   // Construir FormData para poder adjuntar el comprobante si lo hay
   const formData = new FormData();
   for (const [k, v] of Object.entries(cuerpo)) formData.append(k, v);
+  if (modoGrupo) {
+    formData.append('items', JSON.stringify(carritoActivo.map(item => ({
+      habitacion: item.hab.id, fecha_entrada: item.ci, fecha_salida: item.co, huespedes: item.guests,
+    }))));
+  }
   const comprobante = document.getElementById('comprobante-input')?.files[0];
   if (comprobante) formData.append('comprobante_pago', comprobante);
 
   try {
-    const resp  = await fetch(`${API_BASE}/api/reservas`, {
+    const resp  = await fetch(`${API_BASE}/api/reservas${modoGrupo ? '/grupo' : ''}`, {
       method: 'POST',
       body: formData,   // sin Content-Type — el navegador lo pone automáticamente con el boundary
     });
@@ -3790,6 +4077,11 @@ async function enviarReserva() {
       btn.disabled = false;
       btn.textContent = t('checkout_confirmar_reserva');
       return;
+    }
+
+    if (modoGrupo) {
+      carrito = [];
+      renderCarritoFab();
     }
 
     if (datos.estado === 'pendiente_pago') {

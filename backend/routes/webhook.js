@@ -35,11 +35,12 @@ router.post('/payphone', async (req, res) => {
 
   console.log('[Webhook] Respuesta PayPhone:', JSON.stringify(resultado));
 
-  // El clientTransactionId que enviamos es el código de reserva
-  const codigo  = clientTransactionId;
-  const reserva = db.prepare('SELECT * FROM reservas WHERE codigo = ?').get(codigo);
+  // El clientTransactionId que enviamos es el código de reserva, o el código
+  // de grupo cuando el pago cubre varias habitaciones del carrito.
+  const codigo = clientTransactionId;
+  const reservasGrupo = db.prepare('SELECT * FROM reservas WHERE codigo = ? OR grupo_id = ?').all(codigo, codigo);
 
-  if (!reserva) {
+  if (!reservasGrupo.length) {
     console.warn(`[Webhook] Reserva no encontrada: ${codigo}`);
     return res.status(404).send('Reserva no encontrada');
   }
@@ -54,15 +55,17 @@ router.post('/payphone', async (req, res) => {
   db.prepare(`
     UPDATE reservas
     SET estado = ?, payphone_transaction_id = ?, payphone_status = ?
-    WHERE codigo = ?
-  `).run(nuevoEstado, payphoneId, estadoPago, codigo);
+    WHERE codigo = ? OR grupo_id = ?
+  `).run(nuevoEstado, payphoneId, estadoPago, codigo, codigo);
 
   if (aprobado) {
-    console.log(`[Webhook] Reserva ${codigo} — PAGO APROBADO`);
-    email.enviarConfirmacionHuesped(reserva).catch(e => console.error('[Email]', e.message));
-    email.enviarNotificacionHotel(reserva, null).catch(e => console.error('[Email hotel]', e.message));
-    whatsapp.enviarWhatsApp(whatsapp.mensajeNuevaReserva({ ...reserva, estado: 'confirmada' }))
-      .catch(e => console.error('[WA]', e.message));
+    console.log(`[Webhook] Reserva ${codigo} — PAGO APROBADO (${reservasGrupo.length} habitación${reservasGrupo.length > 1 ? 'es' : ''})`);
+    reservasGrupo.forEach(reserva => {
+      email.enviarConfirmacionHuesped(reserva).catch(e => console.error('[Email]', e.message));
+      email.enviarNotificacionHotel(reserva, null).catch(e => console.error('[Email hotel]', e.message));
+      whatsapp.enviarWhatsApp(whatsapp.mensajeNuevaReserva({ ...reserva, estado: 'confirmada' }))
+        .catch(e => console.error('[WA]', e.message));
+    });
   } else {
     console.log(`[Webhook] Reserva ${codigo} — pago ${estadoPago}`);
   }

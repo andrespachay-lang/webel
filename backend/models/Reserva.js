@@ -42,14 +42,19 @@ function crearTablaReservas(db) {
       payphone_transaction_id TEXT,
       payphone_status   TEXT,
       acepta_marketing  INTEGER NOT NULL DEFAULT 0,
+      grupo_id          TEXT,
       creado_en         TEXT    NOT NULL DEFAULT (datetime('now'))
     )
   `);
 
   // Migración: agrega columnas nuevas a bases de datos ya existentes
   const columnas = db.prepare(`PRAGMA table_info(reservas)`).all().map(c => c.name);
-  if (!columnas.includes('acepta_marketing')) {
-    db.exec(`ALTER TABLE reservas ADD COLUMN acepta_marketing INTEGER NOT NULL DEFAULT 0`);
+  const nuevas = {
+    acepta_marketing: `ALTER TABLE reservas ADD COLUMN acepta_marketing INTEGER NOT NULL DEFAULT 0`,
+    grupo_id:         `ALTER TABLE reservas ADD COLUMN grupo_id TEXT`,
+  };
+  for (const [columna, sql] of Object.entries(nuevas)) {
+    if (!columnas.includes(columna)) db.exec(sql);
   }
 }
 
