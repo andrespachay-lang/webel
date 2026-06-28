@@ -3085,6 +3085,15 @@ function renderCarruseles() {
 }
 renderCarruseles();
 
+function actualizarNavCarruseles() {
+  document.querySelectorAll('.carrusel').forEach(cont => {
+    const nav = cont.closest('.carrusel-wrap').querySelector('.carrusel-nav');
+    if (nav) nav.style.display = cont.scrollWidth > cont.clientWidth + 2 ? 'flex' : 'none';
+  });
+}
+actualizarNavCarruseles();
+window.addEventListener('resize', actualizarNavCarruseles);
+
 function scrollCarrusel(vista, dir) {
   const cont = document.querySelector(`[data-carrusel="${vista}"]`);
   cont.scrollBy({ left: dir * 340, behavior: 'smooth' });
