@@ -648,6 +648,31 @@
     color: var(--carbon-suave);
   }
 
+  .catalogo-filtro-banner {
+    margin: 1.5rem auto 0;
+    max-width: 640px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    background: var(--crema);
+    border: 1px solid var(--linea);
+    border-radius: 999px;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.92rem;
+    color: var(--carbon);
+  }
+  .catalogo-filtro-reset {
+    background: none;
+    border: none;
+    color: var(--pacifico);
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 0.92rem;
+  }
+
   .vista-grupo { margin-bottom: 5rem; }
   .vista-grupo:last-child { margin-bottom: 0; }
 
@@ -2122,16 +2147,14 @@
     btn.disabled = true;
     btn.textContent = 'Buscando...';
     try {
-      const resultado = await buscarMejorHabitacion(totalHuespedes, ci, co);
-      const seccion = document.getElementById('habitaciones');
-      if (!resultado) {
+      const disponibles = await buscarHabitacionesDisponibles(totalHuespedes, ci, co);
+      if (!disponibles.length) {
         alert('No hay habitaciones disponibles para esas fechas y número de huéspedes. Intenta con otras fechas.');
+        const seccion = document.getElementById('habitaciones');
         if (seccion) seccion.scrollIntoView({behavior:'smooth'});
         return;
       }
-      habitacionOcupada = resultado.rangos;
-      const exito = iniciarCheckoutConDatos(resultado.hab, ci, co, totalHuespedes);
-      if (!exito && seccion) seccion.scrollIntoView({behavior:'smooth'});
+      mostrarCatalogoFiltrado(disponibles, ci, co, totalHuespedes);
     } finally {
       btn.disabled = false;
       btn.textContent = textoOriginal;
@@ -2264,6 +2287,10 @@
       <div class="section-kicker" data-i18n="hab_kicker">Nuestras habitaciones</div>
       <h2 class="section-title" data-i18n="hab_titulo">Siete espacios, <em>tres vistas.</em></h2>
       <p data-i18n="hab_intro">Cada habitación tiene baño privado, aire acondicionado y wifi. Lo que cambia, y lo que recordarás, es lo que ves al despertar.</p>
+    </div>
+    <div class="catalogo-filtro-banner" id="catalogo-filtro-banner" style="display:none;">
+      <span id="catalogo-filtro-texto"></span>
+      <button type="button" class="catalogo-filtro-reset" onclick="mostrarTodoElCatalogo()">Ver todas las habitaciones</button>
     </div>
   </div>
 
@@ -3479,6 +3506,7 @@ function renderCarruseles() {
     HABITACIONES[vista].forEach(h => {
       const card = document.createElement('article');
       card.className = 'hab-card';
+      card.dataset.habId = h.id;
       card.onclick = () => openModal(vista, h.id);
       card.innerHTML = `
         <div class="hab-img">
@@ -3542,17 +3570,50 @@ function fechasEnConflicto(fechaEntrada, fechaSalida) {
   return habitacionOcupada.some(r => rangosSeSolapan(fechaEntrada, fechaSalida, r.fecha_entrada, r.fecha_salida));
 }
 
-async function buscarMejorHabitacion(totalHuespedes, fechaEntrada, fechaSalida) {
+async function buscarHabitacionesDisponibles(totalHuespedes, fechaEntrada, fechaSalida) {
   const candidatas = Object.values(HABITACIONES)
     .flat()
-    .filter(h => h.capacidad >= totalHuespedes)
-    .sort((a, b) => a.capacidad - b.capacidad);
-  for (const h of candidatas) {
+    .filter(h => h.capacidad >= totalHuespedes);
+  const resultados = await Promise.all(candidatas.map(async h => {
     const rangos = await cargarRangosOcupados(h.id);
     const libre = !rangos.some(r => rangosSeSolapan(fechaEntrada, fechaSalida, r.fecha_entrada, r.fecha_salida));
-    if (libre) return { hab: h, rangos };
+    return libre ? { hab: h, rangos } : null;
+  }));
+  return resultados.filter(Boolean);
+}
+
+let pendingBusqueda = null;
+
+function mostrarCatalogoFiltrado(disponibles, ci, co, totalHuespedes) {
+  pendingBusqueda = { ci, co, totalHuespedes };
+  const idsDisponibles = new Set(disponibles.map(d => d.hab.id));
+
+  document.querySelectorAll('.hab-card').forEach(card => {
+    card.style.display = idsDisponibles.has(card.dataset.habId) ? '' : 'none';
+  });
+  document.querySelectorAll('.vista-grupo').forEach(grupo => {
+    const visibles = grupo.querySelectorAll('.hab-card:not([style*="display: none"])').length;
+    grupo.style.display = visibles > 0 ? '' : 'none';
+  });
+
+  const banner = document.getElementById('catalogo-filtro-banner');
+  const texto = document.getElementById('catalogo-filtro-texto');
+  if (banner && texto) {
+    const n = disponibles.length;
+    texto.textContent = `${n} ${n === 1 ? 'habitación' : 'habitaciones'} disponible${n === 1 ? '' : 's'} para tus fechas y huéspedes`;
+    banner.style.display = 'flex';
   }
-  return null;
+
+  const seccion = document.getElementById('habitaciones');
+  if (seccion) seccion.scrollIntoView({ behavior: 'smooth' });
+}
+
+function mostrarTodoElCatalogo() {
+  pendingBusqueda = null;
+  document.querySelectorAll('.hab-card').forEach(card => { card.style.display = ''; });
+  document.querySelectorAll('.vista-grupo').forEach(grupo => { grupo.style.display = ''; });
+  const banner = document.getElementById('catalogo-filtro-banner');
+  if (banner) banner.style.display = 'none';
 }
 
 function openModal(vista, id) {
@@ -3619,11 +3680,18 @@ function openModal(vista, id) {
     <button class="modal-reserva-btn" onclick="iniciarCheckout()">${t('modal_reservar_ahora')}</button>
   `;
 
-  // Pre-rellenar con datos del hero
-  const heroIn = document.getElementById('hsv2-checkin').value;
-  const heroOut = document.getElementById('hsv2-checkout').value;
-  if (heroIn) document.getElementById('m-checkin').value = heroIn;
-  if (heroOut) document.getElementById('m-checkout').value = heroOut;
+  // Pre-rellenar con la última búsqueda del catálogo, o si no con los datos del hero
+  if (pendingBusqueda) {
+    document.getElementById('m-checkin').value = pendingBusqueda.ci;
+    document.getElementById('m-checkout').value = pendingBusqueda.co;
+    const gSel = document.getElementById('m-guests');
+    if (gSel) gSel.value = Math.min(pendingBusqueda.totalHuespedes, h.capacidad);
+  } else {
+    const heroIn = document.getElementById('hsv2-checkin').value;
+    const heroOut = document.getElementById('hsv2-checkout').value;
+    if (heroIn) document.getElementById('m-checkin').value = heroIn;
+    if (heroOut) document.getElementById('m-checkout').value = heroOut;
+  }
 
   configurarLimitesFecha('m-checkin', 'm-checkout');
 
