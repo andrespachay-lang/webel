@@ -289,6 +289,29 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
+  .hsv2-room-block { padding-bottom: 0.4rem; }
+  .hsv2-room-block + .hsv2-room-block { margin-top: 0.6rem; border-top: 2px solid rgba(27,73,101,0.1); padding-top: 0.6rem; }
+  .hsv2-room-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 0.2rem;
+  }
+  .hsv2-room-head strong { font-size: 0.85rem; color: var(--pacifico); }
+  .hsv2-room-quitar {
+    background: none; border: 0; color: var(--carbon-suave);
+    font-size: 0.72rem; text-decoration: underline; cursor: pointer;
+    font-family: var(--sans);
+  }
+  .hsv2-room-quitar:hover { color: var(--pacifico); }
+  .hsv2-agregar-hab {
+    width: 100%; margin-top: 0.6rem; padding: 0.65rem;
+    background: transparent; border: 1px solid var(--pacifico);
+    color: var(--pacifico); border-radius: 100px;
+    font-family: var(--sans); font-size: 0.75rem; letter-spacing: 0.08em;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .hsv2-agregar-hab:hover:not(:disabled) { background: var(--pacifico); color: var(--crema); }
+  .hsv2-agregar-hab:disabled { opacity: 0.35; cursor: default; }
+
   .hsv2-row {
     display: flex; align-items: center; justify-content: space-between;
     padding: 0.8rem 0; border-bottom: 1px solid rgba(27,73,101,0.08);
@@ -671,6 +694,16 @@
     cursor: pointer;
     text-decoration: underline;
     font-size: 0.92rem;
+  }
+
+  .hab-grid-flat {
+    display: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    max-width: var(--max);
+    margin: 2rem auto 0;
+    padding: 0 2rem;
   }
 
   .vista-grupo { margin-bottom: 5rem; }
@@ -1910,52 +1943,10 @@
         <!-- DROPDOWN -->
         <div class="hsv2-dropdown" id="hsv2-dropdown">
 
-          <!-- Adultos -->
-          <div class="hsv2-row">
-            <div class="hsv2-info">
-              <strong>Adultos</strong>
-              <span>11 años en adelante · <em class="txt-sol">máx. 5 por habitación</em></span>
-            </div>
-            <div class="hsv2-counter">
-              <button class="hsv2-btn" id="hsv2-adult-minus">−</button>
-              <span class="hsv2-num" id="hsv2-n-adultos">2</span>
-              <button class="hsv2-btn" id="hsv2-adult-plus">+</button>
-            </div>
-          </div>
+          <!-- Bloques por habitación (dinámico) -->
+          <div id="hsv2-rooms"></div>
 
-          <!-- Niños -->
-          <div class="hsv2-row">
-            <div class="hsv2-info">
-              <strong>Niños</strong>
-              <span>0–10 años · <em class="txt-green">1 gratis (0–5 años)</em></span>
-            </div>
-            <div class="hsv2-counter">
-              <button class="hsv2-btn" id="hsv2-nino-minus">−</button>
-              <span class="hsv2-num" id="hsv2-n-ninos">0</span>
-              <button class="hsv2-btn" id="hsv2-nino-plus">+</button>
-            </div>
-          </div>
-
-          <!-- Edades niños -->
-          <div class="hsv2-ages" id="hsv2-ages"></div>
-
-          <!-- Alerta capacidad -->
-          <div class="hsv2-alert" id="hsv2-alert">
-            ⚠️ Capacidad máxima alcanzada (5 personas).
-            Para grupos más grandes escríbenos por WhatsApp.
-          </div>
-
-          <!-- Mascota -->
-          <div class="hsv2-pet-row">
-            <div class="hsv2-info">
-              <strong>¿Viajas con mascota?</strong>
-              <span class="txt-sol">+$5 por noche · máximo 1 por habitación</span>
-            </div>
-            <button class="hsv2-toggle" id="hsv2-pet-toggle"></button>
-          </div>
-          <div class="hsv2-pet-note" id="hsv2-pet-note">
-            1 mascota incluida en tu reserva
-          </div>
+          <button type="button" class="hsv2-agregar-hab" id="hsv2-agregar-hab">+ Agregar otra habitación</button>
 
           <!-- Precio estimado -->
           <div class="hsv2-precio" id="hsv2-precio">
@@ -1979,82 +1970,139 @@
 
 <script>
 (function() {
-  const MAX = 5, PRECIO = 20, PRECIO_PET = 5, PRECIO_1_PERSONA = 25;
-  const st = { adultos: 2, ninos: 0, mascota: false, edades: [] };
+  const MAX = 5, PRECIO = 20, PRECIO_PET = 5, PRECIO_1_PERSONA = 25, MAX_HABITACIONES = 7;
+  let habitaciones = [ { adultos: 2, ninos: 0, edades: [], mascota: false } ];
 
   const $  = id => document.getElementById(id);
-  const total = () => st.adultos + st.ninos;
+  const totalRoom = r => r.adultos + r.ninos;
 
   // Mueve el dropdown al <body> para que su position:fixed sea relativo al
   // viewport y no a un ancestro con transform (la animación de entrada del
   // buscador deja un transform permanente vía animation-fill-mode: forwards).
   document.body.appendChild($('hsv2-dropdown'));
 
-  function change(tipo, delta) {
-    if (tipo === 'adultos') {
-      const n = st.adultos + delta;
-      if (n < 1 || n > MAX || (delta > 0 && total() >= MAX)) return;
-      st.adultos = n;
-    } else {
-      const n = st.ninos + delta;
-      if (n < 0 || (delta > 0 && total() >= MAX)) return;
-      st.ninos = n;
-      renderAges();
+  function ageRowHtml(idx, ei, edad) {
+    let tagTexto = '', tagCls = 'hsv2-age-tag';
+    if (edad !== null && !isNaN(edad)) {
+      if (edad<=5 && ei===0) { tagTexto='Gratis'; tagCls='hsv2-age-tag tag-gratis'; }
+      else if (edad<=10) { tagTexto='50%'; tagCls='hsv2-age-tag tag-medio'; }
+      else { tagTexto='100%'; tagCls='hsv2-age-tag tag-full'; }
     }
-    syncUI();
-    calcular();
+    return `
+      <div class="hsv2-age-row">
+        <select class="hsv2-age-select" data-action="edad" data-idx="${idx}" data-ei="${ei}">
+          <option value="">Niño ${ei+1} — ¿cuántos años tendrá?</option>
+          ${[...Array(11)].map((_,a) =>
+            `<option value="${a}" ${a===edad?'selected':''}>${a===0?'Menos de 1 año':a+' año'+(a>1?'s':'')}</option>`
+          ).join('')}
+        </select>
+        <span class="${tagCls}">${tagTexto}</span>
+      </div>`;
   }
 
-  function renderAges() {
-    const cont = $('hsv2-ages');
-    cont.innerHTML = '';
-    st.edades = Array(st.ninos).fill(null);
-    cont.classList.toggle('show', st.ninos > 0);
-    for (let i = 0; i < st.ninos; i++) {
-      const row = document.createElement('div');
-      row.className = 'hsv2-age-row';
-      const sel = document.createElement('select');
-      sel.className = 'hsv2-age-select';
-      sel.innerHTML = `<option value="">Niño ${i+1} — ¿cuántos años tendrá?</option>
-        ${[...Array(11)].map((_,a) =>
-          `<option value="${a}">${a===0?'Menos de 1 año':a+' año'+(a>1?'s':'')}</option>`
-        ).join('')}`;
-      const tag = document.createElement('span');
-      tag.className = 'hsv2-age-tag';
-      sel.onchange = e => {
-        const edad = parseInt(e.target.value);
-        st.edades[i] = isNaN(edad) ? null : edad;
-        if (isNaN(edad)) { tag.textContent=''; tag.className='hsv2-age-tag'; }
-        else if (edad<=5 && i===0) { tag.textContent='Gratis'; tag.className='hsv2-age-tag tag-gratis'; }
-        else if (edad<=10) { tag.textContent='50%'; tag.className='hsv2-age-tag tag-medio'; }
-        else { tag.textContent='100%'; tag.className='hsv2-age-tag tag-full'; }
-        calcular();
-      };
-      row.appendChild(sel); row.appendChild(tag);
-      cont.appendChild(row);
+  function roomBlockHtml(r, idx) {
+    const tot = totalRoom(r);
+    return `
+      <div class="hsv2-room-block" data-idx="${idx}">
+        <div class="hsv2-room-head">
+          <strong>Habitación ${idx+1}</strong>
+          ${habitaciones.length > 1 ? `<button type="button" class="hsv2-room-quitar" data-action="quitar" data-idx="${idx}">Quitar</button>` : ''}
+        </div>
+        <div class="hsv2-row">
+          <div class="hsv2-info">
+            <strong>Adultos</strong>
+            <span>11 años en adelante · <em class="txt-sol">máx. 5</em></span>
+          </div>
+          <div class="hsv2-counter">
+            <button class="hsv2-btn" data-action="adultos-" data-idx="${idx}" ${r.adultos<=1?'disabled':''}>−</button>
+            <span class="hsv2-num">${r.adultos}</span>
+            <button class="hsv2-btn" data-action="adultos+" data-idx="${idx}" ${(r.adultos>=MAX||tot>=MAX)?'disabled':''}>+</button>
+          </div>
+        </div>
+        <div class="hsv2-row">
+          <div class="hsv2-info">
+            <strong>Niños</strong>
+            <span>0–10 años · <em class="txt-green">1 gratis (0–5 años)</em></span>
+          </div>
+          <div class="hsv2-counter">
+            <button class="hsv2-btn" data-action="ninos-" data-idx="${idx}" ${r.ninos<=0?'disabled':''}>−</button>
+            <span class="hsv2-num">${r.ninos}</span>
+            <button class="hsv2-btn" data-action="ninos+" data-idx="${idx}" ${tot>=MAX?'disabled':''}>+</button>
+          </div>
+        </div>
+        <div class="hsv2-ages ${r.ninos>0?'show':''}">
+          ${r.edades.map((edad,ei) => ageRowHtml(idx, ei, edad)).join('')}
+        </div>
+        <div class="hsv2-alert ${tot>=MAX?'show':''}">
+          ⚠️ Capacidad máxima alcanzada (5 personas) para esta habitación.
+        </div>
+        <div class="hsv2-pet-row">
+          <div class="hsv2-info">
+            <strong>¿Viajas con mascota?</strong>
+            <span class="txt-sol">+$5 por noche</span>
+          </div>
+          <button class="hsv2-toggle ${r.mascota?'on':''}" data-action="mascota" data-idx="${idx}"></button>
+        </div>
+      </div>`;
+  }
+
+  function renderRooms() {
+    $('hsv2-rooms').innerHTML = habitaciones.map((r,i) => roomBlockHtml(r,i)).join('');
+    $('hsv2-agregar-hab').disabled = habitaciones.length >= MAX_HABITACIONES;
+  }
+
+  function agregarHabitacion() {
+    if (habitaciones.length >= MAX_HABITACIONES) return;
+    habitaciones.push({ adultos: 1, ninos: 0, edades: [], mascota: false });
+    renderRooms(); syncUI(); calcular();
+  }
+
+  function quitarHabitacion(idx) {
+    if (habitaciones.length <= 1) return;
+    habitaciones.splice(idx, 1);
+    renderRooms(); syncUI(); calcular();
+  }
+
+  function change(idx, tipo, delta) {
+    const r = habitaciones[idx];
+    if (!r) return;
+    if (tipo === 'adultos') {
+      const n = r.adultos + delta;
+      if (n < 1 || n > MAX || (delta > 0 && totalRoom(r) >= MAX)) return;
+      r.adultos = n;
+    } else {
+      const n = r.ninos + delta;
+      if (n < 0 || (delta > 0 && totalRoom(r) >= MAX)) return;
+      r.ninos = n;
+      r.edades = Array(n).fill(null);
     }
+    renderRooms(); syncUI(); calcular();
+  }
+
+  function cambiarEdad(idx, ei, valor) {
+    const r = habitaciones[idx];
+    if (!r) return;
+    const edad = parseInt(valor);
+    r.edades[ei] = isNaN(edad) ? null : edad;
+    renderRooms(); calcular();
+  }
+
+  function togglePet(idx) {
+    const r = habitaciones[idx];
+    if (!r) return;
+    r.mascota = !r.mascota;
+    renderRooms(); syncUI(); calcular();
   }
 
   function syncUI() {
-    $('hsv2-n-adultos').textContent = st.adultos;
-    $('hsv2-n-ninos').textContent = st.ninos;
-    $('hsv2-adult-minus').disabled = st.adultos <= 1;
-    $('hsv2-adult-plus').disabled  = st.adultos >= MAX || total() >= MAX;
-    $('hsv2-nino-minus').disabled  = st.ninos <= 0;
-    $('hsv2-nino-plus').disabled   = total() >= MAX;
-    $('hsv2-alert').classList.toggle('show', total() >= MAX);
-    const parts = [`${st.adultos} adulto${st.adultos>1?'s':''}`];
-    if (st.ninos>0) parts.push(`${st.ninos} niño${st.ninos>1?'s':''}`);
-    if (st.mascota) parts.push('1 mascota');
-    parts.push('1 habitación');
+    const totalAdultos = habitaciones.reduce((s,r)=>s+r.adultos,0);
+    const totalNinos = habitaciones.reduce((s,r)=>s+r.ninos,0);
+    const totalMascotas = habitaciones.filter(r=>r.mascota).length;
+    const parts = [`${totalAdultos} adulto${totalAdultos>1?'s':''}`];
+    if (totalNinos>0) parts.push(`${totalNinos} niño${totalNinos>1?'s':''}`);
+    if (totalMascotas>0) parts.push(`${totalMascotas} mascota${totalMascotas>1?'s':''}`);
+    parts.push(`${habitaciones.length} ${habitaciones.length>1?'habitaciones':'habitación'}`);
     $('hsv2-guestsText').textContent = parts.join(' · ');
-  }
-
-  function togglePet() {
-    st.mascota = !st.mascota;
-    $('hsv2-pet-toggle').classList.toggle('on', st.mascota);
-    $('hsv2-pet-note').classList.toggle('show', st.mascota);
-    syncUI(); calcular();
   }
 
   function calcular() {
@@ -2063,35 +2111,26 @@
     const box = $('hsv2-precio');
     if (!ci || !co || new Date(co) <= new Date(ci)) { box.style.display='none'; return; }
     const noches = Math.round((new Date(co)-new Date(ci))/86400000);
-    let sub = 0, lineas = [], gratisUsado = false;
+    let subGeneral = 0, lineas = [];
 
-    const soloUnaPersona = st.adultos === 1 && st.ninos === 0;
-    const cA = soloUnaPersona ? PRECIO_1_PERSONA * noches : st.adultos * PRECIO * noches;
-    sub += cA;
-    lineas.push(soloUnaPersona
-      ? `Habitación individual × $${PRECIO_1_PERSONA} × ${noches} noche${noches>1?'s':''} = <strong>$${cA.toFixed(2)}</strong>`
-      : `${st.adultos} adulto${st.adultos>1?'s':''} × $${PRECIO} × ${noches} noche${noches>1?'s':''} = <strong>$${cA.toFixed(2)}</strong>`);
+    habitaciones.forEach((r, idx) => {
+      let subRoom = 0, gratisUsado = false;
+      const soloUnaPersona = r.adultos === 1 && r.ninos === 0;
+      subRoom += soloUnaPersona ? PRECIO_1_PERSONA * noches : r.adultos * PRECIO * noches;
 
-    st.edades.forEach((edad, i) => {
-      if (edad===null) return;
-      if (edad<=5 && !gratisUsado) {
-        gratisUsado=true;
-        lineas.push(`Niño ${i+1} (${edad===0?'<1 año':edad+' años'}) — <span style="color:#2e9e6b;font-weight:500">Gratis</span>`);
-      } else if (edad<=10) {
-        const c=PRECIO*0.5*noches; sub+=c;
-        lineas.push(`Niño ${i+1} (${edad} años) · 50% = <strong>$${c.toFixed(2)}</strong>`);
-      } else {
-        const c=PRECIO*noches; sub+=c;
-        lineas.push(`Niño ${i+1} (${edad} años) · 100% = <strong>$${c.toFixed(2)}</strong>`);
-      }
+      r.edades.forEach(edad => {
+        if (edad===null) return;
+        if (edad<=5 && !gratisUsado) { gratisUsado = true; }
+        else if (edad<=10) { subRoom += PRECIO*0.5*noches; }
+        else { subRoom += PRECIO*noches; }
+      });
+      if (r.mascota) subRoom += PRECIO_PET*noches;
+
+      subGeneral += subRoom;
+      lineas.push(`Habitación ${idx+1} (${totalRoom(r)} huésped${totalRoom(r)>1?'es':''}${r.mascota?' + mascota':''}) = <strong>$${subRoom.toFixed(2)}</strong>`);
     });
 
-    if (st.mascota) {
-      const cM=PRECIO_PET*noches; sub+=cM;
-      lineas.push(`1 mascota × $${PRECIO_PET} × ${noches} noche${noches>1?'s':''} = <strong>$${cM.toFixed(2)}</strong>`);
-    }
-
-    const iva=sub*0.15, total2=sub+iva;
+    const iva=subGeneral*0.15, total2=subGeneral+iva;
     lineas.push(`IVA 15% = <strong>$${iva.toFixed(2)}</strong>`);
     $('hsv2-desglose').innerHTML = lineas.join('<br>');
     $('hsv2-total').textContent = `$${total2.toFixed(2)} USD`;
@@ -2128,11 +2167,30 @@
     $('hsv2-dropdown').classList.contains('open') ? closeDD() : openDD();
   });
   $('hsv2-dropdown').addEventListener('click', e => e.stopPropagation());
-  $('hsv2-adult-minus').addEventListener('click', e => { e.stopPropagation(); change('adultos',-1); posicionarDD(); });
-  $('hsv2-adult-plus').addEventListener('click',  e => { e.stopPropagation(); change('adultos',1); posicionarDD(); });
-  $('hsv2-nino-minus').addEventListener('click',  e => { e.stopPropagation(); change('ninos',-1); posicionarDD(); });
-  $('hsv2-nino-plus').addEventListener('click',   e => { e.stopPropagation(); change('ninos',1); posicionarDD(); });
-  $('hsv2-pet-toggle').addEventListener('click',  e => { e.stopPropagation(); togglePet(); posicionarDD(); });
+
+  $('hsv2-rooms').addEventListener('click', e => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    e.stopPropagation();
+    const idx = parseInt(btn.dataset.idx);
+    switch (btn.dataset.action) {
+      case 'adultos-': change(idx,'adultos',-1); break;
+      case 'adultos+': change(idx,'adultos',1); break;
+      case 'ninos-':   change(idx,'ninos',-1); break;
+      case 'ninos+':   change(idx,'ninos',1); break;
+      case 'mascota':  togglePet(idx); break;
+      case 'quitar':   quitarHabitacion(idx); break;
+    }
+    posicionarDD();
+  });
+  $('hsv2-rooms').addEventListener('change', e => {
+    const sel = e.target.closest('.hsv2-age-select');
+    if (!sel) return;
+    cambiarEdad(parseInt(sel.dataset.idx), parseInt(sel.dataset.ei), sel.value);
+    posicionarDD();
+  });
+
+  $('hsv2-agregar-hab').addEventListener('click', e => { e.stopPropagation(); agregarHabitacion(); posicionarDD(); });
   $('hsv2-listo').addEventListener('click', closeDD);
   window.addEventListener('resize', () => { if ($('hsv2-dropdown').classList.contains('open')) posicionarDD(); });
   window.addEventListener('scroll', () => { if ($('hsv2-dropdown').classList.contains('open')) posicionarDD(); }, true);
@@ -2141,20 +2199,20 @@
     if (!ci||!co) { alert('Selecciona fechas de llegada y salida'); return; }
     if (new Date(co)<=new Date(ci)) { alert('La salida debe ser posterior a la llegada'); return; }
     closeDD();
-    const totalHuespedes = st.adultos + st.ninos;
+    const requerimientos = habitaciones.map(totalRoom);
     const btn = $('hsv2-buscar');
     const textoOriginal = btn.textContent;
     btn.disabled = true;
     btn.textContent = 'Buscando...';
     try {
-      const disponibles = await buscarHabitacionesDisponibles(totalHuespedes, ci, co);
+      const disponibles = await buscarHabitacionesDisponibles(requerimientos, ci, co);
       if (!disponibles.length) {
         alert('No hay habitaciones disponibles para esas fechas y número de huéspedes. Intenta con otras fechas.');
         const seccion = document.getElementById('habitaciones');
         if (seccion) seccion.scrollIntoView({behavior:'smooth'});
         return;
       }
-      mostrarCatalogoFiltrado(disponibles, ci, co, totalHuespedes);
+      mostrarCatalogoFiltrado(disponibles, ci, co, requerimientos);
     } finally {
       btn.disabled = false;
       btn.textContent = textoOriginal;
@@ -2165,6 +2223,7 @@
   $('hsv2-checkin').addEventListener('change', () => { calcular(); posicionarDD(); });
   $('hsv2-checkout').addEventListener('change', () => { calcular(); posicionarDD(); });
 
+  renderRooms();
   syncUI();
 })();
 </script>
@@ -2292,6 +2351,7 @@
       <span id="catalogo-filtro-texto"></span>
       <button type="button" class="catalogo-filtro-reset" onclick="mostrarTodoElCatalogo()">Ver todas las habitaciones</button>
     </div>
+    <div class="hab-grid-flat" id="hab-grid-flat" style="display:none;"></div>
   </div>
 
   <!-- VISTA AL MAR -->
@@ -3507,6 +3567,7 @@ function renderCarruseles() {
       const card = document.createElement('article');
       card.className = 'hab-card';
       card.dataset.habId = h.id;
+      card.dataset.vista = vista;
       card.onclick = () => openModal(vista, h.id);
       card.innerHTML = `
         <div class="hab-img">
@@ -3532,6 +3593,11 @@ function renderCarruseles() {
   });
 }
 renderCarruseles();
+
+document.getElementById('hab-grid-flat').addEventListener('click', e => {
+  const card = e.target.closest('.hab-card');
+  if (card) openModal(card.dataset.vista, card.dataset.habId);
+});
 
 function actualizarNavCarruseles() {
   document.querySelectorAll('.carrusel').forEach(cont => {
@@ -3570,10 +3636,11 @@ function fechasEnConflicto(fechaEntrada, fechaSalida) {
   return habitacionOcupada.some(r => rangosSeSolapan(fechaEntrada, fechaSalida, r.fecha_entrada, r.fecha_salida));
 }
 
-async function buscarHabitacionesDisponibles(totalHuespedes, fechaEntrada, fechaSalida) {
+async function buscarHabitacionesDisponibles(requerimientos, fechaEntrada, fechaSalida) {
+  const minReq = Math.min(...requerimientos);
   const candidatas = Object.values(HABITACIONES)
     .flat()
-    .filter(h => h.capacidad >= totalHuespedes);
+    .filter(h => h.capacidad >= minReq);
   const resultados = await Promise.all(candidatas.map(async h => {
     const rangos = await cargarRangosOcupados(h.id);
     const libre = !rangos.some(r => rangosSeSolapan(fechaEntrada, fechaSalida, r.fecha_entrada, r.fecha_salida));
@@ -3584,23 +3651,25 @@ async function buscarHabitacionesDisponibles(totalHuespedes, fechaEntrada, fecha
 
 let pendingBusqueda = null;
 
-function mostrarCatalogoFiltrado(disponibles, ci, co, totalHuespedes) {
-  pendingBusqueda = { ci, co, totalHuespedes };
-  const idsDisponibles = new Set(disponibles.map(d => d.hab.id));
+function mostrarCatalogoFiltrado(disponibles, ci, co, requerimientos) {
+  pendingBusqueda = { ci, co, requerimientos };
 
-  document.querySelectorAll('.hab-card').forEach(card => {
-    card.style.display = idsDisponibles.has(card.dataset.habId) ? '' : 'none';
+  document.querySelectorAll('.vista-grupo').forEach(grupo => { grupo.style.display = 'none'; });
+
+  const flat = document.getElementById('hab-grid-flat');
+  flat.innerHTML = '';
+  disponibles.forEach(d => {
+    const original = document.querySelector(`.hab-card[data-hab-id="${d.hab.id}"]`);
+    if (original) flat.appendChild(original.cloneNode(true));
   });
-  document.querySelectorAll('.vista-grupo').forEach(grupo => {
-    const visibles = grupo.querySelectorAll('.hab-card:not([style*="display: none"])').length;
-    grupo.style.display = visibles > 0 ? '' : 'none';
-  });
+  flat.style.display = 'flex';
 
   const banner = document.getElementById('catalogo-filtro-banner');
   const texto = document.getElementById('catalogo-filtro-texto');
   if (banner && texto) {
     const n = disponibles.length;
-    texto.textContent = `${n} ${n === 1 ? 'habitación' : 'habitaciones'} disponible${n === 1 ? '' : 's'} para tus fechas y huéspedes`;
+    const nHab = requerimientos.length;
+    texto.textContent = `${n} ${n === 1 ? 'habitación' : 'habitaciones'} disponible${n === 1 ? '' : 's'} para ${nHab} ${nHab > 1 ? 'habitaciones' : 'habitación'} buscada${nHab > 1 ? 's' : ''}`;
     banner.style.display = 'flex';
   }
 
@@ -3610,8 +3679,10 @@ function mostrarCatalogoFiltrado(disponibles, ci, co, totalHuespedes) {
 
 function mostrarTodoElCatalogo() {
   pendingBusqueda = null;
-  document.querySelectorAll('.hab-card').forEach(card => { card.style.display = ''; });
   document.querySelectorAll('.vista-grupo').forEach(grupo => { grupo.style.display = ''; });
+  const flat = document.getElementById('hab-grid-flat');
+  flat.style.display = 'none';
+  flat.innerHTML = '';
   const banner = document.getElementById('catalogo-filtro-banner');
   if (banner) banner.style.display = 'none';
 }
@@ -3685,7 +3756,12 @@ function openModal(vista, id) {
     document.getElementById('m-checkin').value = pendingBusqueda.ci;
     document.getElementById('m-checkout').value = pendingBusqueda.co;
     const gSel = document.getElementById('m-guests');
-    if (gSel) gSel.value = Math.min(pendingBusqueda.totalHuespedes, h.capacidad);
+    if (gSel) {
+      const mejor = pendingBusqueda.requerimientos
+        .filter(req => req <= h.capacidad)
+        .sort((a,b) => b-a)[0] || 1;
+      gSel.value = mejor;
+    }
   } else {
     const heroIn = document.getElementById('hsv2-checkin').value;
     const heroOut = document.getElementById('hsv2-checkout').value;
