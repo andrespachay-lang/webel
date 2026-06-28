@@ -61,11 +61,16 @@ function generarCodigo(db) {
   return `EDS-${año}-${String(siguiente).padStart(4, '0')}`;
 }
 
-function calcularTotal(huespedes, fechaEntrada, fechaSalida) {
+const DESCUENTO_TRANSFERENCIA = 0.05;
+
+function calcularTotal(huespedes, fechaEntrada, fechaSalida, conDescuentoTransferencia = false) {
   const entrada = new Date(fechaEntrada);
   const salida  = new Date(fechaSalida);
   const noches  = Math.round((salida - entrada) / (1000 * 60 * 60 * 24));
-  const subtotal = huespedes * noches * PRECIO_POR_PERSONA_NOCHE;
+  const subtotalBase = huespedes * noches * PRECIO_POR_PERSONA_NOCHE;
+  const subtotal = conDescuentoTransferencia
+    ? parseFloat((subtotalBase * (1 - DESCUENTO_TRANSFERENCIA)).toFixed(2))
+    : subtotalBase;
   const iva      = parseFloat((subtotal * IVA).toFixed(2));
   const total    = parseFloat((subtotal + iva).toFixed(2));
   return { noches, subtotal, iva, total };
@@ -75,6 +80,7 @@ module.exports = {
   HABITACIONES,
   PRECIO_POR_PERSONA_NOCHE,
   IVA,
+  DESCUENTO_TRANSFERENCIA,
   crearTablaReservas,
   generarCodigo,
   calcularTotal,

@@ -83,8 +83,12 @@ router.post('/', subirComprobante.single('comprobante_pago'), async (req, res) =
     return res.status(409).json({ error: 'La habitación no está disponible para las fechas seleccionadas' });
   }
 
+  // ── Pago con PayPhone o transferencia (5% dto. en transferencia) ─────────
+  const esPayPhone = metodo_pago.toLowerCase().includes('payphone');
+  const esTransfer = metodo_pago.toLowerCase().includes('transferencia');
+
   // ── Calcular totales ─────────────────────────────────────────────────────
-  const { noches, subtotal, iva, total } = calcularTotal(numHuespedes, fecha_entrada, fecha_salida);
+  const { noches, subtotal, iva, total } = calcularTotal(numHuespedes, fecha_entrada, fecha_salida, esTransfer);
   const codigo             = generarCodigo(db);
   const archivoComprobante = req.file ? req.file.filename : null;
 
@@ -111,10 +115,6 @@ router.post('/', subirComprobante.single('comprobante_pago'), async (req, res) =
     console.error('[Reserva] Error guardando:', err);
     return res.status(500).json({ error: 'Error interno al guardar la reserva' });
   }
-
-  // ── Pago con PayPhone ────────────────────────────────────────────────────
-  const esPayPhone    = metodo_pago.toLowerCase().includes('payphone');
-  const esTransfer    = metodo_pago.toLowerCase().includes('transferencia');
 
   if (esPayPhone) {
     try {

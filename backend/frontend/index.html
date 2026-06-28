@@ -38,14 +38,29 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+    padding-top: var(--promo-h, 0px);
   }
   img { max-width: 100%; display: block; }
   a, button { color: inherit; text-decoration: none; }
   button { background: none; border: 0; font-family: inherit; cursor: pointer; }
 
+  /* ───────── BARRA DE PROMOCIÓN ───────── */
+  .promo-bar {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 101;
+    background: var(--pacifico);
+    color: var(--crema);
+    text-align: center;
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    padding: 0.6rem 1rem;
+    line-height: 1.4;
+  }
+  .promo-bar strong { color: var(--sol); }
+
   /* ───────── NAV ───────── */
   .nav {
-    position: fixed; top: 0; left: 0; right: 0;
+    position: fixed; top: var(--promo-h, 0px); left: 0; right: 0;
     z-index: 100;
     padding: 1.5rem 2rem;
     display: flex; justify-content: space-between; align-items: center;
@@ -676,65 +691,6 @@
     border-color: var(--pacifico);
   }
 
-  /* ───────── EXPERIENCIA ───────── */
-  .experiencia {
-    background: var(--pacifico);
-    color: var(--crema);
-    position: relative;
-    overflow: hidden;
-  }
-  .experiencia::before {
-    content: '';
-    position: absolute; top: -50%; right: -20%;
-    width: 800px; height: 800px;
-    background: radial-gradient(circle, rgba(212, 165, 116, 0.15) 0%, transparent 60%);
-    pointer-events: none;
-  }
-  .experiencia .section-title { color: var(--crema); }
-  .experiencia .section-title em { color: var(--arena); }
-  .exp-head {
-    text-align: center;
-    max-width: 640px;
-    margin: 0 auto 5rem;
-    position: relative;
-  }
-  .exp-head p {
-    color: rgba(250, 246, 240, 0.8);
-    font-size: 1.05rem;
-  }
-  .exp-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 2.5rem;
-    position: relative;
-  }
-  .exp-item { text-align: center; }
-  .exp-photo {
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 1.25rem;
-  }
-  .exp-photo img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.6s ease;
-  }
-  .exp-item:hover .exp-photo img { transform: scale(1.08); }
-  .exp-item h4 {
-    font-family: var(--serif);
-    font-size: 1.2rem;
-    font-weight: 400;
-    margin-bottom: 0.5rem;
-    color: var(--crema);
-  }
-  .exp-item p {
-    font-size: 0.9rem;
-    color: rgba(250, 246, 240, 0.7);
-    line-height: 1.6;
-  }
 
   /* ───────── DESCONEXIÓN ───────── */
   .desconexion {
@@ -1619,6 +1575,11 @@
   </symbol>
 </svg>
 
+<!-- BARRA DE PROMOCIÓN -->
+<div class="promo-bar" id="promo-bar" data-i18n="promo_transferencia">
+  Paga por transferencia y obtén un <strong>5% de descuento</strong> en tu reserva.
+</div>
+
 <!-- NAV -->
 <nav class="nav" id="nav">
   <a href="#" class="nav-brand">
@@ -1875,53 +1836,6 @@
 
 </section>
 
-<!-- EXPERIENCIA -->
-<section class="experiencia">
-  <div class="container">
-    <div class="exp-head reveal">
-      <div class="section-kicker" data-i18n="exp_kicker">La experiencia</div>
-      <h2 class="section-title" data-i18n="exp_titulo">Lo que <em>encontrarás</em> aquí.</h2>
-      <p data-i18n="exp_intro">Pequeños lujos que componen una estadía sin prisa. Los huéspedes los recuerdan cuando se van.</p>
-    </div>
-    <div class="exp-grid reveal-stagger">
-
-      <div class="exp-item">
-        <div class="exp-photo">
-          <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?w=600&q=80" alt="Piscina propia — Estación del Sol">
-        </div>
-        <h4 data-i18n="exp1_titulo">Piscina propia</h4>
-        <p data-i18n="exp1_texto">De los pocos hoteles de la zona con piscina al aire libre.</p>
-      </div>
-
-      <div class="exp-item">
-        <div class="exp-photo">
-          <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80" alt="Mirador y áreas comunes — Estación del Sol">
-        </div>
-        <h4 data-i18n="exp2_titulo">Mirador y áreas comunes</h4>
-        <p data-i18n="exp2_texto">Patio, sala y mirador para reunirse o quedarse en silencio.</p>
-      </div>
-
-      <div class="exp-item">
-        <div class="exp-photo">
-          <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80" alt="Desayuno y café — Estación del Sol">
-        </div>
-        <h4 data-i18n="exp3_titulo">Desayuno y café</h4>
-        <p data-i18n="exp3_texto">Una mañana sin apuros frente al mar, como debe ser.</p>
-      </div>
-
-      <div class="exp-item">
-        <div class="exp-photo">
-          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80" alt="Anfitrión presente — Estación del Sol">
-        </div>
-        <h4 data-i18n="exp4_titulo">Anfitrión presente</h4>
-        <p data-i18n="exp4_texto">Recomendaciones reales de quien conoce la costa como su patio.</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
 <!-- RESEÑAS -->
 <section class="resenas" id="resenas">
   <div class="container">
@@ -2060,7 +1974,6 @@
       <ul>
         <li><a href="#historia" data-i18n="nav_historia">Historia</a></li>
         <li><a href="#habitaciones" data-i18n="nav_habitaciones">Habitaciones</a></li>
-        <li><a href="#experiencia" data-i18n="foot_experiencia">Experiencia</a></li>
         <li><a href="#resenas" data-i18n="nav_resenas">Reseñas</a></li>
         <li><a href="#ubicacion" data-i18n="nav_ubicacion">Ubicación</a></li>
       </ul>
@@ -2195,8 +2108,13 @@
         <button class="pay-method" onclick="selectPay(this)" data-metodo="Transferencia">
           <strong data-i18n="pago_transferencia">Transferencia</strong>
           <span>Banco Pichincha / Guayaquil</span>
+          <span style="display:inline-block;margin-top:0.4rem;font-size:0.7rem;letter-spacing:0.05em;color:#2e7d4f;font-weight:600;" data-i18n="pago_transferencia_dto">−5% de descuento</span>
         </button>
       </div>
+
+      <p style="font-size:0.82rem;color:var(--carbon-suave);background:rgba(212,165,116,0.12);border:1px solid rgba(212,165,116,0.35);border-radius:8px;padding:0.7rem 1rem;margin-bottom:1.5rem;" data-i18n="recordatorio_transferencia">
+        💡 Recuerda: si pagas por <strong>transferencia</strong>, obtienes un <strong>5% de descuento</strong> en tu reserva.
+      </p>
 
       <!-- Bloque PayPhone -->
       <div id="bloque-payphone">
@@ -2321,6 +2239,7 @@
       <div class="resumen-linea"><span data-i18n="resumen_huespedes">Huéspedes</span><span id="resumen-guests">—</span></div>
       <div class="resumen-linea"><span data-i18n="resumen_noches">Noches</span><span id="resumen-noches">—</span></div>
       <div class="resumen-linea"><span id="resumen-precio-detail">—</span><span id="resumen-subtotal">—</span></div>
+      <div class="resumen-linea" id="resumen-descuento-linea" style="display:none;color:#2e7d4f;"><span data-i18n="resumen_descuento">Descuento transferencia (5%)</span><span id="resumen-descuento">—</span></div>
       <div class="resumen-linea"><span data-i18n="resumen_iva">IVA 15%</span><span id="resumen-iva">—</span></div>
 
       <div class="resumen-total">
@@ -2341,6 +2260,7 @@ let idiomaActual = 'es';
 
 const i18n = {
   es: {
+    promo_transferencia: 'Paga por transferencia y obtén un <strong>5% de descuento</strong> en tu reserva.',
     nav_historia: 'Historia',
     nav_habitaciones: 'Habitaciones',
     nav_resenas: 'Reseñas',
@@ -2378,17 +2298,6 @@ const i18n = {
     vista_montana_titulo: 'Vista a la <em>montaña</em>',
     vista_montana_meta: 'Distintos niveles · 3 habitaciones',
 
-    exp_kicker: 'La experiencia',
-    exp_titulo: 'Lo que <em>encontrarás</em> aquí.',
-    exp_intro: 'Pequeños lujos que componen una estadía sin prisa. Los huéspedes los recuerdan cuando se van.',
-    exp1_titulo: 'Piscina propia',
-    exp1_texto: 'De los pocos hoteles de la zona con piscina al aire libre.',
-    exp2_titulo: 'Mirador y áreas comunes',
-    exp2_texto: 'Patio, sala y mirador para reunirse o quedarse en silencio.',
-    exp3_titulo: 'Desayuno y café',
-    exp3_texto: 'Una mañana sin apuros frente al mar, como debe ser.',
-    exp4_titulo: 'Anfitrión presente',
-    exp4_texto: 'Recomendaciones reales de quien conoce la costa como su patio.',
 
     desc_cita: 'Fui al mar para ser feliz.',
 
@@ -2424,7 +2333,6 @@ const i18n = {
     foot_tag: 'Como tu casa en la playa.',
     foot_desc: 'Hotel Estación del Sol en Las Núñez, Santa Elena, Ruta del Spondylus, Ecuador.',
     foot_h_hotel: 'Hotel',
-    foot_experiencia: 'Experiencia',
     foot_h_contacto: 'Contacto',
     foot_h_siguenos: 'Síguenos',
     foot_derechos: '© 2026 Estación del Sol. Todos los derechos reservados.',
@@ -2503,6 +2411,8 @@ const i18n = {
     checkout_pago_intro: 'Elige cómo quieres pagar tu reserva.',
     pago_payphone_desc: 'Pago en tu app · seguro',
     pago_transferencia: 'Transferencia',
+    pago_transferencia_dto: '−5% de descuento',
+    recordatorio_transferencia: '💡 Recuerda: si pagas por <strong>transferencia</strong>, obtienes un <strong>5% de descuento</strong> en tu reserva.',
     pp_como_funciona: 'Cómo funciona',
     pp_paso1: 'Haz clic en <strong style="color:var(--pacifico);">Confirmar reserva</strong>',
     pp_paso2: 'Recibirás una notificación en tu app <strong>PayPhone</strong>',
@@ -2546,6 +2456,7 @@ const i18n = {
     resumen_salida: 'Salida',
     resumen_huespedes: 'Huéspedes',
     resumen_noches: 'Noches',
+    resumen_descuento: 'Descuento transferencia (5%)',
     resumen_iva: 'IVA 15%',
     resumen_total_label: 'Total',
 
@@ -2584,6 +2495,7 @@ const i18n = {
   },
 
   en: {
+    promo_transferencia: 'Pay by bank transfer and get a <strong>5% discount</strong> on your stay.',
     nav_historia: 'Our Story',
     nav_habitaciones: 'Rooms',
     nav_resenas: 'Reviews',
@@ -2621,17 +2533,6 @@ const i18n = {
     vista_montana_titulo: 'Mountain <em>view</em>',
     vista_montana_meta: 'Different levels · 3 rooms',
 
-    exp_kicker: 'The experience',
-    exp_titulo: 'What you\'ll <em>find</em> here.',
-    exp_intro: 'Small pleasures that make up an unhurried stay. Guests remember them long after they leave.',
-    exp1_titulo: 'Private pool',
-    exp1_texto: 'One of the few hotels in the area with an outdoor pool.',
-    exp2_titulo: 'Lookout and common areas',
-    exp2_texto: 'A patio, lounge and lookout point to gather — or stay quiet.',
-    exp3_titulo: 'Breakfast and coffee',
-    exp3_texto: 'An unhurried morning facing the sea, just as it should be.',
-    exp4_titulo: 'A host who is present',
-    exp4_texto: 'Real recommendations from someone who knows the coast like the back of their hand.',
 
     desc_cita: "I went to the sea to be happy.",
 
@@ -2667,7 +2568,6 @@ const i18n = {
     foot_tag: 'Like your home by the sea.',
     foot_desc: 'Estación del Sol hotel in Las Núñez, Santa Elena, Spondylus Route, Ecuador.',
     foot_h_hotel: 'Hotel',
-    foot_experiencia: 'Experience',
     foot_h_contacto: 'Contact',
     foot_h_siguenos: 'Follow us',
     foot_derechos: '© 2026 Estación del Sol. All rights reserved.',
@@ -2745,6 +2645,8 @@ const i18n = {
     checkout_pago_intro: 'Choose how you\'d like to pay for your booking.',
     pago_payphone_desc: 'Pay in your app · secure',
     pago_transferencia: 'Bank transfer',
+    pago_transferencia_dto: '−5% discount',
+    recordatorio_transferencia: '💡 Remember: pay by <strong>bank transfer</strong> and get a <strong>5% discount</strong> on your reservation.',
     pp_como_funciona: 'How it works',
     pp_paso1: 'Click <strong style="color:var(--pacifico);">Confirm booking</strong>',
     pp_paso2: 'You\'ll get a notification on your <strong>PayPhone</strong> app',
@@ -2788,6 +2690,7 @@ const i18n = {
     resumen_salida: 'Check-out',
     resumen_huespedes: 'Guests',
     resumen_noches: 'Nights',
+    resumen_descuento: 'Bank transfer discount (5%)',
     resumen_iva: '15% VAT',
     resumen_total_label: 'Total',
 
@@ -2938,10 +2841,18 @@ function configurarLimitesFecha(idEntrada, idSalida) {
   });
 }
 
+function ajustarAlturaPromoBar() {
+  const barra = document.getElementById('promo-bar');
+  if (!barra) return;
+  document.documentElement.style.setProperty('--promo-h', `${barra.offsetHeight}px`);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   aplicarIdioma(localStorage.getItem('idioma') || 'es');
   configurarLimitesFecha('hero-checkin', 'hero-checkout');
+  ajustarAlturaPromoBar();
 });
+window.addEventListener('resize', ajustarAlturaPromoBar);
 
 /* ═════════ DATOS DE HABITACIONES ═════════ */
 /* Nombre / descripción / camas se traducen vía i18n usando la clave i18nKey de cada habitación. */
@@ -3240,6 +3151,23 @@ document.getElementById('modal').addEventListener('click', (e) => {
 });
 
 /* ═════════ CHECKOUT ═════════ */
+let checkoutSubtotalBase = 0;
+
+function recalcularResumen(metodo) {
+  const subtotal = checkoutSubtotalBase;
+  const esTransferencia = metodo === 'Transferencia';
+  const descuento = esTransferencia ? subtotal * 0.05 : 0;
+  const baseConDescuento = subtotal - descuento;
+  const iva = baseConDescuento * 0.15;
+  const total = baseConDescuento + iva;
+
+  document.getElementById('resumen-subtotal').textContent = `$${subtotal.toFixed(2)}`;
+  document.getElementById('resumen-descuento-linea').style.display = esTransferencia ? 'flex' : 'none';
+  if (esTransferencia) document.getElementById('resumen-descuento').textContent = `-$${descuento.toFixed(2)}`;
+  document.getElementById('resumen-iva').textContent = `$${iva.toFixed(2)}`;
+  document.getElementById('resumen-total').textContent = `$${total.toFixed(2)} USD`;
+}
+
 function iniciarCheckout() {
   const ci = document.getElementById('m-checkin').value;
   const co = document.getElementById('m-checkout').value;
@@ -3253,9 +3181,7 @@ function iniciarCheckout() {
     return;
   }
   const noches = Math.round((new Date(co) - new Date(ci)) / 86400000);
-  const subtotal = noches * parseInt(g) * 20;
-  const iva = subtotal * 0.15;
-  const total = subtotal + iva;
+  checkoutSubtotalBase = noches * parseInt(g) * 20;
 
   // Llenar resumen
   document.getElementById('resumen-img').src = currentHab.img;
@@ -3269,9 +3195,7 @@ function iniciarCheckout() {
   rg.textContent  = `${g} ${g==1?t('persona_singular'):t('persona_plural')}`;  rg.dataset.raw = g;
   document.getElementById('resumen-noches').textContent = `${noches} ${noches==1?t('noche_singular'):t('noche_plural')}`;
   document.getElementById('resumen-precio-detail').textContent = t('resumen_precio_detail', { g, noches });
-  document.getElementById('resumen-subtotal').textContent = `$${subtotal.toFixed(2)}`;
-  document.getElementById('resumen-iva').textContent = `$${iva.toFixed(2)}`;
-  document.getElementById('resumen-total').textContent = `$${total.toFixed(2)} USD`;
+  recalcularResumen(document.querySelector('.pay-method.active')?.dataset.metodo || 'PayPhone');
 
   closeModal();
   document.getElementById('checkout').classList.add('open');
@@ -3323,6 +3247,7 @@ function selectPay(el) {
   const metodo = el.dataset.metodo || '';
   document.getElementById('bloque-payphone').style.display     = metodo === 'PayPhone'     ? 'block' : 'none';
   document.getElementById('bloque-transferencia').style.display = metodo === 'Transferencia' ? 'block' : 'none';
+  recalcularResumen(metodo);
 }
 
 function mostrarComprobante(evento) {
