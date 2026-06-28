@@ -229,61 +229,184 @@
     animation: fadeUp 1s ease-out 0.7s forwards;
   }
 
-  /* Buscador hero */
-  .hero-search {
-    background: rgba(250, 246, 240, 0.97);
+  /* Buscador hero v2 */
+  .hero-search-v2 {
+    background: rgba(250,246,240,0.97);
     backdrop-filter: blur(12px);
-    padding: 1rem;
     border-radius: 100px;
     display: flex; align-items: center;
-    gap: 0;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.18);
     max-width: 720px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: visible;
     opacity: 0;
     animation: fadeUp 1s ease-out 0.9s forwards;
   }
-  .hs-field {
-    flex: 1;
-    padding: 0.5rem 1.25rem;
-    color: var(--carbon);
-    border-right: 1px solid var(--linea);
+  .hsv2-field {
+    flex: 1; padding: 0.75rem 1.25rem;
+    border-right: 1px solid rgba(27,73,101,0.12);
     min-width: 0;
   }
-  .hs-field:last-of-type { border-right: 0; }
-  .hs-field label {
+  .hsv2-field label,
+  .hsv2-guests label {
+    display: block; font-size: 0.65rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--carbon-suave); margin-bottom: 0.2rem;
+    font-weight: 500; pointer-events: none;
+  }
+  .hsv2-field input[type="date"] {
+    border: 0; background: transparent;
+    font-family: var(--sans); font-size: 0.88rem;
+    color: var(--carbon); width: 100%; padding: 0; cursor: pointer;
+  }
+  .hsv2-field input:focus { outline: none; }
+  .hsv2-guests {
+    flex: 1.4; padding: 0.75rem 1.25rem;
+    cursor: pointer; position: relative; user-select: none;
+  }
+  .hsv2-guests-val {
+    font-size: 0.88rem; color: var(--carbon);
+    display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+  }
+  .hsv2-guests-val svg { color: var(--carbon-suave); transition: transform 0.3s; flex-shrink: 0; }
+  .hsv2-guests-val.open svg { transform: rotate(180deg); }
+
+  /* DROPDOWN */
+  .hsv2-dropdown {
+    position: absolute; top: calc(100% + 12px);
+    left: 50%; transform: translateX(-50%);
+    background: var(--crema); border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(27,73,101,0.18);
+    padding: 1.25rem 1.5rem; width: 340px; z-index: 200;
+    display: none; border: 1px solid rgba(27,73,101,0.08);
+  }
+  .hsv2-dropdown.open {
     display: block;
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--carbon-suave);
-    margin-bottom: 0.2rem;
-    font-weight: 500;
+    animation: hsv2FadeUp 0.25s ease;
   }
-  .hs-field input, .hs-field select {
-    width: 100%;
-    border: 0;
-    background: transparent;
-    font-family: var(--sans);
-    font-size: 0.95rem;
-    color: var(--carbon);
-    padding: 0;
+  @keyframes hsv2FadeUp {
+    from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
   }
-  .hs-field input:focus, .hs-field select:focus { outline: none; }
-  .hs-btn {
-    background: var(--pacifico);
-    color: var(--crema);
-    border-radius: 100px;
-    padding: 1rem 1.75rem;
-    font-size: 0.85rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    font-weight: 500;
-    transition: all 0.3s;
-    white-space: nowrap;
+
+  .hsv2-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.8rem 0; border-bottom: 1px solid rgba(27,73,101,0.08);
   }
-  .hs-btn:hover {
-    background: var(--sol);
-    transform: scale(1.04);
+  .hsv2-info strong { display: block; font-size: 0.9rem; color: var(--carbon); font-weight: 500; }
+  .hsv2-info span { font-size: 0.72rem; color: var(--carbon-suave); margin-top: 0.1rem; display: block; }
+  .txt-sol { color: var(--sol) !important; font-style: normal !important; }
+  .txt-green { color: #2e9e6b !important; font-style: normal !important; }
+
+  .hsv2-counter { display: flex; align-items: center; gap: 0.65rem; }
+  .hsv2-btn {
+    width: 30px; height: 30px; border-radius: 50%;
+    border: 1px solid rgba(27,73,101,0.25); background: transparent;
+    color: var(--pacifico); font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.2s; font-family: var(--sans); line-height: 1;
+  }
+  .hsv2-btn:hover:not(:disabled) { background: var(--pacifico); color: var(--crema); border-color: var(--pacifico); }
+  .hsv2-btn:disabled { opacity: 0.25; cursor: default; }
+  .hsv2-num { font-size: 0.95rem; color: var(--carbon); min-width: 18px; text-align: center; font-weight: 500; }
+
+  /* Alerta */
+  .hsv2-alert {
+    background: rgba(212,165,116,0.12); border: 1px solid rgba(212,165,116,0.35);
+    border-radius: 8px; padding: 0.6rem 0.85rem;
+    font-size: 0.75rem; color: var(--carbon); line-height: 1.4;
+    display: none; margin: 0.4rem 0;
+  }
+  .hsv2-alert.show { display: block; }
+
+  /* Edades */
+  .hsv2-ages { display: none; flex-direction: column; gap: 0.4rem; padding: 0.5rem 0; }
+  .hsv2-ages.show { display: flex; }
+  .hsv2-age-row { display: flex; align-items: center; gap: 0.5rem; }
+  .hsv2-age-select {
+    flex: 1; padding: 0.45rem 0.7rem;
+    border: 1px solid rgba(27,73,101,0.15); border-radius: 8px;
+    background: var(--crema); font-family: var(--sans);
+    font-size: 0.82rem; color: var(--carbon); cursor: pointer;
+  }
+  .hsv2-age-select:focus { outline: none; border-color: var(--sol); }
+  .hsv2-age-tag {
+    font-size: 0.68rem; padding: 0.2rem 0.55rem;
+    border-radius: 100px; font-weight: 500; white-space: nowrap;
+  }
+  .tag-gratis { background: rgba(46,158,107,0.12); color: #2e9e6b; }
+  .tag-medio  { background: rgba(212,165,116,0.15); color: #c4873a; }
+  .tag-full   { background: rgba(27,73,101,0.1); color: var(--pacifico); }
+
+  /* Mascota */
+  .hsv2-pet-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.8rem 0 0.4rem;
+  }
+  .hsv2-pet-note {
+    font-size: 0.7rem; color: var(--carbon-suave);
+    display: none; margin-bottom: 0.4rem; padding-left: 0.1rem;
+  }
+  .hsv2-pet-note.show { display: block; }
+  .hsv2-toggle {
+    width: 42px; height: 23px; background: rgba(27,73,101,0.15);
+    border-radius: 100px; position: relative; cursor: pointer;
+    transition: background 0.3s; border: 0; flex-shrink: 0;
+  }
+  .hsv2-toggle.on { background: var(--pacifico); }
+  .hsv2-toggle::after {
+    content: ''; position: absolute;
+    width: 17px; height: 17px; background: white; border-radius: 50%;
+    top: 3px; left: 3px; transition: transform 0.3s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  .hsv2-toggle.on::after { transform: translateX(19px); }
+
+  /* Precio */
+  .hsv2-precio {
+    margin-top: 0.85rem; padding: 0.85rem 1rem;
+    background: rgba(212,165,116,0.1); border-radius: 10px;
+    border: 1px solid rgba(212,165,116,0.2); display: none;
+  }
+  .hsv2-precio-label {
+    font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--carbon-suave); margin-bottom: 0.4rem; font-weight: 500;
+  }
+  .hsv2-desglose { font-size: 0.78rem; color: var(--carbon-suave); line-height: 1.8; }
+  .hsv2-total-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-top: 0.5rem; padding-top: 0.5rem;
+    border-top: 1px solid rgba(212,165,116,0.3);
+  }
+  .hsv2-total-row span { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--carbon-suave); }
+  .hsv2-total-row strong { font-family: var(--serif); font-size: 1.3rem; color: var(--pacifico); font-weight: 400; }
+
+  .hsv2-listo {
+    width: 100%; margin-top: 1rem; padding: 0.8rem;
+    background: var(--pacifico); color: var(--crema); border: 0;
+    border-radius: 100px; font-family: var(--sans);
+    font-size: 0.78rem; letter-spacing: 0.15em;
+    text-transform: uppercase; font-weight: 500; cursor: pointer; transition: all 0.3s;
+  }
+  .hsv2-listo:hover { background: var(--sol); color: var(--carbon); }
+
+  .hsv2-buscar {
+    background: var(--pacifico); color: var(--crema); border-radius: 100px;
+    padding: 0.85rem 1.75rem; font-size: 0.82rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    font-weight: 500; border: 0; cursor: pointer;
+    transition: all 0.3s; white-space: nowrap;
+    font-family: var(--sans); margin: 0.35rem;
+  }
+  .hsv2-buscar:hover { background: var(--sol); color: var(--carbon); }
+
+  @media (max-width: 700px) {
+    .hero-search-v2 { flex-direction: column; border-radius: 16px; padding: 0.5rem; }
+    .hsv2-field { border-right: 0; border-bottom: 1px solid rgba(27,73,101,0.12); width: 100%; }
+    .hsv2-guests { width: 100%; }
+    .hsv2-buscar { width: 100%; margin: 0.25rem 0 0; }
+    .hsv2-dropdown { width: 90vw; left: 5%; transform: none; }
+    .hsv2-dropdown.open { animation: none; }
   }
 
   @keyframes fadeUp {
@@ -1511,19 +1634,6 @@
     .foot-bottom { flex-direction: column; gap: 0.75rem; text-align: center; }
     section { padding: 5rem 1.25rem; }
     .vista-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
-    .hero-search {
-      flex-direction: column;
-      border-radius: 16px;
-      padding: 0.75rem;
-    }
-    .hs-field {
-      border-right: 0;
-      border-bottom: 1px solid var(--linea);
-      padding: 0.75rem 1rem;
-      width: 100%;
-    }
-    .hs-field:nth-last-child(2) { border-bottom: 0; }
-    .hs-btn { width: 100%; margin-top: 0.5rem; }
     .modal { grid-template-columns: 1fr; max-height: 95vh; }
     .modal-gallery { min-height: 200px; max-height: 220px; flex-shrink: 0; }
     .modal-body { padding: 1.5rem; max-height: calc(95vh - 200px); }
@@ -1642,31 +1752,249 @@
     <h1 data-i18n="hero_titulo">Estación<br>del <em>Sol</em></h1>
     <p class="hero-tagline" data-i18n="hero_tagline">Como tu casa en la playa. Un lugar para detenerse, respirar y volver a sentirse en casa.</p>
 
-    <!-- Buscador -->
-    <div class="hero-search">
-      <div class="hs-field">
-        <label data-i18n="hero_llegada">Llegada</label>
-        <input type="date" id="hero-checkin">
+    <!-- BUSCADOR V2 — ESTACIÓN DEL SOL -->
+    <div class="hero-search-v2" id="heroSearch">
+
+      <div class="hsv2-field">
+        <label>Llegada</label>
+        <input type="date" id="hsv2-checkin">
       </div>
-      <div class="hs-field">
-        <label data-i18n="hero_salida">Salida</label>
-        <input type="date" id="hero-checkout">
+
+      <div class="hsv2-field">
+        <label>Salida</label>
+        <input type="date" id="hsv2-checkout">
       </div>
-      <div class="hs-field">
-        <label data-i18n="hero_huespedes">Huéspedes</label>
-        <select id="hero-guests">
-          <option data-i18n="opt_huesped_1">1 huésped</option>
-          <option data-i18n="opt_huesped_2">2 huéspedes</option>
-          <option selected data-i18n="opt_huesped_3">3 huéspedes</option>
-          <option data-i18n="opt_huesped_4">4 huéspedes</option>
-          <option data-i18n="opt_huesped_5">5 huéspedes</option>
-        </select>
+
+      <div class="hsv2-guests" id="hsv2-guestsField">
+        <label>Huéspedes</label>
+        <div class="hsv2-guests-val" id="hsv2-guestsVal">
+          <span id="hsv2-guestsText">2 adultos · 1 habitación</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" id="hsv2-arrow">
+            <path d="M6 9l6 6 6-6"/>
+          </svg>
+        </div>
+
+        <!-- DROPDOWN -->
+        <div class="hsv2-dropdown" id="hsv2-dropdown">
+
+          <!-- Adultos -->
+          <div class="hsv2-row">
+            <div class="hsv2-info">
+              <strong>Adultos</strong>
+              <span>11 años en adelante · <em class="txt-sol">máx. 5 por habitación</em></span>
+            </div>
+            <div class="hsv2-counter">
+              <button class="hsv2-btn" id="hsv2-adult-minus">−</button>
+              <span class="hsv2-num" id="hsv2-n-adultos">2</span>
+              <button class="hsv2-btn" id="hsv2-adult-plus">+</button>
+            </div>
+          </div>
+
+          <!-- Niños -->
+          <div class="hsv2-row">
+            <div class="hsv2-info">
+              <strong>Niños</strong>
+              <span>0–10 años · <em class="txt-green">1 gratis (0–5 años)</em></span>
+            </div>
+            <div class="hsv2-counter">
+              <button class="hsv2-btn" id="hsv2-nino-minus">−</button>
+              <span class="hsv2-num" id="hsv2-n-ninos">0</span>
+              <button class="hsv2-btn" id="hsv2-nino-plus">+</button>
+            </div>
+          </div>
+
+          <!-- Edades niños -->
+          <div class="hsv2-ages" id="hsv2-ages"></div>
+
+          <!-- Alerta capacidad -->
+          <div class="hsv2-alert" id="hsv2-alert">
+            ⚠️ Capacidad máxima alcanzada (5 personas).
+            Para grupos más grandes escríbenos por WhatsApp.
+          </div>
+
+          <!-- Mascota -->
+          <div class="hsv2-pet-row">
+            <div class="hsv2-info">
+              <strong>¿Viajas con mascota?</strong>
+              <span class="txt-sol">+$5 por noche · máximo 1 por habitación</span>
+            </div>
+            <button class="hsv2-toggle" id="hsv2-pet-toggle"></button>
+          </div>
+          <div class="hsv2-pet-note" id="hsv2-pet-note">
+            1 mascota incluida en tu reserva
+          </div>
+
+          <!-- Precio estimado -->
+          <div class="hsv2-precio" id="hsv2-precio">
+            <div class="hsv2-precio-label">Precio estimado</div>
+            <div class="hsv2-desglose" id="hsv2-desglose"></div>
+            <div class="hsv2-total-row">
+              <span>Total con IVA 15%</span>
+              <strong id="hsv2-total">—</strong>
+            </div>
+          </div>
+
+          <button class="hsv2-listo" id="hsv2-listo">Listo</button>
+        </div>
       </div>
-      <button class="hs-btn" onclick="document.getElementById('habitaciones').scrollIntoView({behavior:'smooth'})" data-i18n="hero_buscar">Buscar</button>
+
+      <button class="hsv2-buscar" id="hsv2-buscar">Buscar</button>
     </div>
   </div>
   <div class="hero-scroll" data-i18n="hero_descubre">Descubre ↓</div>
 </header>
+
+<script>
+(function() {
+  const MAX = 5, PRECIO = 20, PRECIO_PET = 5;
+  const st = { adultos: 2, ninos: 0, mascota: false, edades: [] };
+
+  const $  = id => document.getElementById(id);
+  const total = () => st.adultos + st.ninos;
+
+  function change(tipo, delta) {
+    if (tipo === 'adultos') {
+      const n = st.adultos + delta;
+      if (n < 1 || n > MAX || (delta > 0 && total() >= MAX)) return;
+      st.adultos = n;
+    } else {
+      const n = st.ninos + delta;
+      if (n < 0 || (delta > 0 && total() >= MAX)) return;
+      st.ninos = n;
+      renderAges();
+    }
+    syncUI();
+    calcular();
+  }
+
+  function renderAges() {
+    const cont = $('hsv2-ages');
+    cont.innerHTML = '';
+    st.edades = Array(st.ninos).fill(null);
+    cont.classList.toggle('show', st.ninos > 0);
+    for (let i = 0; i < st.ninos; i++) {
+      const row = document.createElement('div');
+      row.className = 'hsv2-age-row';
+      const sel = document.createElement('select');
+      sel.className = 'hsv2-age-select';
+      sel.innerHTML = `<option value="">Niño ${i+1} — ¿cuántos años tendrá?</option>
+        ${[...Array(11)].map((_,a) =>
+          `<option value="${a}">${a===0?'Menos de 1 año':a+' año'+(a>1?'s':'')}</option>`
+        ).join('')}`;
+      const tag = document.createElement('span');
+      tag.className = 'hsv2-age-tag';
+      sel.onchange = e => {
+        const edad = parseInt(e.target.value);
+        st.edades[i] = isNaN(edad) ? null : edad;
+        if (isNaN(edad)) { tag.textContent=''; tag.className='hsv2-age-tag'; }
+        else if (edad<=5 && i===0) { tag.textContent='Gratis'; tag.className='hsv2-age-tag tag-gratis'; }
+        else if (edad<=10) { tag.textContent='50%'; tag.className='hsv2-age-tag tag-medio'; }
+        else { tag.textContent='100%'; tag.className='hsv2-age-tag tag-full'; }
+        calcular();
+      };
+      row.appendChild(sel); row.appendChild(tag);
+      cont.appendChild(row);
+    }
+  }
+
+  function syncUI() {
+    $('hsv2-n-adultos').textContent = st.adultos;
+    $('hsv2-n-ninos').textContent = st.ninos;
+    $('hsv2-adult-minus').disabled = st.adultos <= 1;
+    $('hsv2-adult-plus').disabled  = st.adultos >= MAX || total() >= MAX;
+    $('hsv2-nino-minus').disabled  = st.ninos <= 0;
+    $('hsv2-nino-plus').disabled   = total() >= MAX;
+    $('hsv2-alert').classList.toggle('show', total() >= MAX);
+    const parts = [`${st.adultos} adulto${st.adultos>1?'s':''}`];
+    if (st.ninos>0) parts.push(`${st.ninos} niño${st.ninos>1?'s':''}`);
+    if (st.mascota) parts.push('1 mascota');
+    parts.push('1 habitación');
+    $('hsv2-guestsText').textContent = parts.join(' · ');
+  }
+
+  function togglePet() {
+    st.mascota = !st.mascota;
+    $('hsv2-pet-toggle').classList.toggle('on', st.mascota);
+    $('hsv2-pet-note').classList.toggle('show', st.mascota);
+    syncUI(); calcular();
+  }
+
+  function calcular() {
+    const ci = $('hsv2-checkin').value;
+    const co = $('hsv2-checkout').value;
+    const box = $('hsv2-precio');
+    if (!ci || !co || new Date(co) <= new Date(ci)) { box.style.display='none'; return; }
+    const noches = Math.round((new Date(co)-new Date(ci))/86400000);
+    let sub = 0, lineas = [], gratisUsado = false;
+
+    const cA = st.adultos * PRECIO * noches;
+    sub += cA;
+    lineas.push(`${st.adultos} adulto${st.adultos>1?'s':''} × $${PRECIO} × ${noches} noche${noches>1?'s':''} = <strong>$${cA.toFixed(2)}</strong>`);
+
+    st.edades.forEach((edad, i) => {
+      if (edad===null) return;
+      if (edad<=5 && !gratisUsado) {
+        gratisUsado=true;
+        lineas.push(`Niño ${i+1} (${edad===0?'<1 año':edad+' años'}) — <span style="color:#2e9e6b;font-weight:500">Gratis</span>`);
+      } else if (edad<=10) {
+        const c=PRECIO*0.5*noches; sub+=c;
+        lineas.push(`Niño ${i+1} (${edad} años) · 50% = <strong>$${c.toFixed(2)}</strong>`);
+      } else {
+        const c=PRECIO*noches; sub+=c;
+        lineas.push(`Niño ${i+1} (${edad} años) · 100% = <strong>$${c.toFixed(2)}</strong>`);
+      }
+    });
+
+    if (st.mascota) {
+      const cM=PRECIO_PET*noches; sub+=cM;
+      lineas.push(`1 mascota × $${PRECIO_PET} × ${noches} noche${noches>1?'s':''} = <strong>$${cM.toFixed(2)}</strong>`);
+    }
+
+    const iva=sub*0.15, total2=sub+iva;
+    lineas.push(`IVA 15% = <strong>$${iva.toFixed(2)}</strong>`);
+    $('hsv2-desglose').innerHTML = lineas.join('<br>');
+    $('hsv2-total').textContent = `$${total2.toFixed(2)} USD`;
+    box.style.display='block';
+  }
+
+  function openDD() {
+    $('hsv2-dropdown').classList.add('open');
+    $('hsv2-guestsVal').classList.add('open');
+  }
+  function closeDD() {
+    $('hsv2-dropdown').classList.remove('open');
+    $('hsv2-guestsVal').classList.remove('open');
+  }
+
+  // Eventos
+  $('hsv2-guestsField').addEventListener('click', e => {
+    e.stopPropagation();
+    $('hsv2-dropdown').classList.contains('open') ? closeDD() : openDD();
+  });
+  $('hsv2-dropdown').addEventListener('click', e => e.stopPropagation());
+  $('hsv2-adult-minus').addEventListener('click', e => { e.stopPropagation(); change('adultos',-1); });
+  $('hsv2-adult-plus').addEventListener('click',  e => { e.stopPropagation(); change('adultos',1); });
+  $('hsv2-nino-minus').addEventListener('click',  e => { e.stopPropagation(); change('ninos',-1); });
+  $('hsv2-nino-plus').addEventListener('click',   e => { e.stopPropagation(); change('ninos',1); });
+  $('hsv2-pet-toggle').addEventListener('click',  e => { e.stopPropagation(); togglePet(); });
+  $('hsv2-listo').addEventListener('click', closeDD);
+  $('hsv2-buscar').addEventListener('click', () => {
+    const ci=$('hsv2-checkin').value, co=$('hsv2-checkout').value;
+    if (!ci||!co) { alert('Selecciona fechas de llegada y salida'); return; }
+    if (new Date(co)<=new Date(ci)) { alert('La salida debe ser posterior a la llegada'); return; }
+    closeDD();
+    const hab=document.getElementById('habitaciones');
+    if (hab) hab.scrollIntoView({behavior:'smooth'});
+  });
+  document.addEventListener('click', closeDD);
+
+  $('hsv2-checkin').addEventListener('change', calcular);
+  $('hsv2-checkout').addEventListener('change', calcular);
+
+  syncUI();
+})();
+</script>
 
 <!-- GALERÍA -->
 <section class="galeria">
@@ -2270,16 +2598,7 @@ const i18n = {
     hero_kicker: 'Las Núñez · Santa Elena, Ecuador · Ruta del Spondylus',
     hero_titulo: 'Estación<br>del <em>Sol</em>',
     hero_tagline: 'Como tu casa en la playa. Un lugar para detenerse, respirar y volver a sentirse en casa.',
-    hero_llegada: 'Llegada',
-    hero_salida: 'Salida',
-    hero_huespedes: 'Huéspedes',
-    hero_buscar: 'Buscar',
     hero_descubre: 'Descubre ↓',
-    opt_huesped_1: '1 huésped',
-    opt_huesped_2: '2 huéspedes',
-    opt_huesped_3: '3 huéspedes',
-    opt_huesped_4: '4 huéspedes',
-    opt_huesped_5: '5 huéspedes',
 
     historia_kicker: 'Nuestra historia',
     historia_titulo: 'Quince años recibiéndote <em>como en casa.</em>',
@@ -2505,16 +2824,7 @@ const i18n = {
     hero_kicker: 'Las Núñez · Santa Elena, Ecuador · Spondylus Route',
     hero_titulo: 'Estación<br>del <em>Sol</em>',
     hero_tagline: 'Like your home by the sea. A place to slow down, breathe, and feel at home again.',
-    hero_llegada: 'Check-in',
-    hero_salida: 'Check-out',
-    hero_huespedes: 'Guests',
-    hero_buscar: 'Search',
     hero_descubre: 'Discover ↓',
-    opt_huesped_1: '1 guest',
-    opt_huesped_2: '2 guests',
-    opt_huesped_3: '3 guests',
-    opt_huesped_4: '4 guests',
-    opt_huesped_5: '5 guests',
 
     historia_kicker: 'Our story',
     historia_titulo: 'Fifteen years welcoming you <em>like family.</em>',
@@ -2849,7 +3159,7 @@ function ajustarAlturaPromoBar() {
 
 document.addEventListener('DOMContentLoaded', () => {
   aplicarIdioma(localStorage.getItem('idioma') || 'es');
-  configurarLimitesFecha('hero-checkin', 'hero-checkout');
+  configurarLimitesFecha('hsv2-checkin', 'hsv2-checkout');
   ajustarAlturaPromoBar();
 });
 window.addEventListener('resize', ajustarAlturaPromoBar);
@@ -3086,8 +3396,8 @@ function openModal(vista, id) {
   `;
 
   // Pre-rellenar con datos del hero
-  const heroIn = document.getElementById('hero-checkin').value;
-  const heroOut = document.getElementById('hero-checkout').value;
+  const heroIn = document.getElementById('hsv2-checkin').value;
+  const heroOut = document.getElementById('hsv2-checkout').value;
   if (heroIn) document.getElementById('m-checkin').value = heroIn;
   if (heroOut) document.getElementById('m-checkout').value = heroOut;
 
