@@ -1847,7 +1847,7 @@
 
 <script>
 (function() {
-  const MAX = 5, PRECIO = 20, PRECIO_PET = 5;
+  const MAX = 5, PRECIO = 20, PRECIO_PET = 5, PRECIO_1_PERSONA = 25;
   const st = { adultos: 2, ninos: 0, mascota: false, edades: [] };
 
   const $  = id => document.getElementById(id);
@@ -1928,9 +1928,12 @@
     const noches = Math.round((new Date(co)-new Date(ci))/86400000);
     let sub = 0, lineas = [], gratisUsado = false;
 
-    const cA = st.adultos * PRECIO * noches;
+    const soloUnaPersona = st.adultos === 1 && st.ninos === 0;
+    const cA = soloUnaPersona ? PRECIO_1_PERSONA * noches : st.adultos * PRECIO * noches;
     sub += cA;
-    lineas.push(`${st.adultos} adulto${st.adultos>1?'s':''} × $${PRECIO} × ${noches} noche${noches>1?'s':''} = <strong>$${cA.toFixed(2)}</strong>`);
+    lineas.push(soloUnaPersona
+      ? `Habitación individual × $${PRECIO_1_PERSONA} × ${noches} noche${noches>1?'s':''} = <strong>$${cA.toFixed(2)}</strong>`
+      : `${st.adultos} adulto${st.adultos>1?'s':''} × $${PRECIO} × ${noches} noche${noches>1?'s':''} = <strong>$${cA.toFixed(2)}</strong>`);
 
     st.edades.forEach((edad, i) => {
       if (edad===null) return;
@@ -2688,11 +2691,14 @@ const i18n = {
     modal_huespedes: 'Huéspedes',
     modal_precio: 'Precio',
     modal_precio_valor: '$20 / persona / noche',
+    modal_precio_valor_individual: '$25 / habitación / noche (1 persona)',
     modal_selecciona_fechas: 'Selecciona fechas para ver total',
     modal_reservar_ahora: 'Reservar ahora →',
     modal_huesped_1: 'huésped',
     modal_huespedes_n: 'huéspedes',
-    modal_detalle_total: '$20 × {g} {personas} × {noches} {nochesLabel} + IVA 15%',
+    modal_detalle_total: '{precio} × {noches} {nochesLabel} + IVA 15%',
+    modal_detalle_precio_normal: '$20 × {g} {personas}',
+    modal_detalle_precio_individual: '$25 habitación individual',
     persona_singular: 'persona',
     persona_plural: 'personas',
     noche_singular: 'noche',
@@ -2700,7 +2706,9 @@ const i18n = {
 
     alert_fechas_invalidas: 'Por favor selecciona fechas válidas',
     alert_fechas_ocupadas: 'Esta habitación ya está reservada en esas fechas. Por favor elige otras fechas.',
-    resumen_precio_detail: 'Subtotal ($20 × {g} × {noches})',
+    resumen_precio_detail: 'Subtotal ({precio} × {noches})',
+    resumen_precio_normal: '$20 × {g}',
+    resumen_precio_individual: '$25 habitación individual',
     resumen_total_iva: '${total} USD (incl. IVA 15%)',
     resumen_total_nota: 'incl. IVA 15%',
 
@@ -2913,11 +2921,14 @@ const i18n = {
     modal_huespedes: 'Guests',
     modal_precio: 'Price',
     modal_precio_valor: '$20 / person / night',
+    modal_precio_valor_individual: '$25 / room / night (1 person)',
     modal_selecciona_fechas: 'Select dates to see the total',
     modal_reservar_ahora: 'Book now →',
     modal_huesped_1: 'guest',
     modal_huespedes_n: 'guests',
-    modal_detalle_total: '$20 × {g} {personas} × {noches} {nochesLabel} + 15% VAT',
+    modal_detalle_total: '{precio} × {noches} {nochesLabel} + 15% VAT',
+    modal_detalle_precio_normal: '$20 × {g} {personas}',
+    modal_detalle_precio_individual: '$25 single room',
     persona_singular: 'person',
     persona_plural: 'people',
     noche_singular: 'night',
@@ -2925,7 +2936,9 @@ const i18n = {
 
     alert_fechas_invalidas: 'Please select valid dates',
     alert_fechas_ocupadas: 'This room is already booked for those dates. Please choose different dates.',
-    resumen_precio_detail: 'Subtotal ($20 × {g} × {noches})',
+    resumen_precio_detail: 'Subtotal ({precio} × {noches})',
+    resumen_precio_normal: '$20 × {g}',
+    resumen_precio_individual: '$25 single room',
     resumen_total_iva: '${total} USD (incl. 15% VAT)',
     resumen_total_nota: 'incl. 15% VAT',
 
@@ -3384,7 +3397,7 @@ function openModal(vista, id) {
         </div>
         <div>
           <label>${t('modal_precio')}</label>
-          <input type="text" value="${t('modal_precio_valor')}" disabled>
+          <input type="text" id="m-precio-valor" value="${t('modal_precio_valor')}" disabled>
         </div>
       </div>
       <div class="modal-resumen">
@@ -3425,6 +3438,10 @@ function setGallery(i) {
   dots.forEach((d, idx) => d.classList.toggle('active', idx === i));
 }
 
+function calcularSubtotalHabitacion(huespedes, noches) {
+  return parseInt(huespedes) === 1 ? 25 * noches : huespedes * noches * 20;
+}
+
 function updateModalTotal() {
   const inEl = document.getElementById('m-checkin');
   const outEl = document.getElementById('m-checkout');
@@ -3445,14 +3462,18 @@ function updateModalTotal() {
   }
 
   const noches = Math.round((co - ci) / 86400000);
-  const subtotal = noches * g * 20;
+  const subtotal = calcularSubtotalHabitacion(g, noches);
   const iva = subtotal * 0.15;
   const total = subtotal + iva;
+  const precioLabel = g === 1
+    ? t('modal_detalle_precio_individual')
+    : t('modal_detalle_precio_normal', { g, personas: t('persona_plural') });
   document.getElementById('m-detalle').textContent = t('modal_detalle_total', {
-    g, noches,
-    personas: g === 1 ? t('persona_singular') : t('persona_plural'),
+    precio: precioLabel, noches,
     nochesLabel: noches === 1 ? t('noche_singular') : t('noche_plural')
   });
+  const precioValorEl = document.getElementById('m-precio-valor');
+  if (precioValorEl) precioValorEl.value = g === 1 ? t('modal_precio_valor_individual') : t('modal_precio_valor');
   document.getElementById('m-total').textContent = `$${total.toFixed(2)}`;
 }
 
@@ -3491,7 +3512,7 @@ function iniciarCheckout() {
     return;
   }
   const noches = Math.round((new Date(co) - new Date(ci)) / 86400000);
-  checkoutSubtotalBase = noches * parseInt(g) * 20;
+  checkoutSubtotalBase = calcularSubtotalHabitacion(parseInt(g), noches);
 
   // Llenar resumen
   document.getElementById('resumen-img').src = currentHab.img;
@@ -3504,7 +3525,10 @@ function iniciarCheckout() {
   rco.textContent = formatFecha(co);  rco.dataset.raw = co;
   rg.textContent  = `${g} ${g==1?t('persona_singular'):t('persona_plural')}`;  rg.dataset.raw = g;
   document.getElementById('resumen-noches').textContent = `${noches} ${noches==1?t('noche_singular'):t('noche_plural')}`;
-  document.getElementById('resumen-precio-detail').textContent = t('resumen_precio_detail', { g, noches });
+  const resumenPrecioLabel = parseInt(g) === 1
+    ? t('resumen_precio_individual')
+    : t('resumen_precio_normal', { g });
+  document.getElementById('resumen-precio-detail').textContent = t('resumen_precio_detail', { precio: resumenPrecioLabel, noches });
   recalcularResumen(document.querySelector('.pay-method.active')?.dataset.metodo || 'PayPhone');
 
   closeModal();

@@ -62,12 +62,15 @@ function generarCodigo(db) {
 }
 
 const DESCUENTO_TRANSFERENCIA = 0.05;
+const PRECIO_HABITACION_1_PERSONA = 25; // tarifa fija para huéspedes que reservan solos, en todas las habitaciones
 
 function calcularTotal(huespedes, fechaEntrada, fechaSalida, conDescuentoTransferencia = false) {
   const entrada = new Date(fechaEntrada);
   const salida  = new Date(fechaSalida);
   const noches  = Math.round((salida - entrada) / (1000 * 60 * 60 * 24));
-  const subtotalBase = huespedes * noches * PRECIO_POR_PERSONA_NOCHE;
+  const subtotalBase = huespedes === 1
+    ? PRECIO_HABITACION_1_PERSONA * noches
+    : huespedes * noches * PRECIO_POR_PERSONA_NOCHE;
   const subtotal = conDescuentoTransferencia
     ? parseFloat((subtotalBase * (1 - DESCUENTO_TRANSFERENCIA)).toFixed(2))
     : subtotalBase;
@@ -79,6 +82,7 @@ function calcularTotal(huespedes, fechaEntrada, fechaSalida, conDescuentoTransfe
 module.exports = {
   HABITACIONES,
   PRECIO_POR_PERSONA_NOCHE,
+  PRECIO_HABITACION_1_PERSONA,
   IVA,
   DESCUENTO_TRANSFERENCIA,
   crearTablaReservas,
