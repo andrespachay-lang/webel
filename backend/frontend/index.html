@@ -2115,8 +2115,8 @@
 
     habitaciones.forEach((r, idx) => {
       let subRoom = 0, gratisUsado = false;
-      const soloUnaPersona = r.adultos === 1 && r.ninos === 0;
-      subRoom += soloUnaPersona ? PRECIO_1_PERSONA * noches : r.adultos * PRECIO * noches;
+      const unAdulto = r.adultos === 1;
+      subRoom += unAdulto ? PRECIO_1_PERSONA * noches : r.adultos * PRECIO * noches;
 
       r.edades.forEach(edad => {
         if (edad===null) return;
