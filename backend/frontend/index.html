@@ -48,15 +48,26 @@
   .promo-bar {
     position: fixed; top: 0; left: 0; right: 0;
     z-index: 101;
-    background: var(--pacifico);
-    color: var(--crema);
+    overflow: hidden;
+  }
+  .promo-bar-track {
+    display: flex;
+    width: 300%;
+    transform: translateX(0%);
+  }
+  .promo-bar-msg {
+    flex: 0 0 33.3333%;
+    box-sizing: border-box;
     text-align: center;
     font-size: 0.78rem;
     letter-spacing: 0.02em;
     padding: 0.6rem 1rem;
     line-height: 1.4;
   }
-  .promo-bar strong { color: var(--sol); }
+  .promo-bar-msg--descuento { background: var(--pacifico); color: var(--crema); }
+  .promo-bar-msg--descuento strong { color: var(--sol); }
+  .promo-bar-msg--ballenas { background: var(--sol); color: var(--pacifico); }
+  .promo-bar-msg--ballenas strong { font-weight: 700; }
 
   /* ───────── NAV ───────── */
   .nav {
@@ -1854,9 +1865,19 @@
   </symbol>
 </svg>
 
-<!-- BARRA DE PROMOCIÓN -->
-<div class="promo-bar" id="promo-bar" data-i18n="promo_transferencia">
-  Paga por transferencia y obtén un <strong>5% de descuento</strong> en tu reserva.
+<!-- BARRA DE PROMOCIÓN — rotativa -->
+<div class="promo-bar" id="promo-bar">
+  <div class="promo-bar-track" id="promo-bar-track">
+    <div class="promo-bar-msg promo-bar-msg--descuento" data-i18n="promo_transferencia">
+      Paga por transferencia y obtén un <strong>5% de descuento</strong> en tu reserva.
+    </div>
+    <div class="promo-bar-msg promo-bar-msg--ballenas" data-i18n="promo_ballenas">
+      Como tu casa en la playa, justo cuando <strong>las ballenas</strong> visitan el vecindario. 🐋
+    </div>
+    <div class="promo-bar-msg promo-bar-msg--descuento" data-i18n="promo_transferencia" aria-hidden="true">
+      Paga por transferencia y obtén un <strong>5% de descuento</strong> en tu reserva.
+    </div>
+  </div>
 </div>
 
 <!-- NAV -->
@@ -2824,6 +2845,7 @@ let idiomaActual = 'es';
 const i18n = {
   es: {
     promo_transferencia: 'Paga por transferencia y obtén un <strong>5% de descuento</strong> en tu reserva.',
+    promo_ballenas: 'Como tu casa en la playa, justo cuando <strong>las ballenas</strong> visitan el vecindario. 🐋',
     nav_historia: 'Historia',
     nav_habitaciones: 'Habitaciones',
     nav_resenas: 'Reseñas',
@@ -3069,6 +3091,7 @@ const i18n = {
 
   en: {
     promo_transferencia: 'Pay by bank transfer and get a <strong>5% discount</strong> on your stay.',
+    promo_ballenas: 'Like your home by the sea, right when <strong>the whales</strong> visit the neighborhood. 🐋',
     nav_historia: 'Our Story',
     nav_habitaciones: 'Rooms',
     nav_resenas: 'Reviews',
@@ -3435,8 +3458,32 @@ document.addEventListener('DOMContentLoaded', () => {
   configurarLimitesFecha('hsv2-checkin', 'hsv2-checkout');
   ajustarAlturaPromoBar();
   iniciarHeroSlides();
+  iniciarPromoBarRotativa();
 });
 window.addEventListener('resize', ajustarAlturaPromoBar);
+
+/* ═════════ BARRA DE PROMOCIÓN — rotación con deslizamiento ═════════ */
+let promoBarPaso = 0;
+
+function avanzarPromoBar() {
+  const track = document.getElementById('promo-bar-track');
+  if (!track) return;
+  promoBarPaso++;
+  track.style.transition = 'transform 0.5s ease';
+  track.style.transform = `translateX(-${promoBarPaso * (100 / 3)}%)`;
+  if (promoBarPaso === 2) {
+    setTimeout(() => {
+      track.style.transition = 'none';
+      track.style.transform = 'translateX(0%)';
+      void track.offsetWidth;
+      promoBarPaso = 0;
+    }, 520);
+  }
+}
+
+function iniciarPromoBarRotativa() {
+  setInterval(avanzarPromoBar, 5000);
+}
 
 /* ═════════ HERO — SLIDES ═════════ */
 const HERO_SLIDES = [
