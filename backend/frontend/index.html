@@ -3670,18 +3670,15 @@ function openModal(vista, id) {
           <input type="date" id="m-checkout">
         </div>
       </div>
-      <div class="modal-reserva-row">
-        <div>
-          <label>${t('modal_huespedes')}</label>
-          <select id="m-guests" onchange="updateModalTotal()">
-            ${[...Array(h.capacidad)].map((_,i) => `<option value="${i+1}">${i+1} ${i===0?t('modal_huesped_1'):t('modal_huespedes_n')}</option>`).join('')}
-          </select>
-        </div>
+      <div class="modal-reserva-row" style="grid-template-columns:1fr;">
         <div>
           <label>${t('modal_precio')}</label>
           <input type="text" id="m-precio-valor" value="${t('modal_precio_valor')}" disabled>
         </div>
       </div>
+      <input type="hidden" id="m-guests" value="1">
+      <label style="display:block;font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--carbon-suave);margin-bottom:0.4rem;font-weight:500;">${t('modal_huespedes')}</label>
+      <div id="m-room-config"></div>
       <div class="modal-resumen">
         <div class="modal-resumen-detalle" id="m-detalle">${t('modal_selecciona_fechas')}</div>
         <div class="modal-resumen-total" id="m-total">—</div>
@@ -3692,22 +3689,21 @@ function openModal(vista, id) {
   `;
 
   // Pre-rellenar con la última búsqueda del catálogo, o si no con los datos del hero
+  modalRoom = { adultos: 1, ninos: 0, edades: [], mascota: false };
   if (pendingBusqueda) {
     document.getElementById('m-checkin').value = pendingBusqueda.ci;
     document.getElementById('m-checkout').value = pendingBusqueda.co;
-    const gSel = document.getElementById('m-guests');
-    if (gSel) {
-      const mejor = pendingBusqueda.requerimientos
-        .filter(req => req <= h.capacidad)
-        .sort((a,b) => b-a)[0] || 1;
-      gSel.value = mejor;
-    }
+    const mejor = pendingBusqueda.requerimientos
+      .filter(req => req <= h.capacidad)
+      .sort((a,b) => b-a)[0] || 1;
+    modalRoom.adultos = Math.min(mejor, h.capacidad);
   } else {
     const heroIn = document.getElementById('hsv2-checkin').value;
     const heroOut = document.getElementById('hsv2-checkout').value;
     if (heroIn) document.getElementById('m-checkin').value = heroIn;
     if (heroOut) document.getElementById('m-checkout').value = heroOut;
   }
+  renderModalRoom(h.capacidad);
 
   configurarLimitesFecha('m-checkin', 'm-checkout');
 
@@ -3723,6 +3719,100 @@ function openModal(vista, id) {
 function closeModal() {
   document.getElementById('modal').classList.remove('open');
   document.body.style.overflow = '';
+}
+
+/* ═════════ Configurador de huéspedes dentro del modal de habitación ═════════ */
+let modalRoom = { adultos: 1, ninos: 0, edades: [], mascota: false };
+
+function modalRoomTotal() { return modalRoom.adultos + modalRoom.ninos; }
+
+function modalAgeRowHtml(ei, edad) {
+  let tagTexto = '', tagCls = 'hsv2-age-tag';
+  if (edad !== null && !isNaN(edad)) {
+    if (edad <= 5 && ei === 0) { tagTexto = 'Gratis'; tagCls = 'hsv2-age-tag tag-gratis'; }
+    else if (edad <= 10) { tagTexto = '50%'; tagCls = 'hsv2-age-tag tag-medio'; }
+    else { tagTexto = '100%'; tagCls = 'hsv2-age-tag tag-full'; }
+  }
+  return `
+    <div class="hsv2-age-row">
+      <select class="hsv2-age-select" onchange="modalCambiarEdad(${ei}, this.value)">
+        <option value="">Niño ${ei + 1} — ¿cuántos años tendrá?</option>
+        ${[...Array(11)].map((_, a) =>
+          `<option value="${a}" ${a === edad ? 'selected' : ''}>${a === 0 ? 'Menos de 1 año' : a + ' año' + (a > 1 ? 's' : '')}</option>`
+        ).join('')}
+      </select>
+      <span class="${tagCls}">${tagTexto}</span>
+    </div>`;
+}
+
+function renderModalRoom(cap) {
+  const cont = document.getElementById('m-room-config');
+  if (!cont) return;
+  const tot = modalRoomTotal();
+  cont.innerHTML = `
+    <div class="hsv2-row">
+      <div class="hsv2-info">
+        <strong>Adultos</strong>
+        <span>11 años en adelante · <em class="txt-sol">máx. ${cap}</em></span>
+      </div>
+      <div class="hsv2-counter">
+        <button type="button" class="hsv2-btn" ${modalRoom.adultos <= 1 ? 'disabled' : ''} onclick="modalChange('adultos',-1,${cap})">−</button>
+        <span class="hsv2-num">${modalRoom.adultos}</span>
+        <button type="button" class="hsv2-btn" ${(modalRoom.adultos >= cap || tot >= cap) ? 'disabled' : ''} onclick="modalChange('adultos',1,${cap})">+</button>
+      </div>
+    </div>
+    <div class="hsv2-row">
+      <div class="hsv2-info">
+        <strong>Niños</strong>
+        <span>0–10 años · <em class="txt-green">1 gratis (0–5 años)</em></span>
+      </div>
+      <div class="hsv2-counter">
+        <button type="button" class="hsv2-btn" ${modalRoom.ninos <= 0 ? 'disabled' : ''} onclick="modalChange('ninos',-1,${cap})">−</button>
+        <span class="hsv2-num">${modalRoom.ninos}</span>
+        <button type="button" class="hsv2-btn" ${tot >= cap ? 'disabled' : ''} onclick="modalChange('ninos',1,${cap})">+</button>
+      </div>
+    </div>
+    <div class="hsv2-ages ${modalRoom.ninos > 0 ? 'show' : ''}">
+      ${modalRoom.edades.map((edad, ei) => modalAgeRowHtml(ei, edad)).join('')}
+    </div>
+    <div class="hsv2-alert ${tot >= cap ? 'show' : ''}">
+      ⚠️ Capacidad máxima alcanzada (${cap} persona${cap > 1 ? 's' : ''}) para esta habitación.
+    </div>
+    <div class="hsv2-pet-row">
+      <div class="hsv2-info">
+        <strong>¿Viajas con mascota?</strong>
+        <span class="txt-sol">Cuéntanos para preparar tu llegada</span>
+      </div>
+      <button type="button" class="hsv2-toggle ${modalRoom.mascota ? 'on' : ''}" onclick="modalTogglePet(${cap})"></button>
+    </div>`;
+  const gEl = document.getElementById('m-guests');
+  if (gEl) gEl.value = tot;
+}
+
+function modalChange(tipo, delta, cap) {
+  if (tipo === 'adultos') {
+    const n = modalRoom.adultos + delta;
+    if (n < 1 || n > cap || (delta > 0 && modalRoomTotal() >= cap)) return;
+    modalRoom.adultos = n;
+  } else {
+    const n = modalRoom.ninos + delta;
+    if (n < 0 || (delta > 0 && modalRoomTotal() >= cap)) return;
+    modalRoom.ninos = n;
+    modalRoom.edades = Array(n).fill(null);
+  }
+  renderModalRoom(cap);
+  updateModalTotal();
+}
+
+function modalCambiarEdad(ei, valor) {
+  const edad = parseInt(valor);
+  modalRoom.edades[ei] = isNaN(edad) ? null : edad;
+  renderModalRoom(currentHab.capacidad);
+}
+
+function modalTogglePet(cap) {
+  modalRoom.mascota = !modalRoom.mascota;
+  renderModalRoom(cap);
 }
 
 function setGallery(i) {
