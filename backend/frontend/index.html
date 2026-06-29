@@ -385,25 +385,6 @@
   }
   .hsv2-toggle.on::after { transform: translateX(19px); }
 
-  /* Precio */
-  .hsv2-precio {
-    margin-top: 0.85rem; padding: 0.85rem 1rem;
-    background: rgba(212,165,116,0.1); border-radius: 10px;
-    border: 1px solid rgba(212,165,116,0.2); display: none;
-  }
-  .hsv2-precio-label {
-    font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase;
-    color: var(--carbon-suave); margin-bottom: 0.4rem; font-weight: 500;
-  }
-  .hsv2-desglose { font-size: 0.78rem; color: var(--carbon-suave); line-height: 1.8; }
-  .hsv2-total-row {
-    display: flex; justify-content: space-between; align-items: baseline;
-    margin-top: 0.5rem; padding-top: 0.5rem;
-    border-top: 1px solid rgba(212,165,116,0.3);
-  }
-  .hsv2-total-row span { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--carbon-suave); }
-  .hsv2-total-row strong { font-family: var(--serif); font-size: 1.3rem; color: var(--pacifico); font-weight: 400; }
-
   .hsv2-listo {
     width: 100%; margin-top: 1rem; padding: 0.8rem;
     background: var(--pacifico); color: var(--crema); border: 0;
@@ -1948,16 +1929,6 @@
 
           <button type="button" class="hsv2-agregar-hab" id="hsv2-agregar-hab">+ Agregar otra habitación</button>
 
-          <!-- Precio estimado -->
-          <div class="hsv2-precio" id="hsv2-precio">
-            <div class="hsv2-precio-label">Precio estimado</div>
-            <div class="hsv2-desglose" id="hsv2-desglose"></div>
-            <div class="hsv2-total-row">
-              <span>Total con IVA 15%</span>
-              <strong id="hsv2-total">—</strong>
-            </div>
-          </div>
-
           <button class="hsv2-listo" id="hsv2-listo">Listo</button>
         </div>
       </div>
@@ -1970,7 +1941,7 @@
 
 <script>
 (function() {
-  const MAX = 5, PRECIO = 20, PRECIO_PET = 5, PRECIO_1_PERSONA = 25, MAX_HABITACIONES = 7;
+  const MAX = 5, MAX_HABITACIONES = 7;
   let habitaciones = [ { adultos: 2, ninos: 0, edades: [], mascota: false } ];
 
   const $  = id => document.getElementById(id);
@@ -2054,13 +2025,13 @@
   function agregarHabitacion() {
     if (habitaciones.length >= MAX_HABITACIONES) return;
     habitaciones.push({ adultos: 1, ninos: 0, edades: [], mascota: false });
-    renderRooms(); syncUI(); calcular();
+    renderRooms(); syncUI();
   }
 
   function quitarHabitacion(idx) {
     if (habitaciones.length <= 1) return;
     habitaciones.splice(idx, 1);
-    renderRooms(); syncUI(); calcular();
+    renderRooms(); syncUI();
   }
 
   function change(idx, tipo, delta) {
@@ -2076,7 +2047,7 @@
       r.ninos = n;
       r.edades = Array(n).fill(null);
     }
-    renderRooms(); syncUI(); calcular();
+    renderRooms(); syncUI();
   }
 
   function cambiarEdad(idx, ei, valor) {
@@ -2084,14 +2055,14 @@
     if (!r) return;
     const edad = parseInt(valor);
     r.edades[ei] = isNaN(edad) ? null : edad;
-    renderRooms(); calcular();
+    renderRooms();
   }
 
   function togglePet(idx) {
     const r = habitaciones[idx];
     if (!r) return;
     r.mascota = !r.mascota;
-    renderRooms(); syncUI(); calcular();
+    renderRooms(); syncUI();
   }
 
   function syncUI() {
@@ -2103,38 +2074,6 @@
     if (totalMascotas>0) parts.push(`${totalMascotas} mascota${totalMascotas>1?'s':''}`);
     parts.push(`${habitaciones.length} ${habitaciones.length>1?'habitaciones':'habitación'}`);
     $('hsv2-guestsText').textContent = parts.join(' · ');
-  }
-
-  function calcular() {
-    const ci = $('hsv2-checkin').value;
-    const co = $('hsv2-checkout').value;
-    const box = $('hsv2-precio');
-    if (!ci || !co || new Date(co) <= new Date(ci)) { box.style.display='none'; return; }
-    const noches = Math.round((new Date(co)-new Date(ci))/86400000);
-    let subGeneral = 0, lineas = [];
-
-    habitaciones.forEach((r, idx) => {
-      let subRoom = 0, gratisUsado = false;
-      const unAdulto = r.adultos === 1;
-      subRoom += unAdulto ? PRECIO_1_PERSONA * noches : r.adultos * PRECIO * noches;
-
-      r.edades.forEach(edad => {
-        if (edad===null) return;
-        if (edad<=5 && !gratisUsado) { gratisUsado = true; }
-        else if (edad<=10) { subRoom += PRECIO*0.5*noches; }
-        else { subRoom += PRECIO*noches; }
-      });
-      if (r.mascota) subRoom += PRECIO_PET*noches;
-
-      subGeneral += subRoom;
-      lineas.push(`Habitación ${idx+1} (${totalRoom(r)} huésped${totalRoom(r)>1?'es':''}${r.mascota?' + mascota':''}) = <strong>$${subRoom.toFixed(2)}</strong>`);
-    });
-
-    const iva=subGeneral*0.15, total2=subGeneral+iva;
-    lineas.push(`IVA 15% = <strong>$${iva.toFixed(2)}</strong>`);
-    $('hsv2-desglose').innerHTML = lineas.join('<br>');
-    $('hsv2-total').textContent = `$${total2.toFixed(2)} USD`;
-    box.style.display='block';
   }
 
   function posicionarDD() {
@@ -2220,8 +2159,8 @@
   });
   document.addEventListener('click', closeDD);
 
-  $('hsv2-checkin').addEventListener('change', () => { calcular(); posicionarDD(); });
-  $('hsv2-checkout').addEventListener('change', () => { calcular(); posicionarDD(); });
+  $('hsv2-checkin').addEventListener('change', () => { posicionarDD(); });
+  $('hsv2-checkout').addEventListener('change', () => { posicionarDD(); });
 
   renderRooms();
   syncUI();
