@@ -169,13 +169,30 @@
   }
   .hero-bg {
     position: absolute; inset: 0;
-    background:
-      linear-gradient(180deg, rgba(27,73,101,0.3) 0%, rgba(27,73,101,0.7) 100%),
-      url('https://images.unsplash.com/photo-1516370873344-fb7c61054fa9?w=2000&q=80') center/cover;
+    background-position: center; background-size: cover;
+    opacity: 0;
     transform: scale(1.05);
+    transition: opacity 1.4s ease;
+  }
+  .hero-bg.active {
+    opacity: 1;
     animation: kenburns 20s ease-out forwards;
   }
   @keyframes kenburns { to { transform: scale(1); } }
+
+  .hero-dots {
+    position: absolute; z-index: 3;
+    right: 2rem; bottom: 2rem;
+    display: flex; flex-direction: column; gap: 0.6rem;
+  }
+  .hero-dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: rgba(250,246,240,0.4);
+    border: 1px solid rgba(250,246,240,0.6);
+    cursor: pointer; padding: 0;
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+  .hero-dot.active { background: var(--sol); transform: scale(1.2); }
   @keyframes spinSlow {
     to { transform: rotate(360deg); }
   }
@@ -194,7 +211,11 @@
     margin-bottom: 1.5rem;
     opacity: 0;
     animation: fadeUp 1s ease-out 0.3s forwards;
+    transition: opacity 0.5s ease;
   }
+  .hero-text-fading .hero-kicker,
+  .hero-text-fading h1,
+  .hero-text-fading .hero-tagline { opacity: 0 !important; animation: none !important; }
   .hero-kicker::before {
     content: '';
     display: inline-block;
@@ -212,6 +233,7 @@
     margin-bottom: 1.5rem;
     opacity: 0;
     animation: fadeUp 1s ease-out 0.5s forwards;
+    transition: opacity 0.5s ease;
   }
   .hero h1 em {
     font-style: italic;
@@ -227,6 +249,7 @@
     margin-bottom: 2rem;
     opacity: 0;
     animation: fadeUp 1s ease-out 0.7s forwards;
+    transition: opacity 0.5s ease;
   }
 
   /* Buscador hero v2 */
@@ -1892,11 +1915,12 @@
 
 <!-- HERO -->
 <header class="hero">
-  <div class="hero-bg"></div>
+  <div class="hero-bg active" id="heroBg0" style="background:linear-gradient(180deg, rgba(27,73,101,0.3) 0%, rgba(27,73,101,0.7) 100%), url('https://images.unsplash.com/photo-1516370873344-fb7c61054fa9?w=2000&amp;q=80') center/cover;"></div>
+  <div class="hero-bg" id="heroBg1"></div>
   <div class="hero-inner">
-    <div class="hero-kicker" data-i18n="hero_kicker">Las Núñez · Santa Elena, Ecuador · Ruta del Spondylus</div>
-    <h1 data-i18n="hero_titulo">Estación<br>del <em>Sol</em></h1>
-    <p class="hero-tagline" data-i18n="hero_tagline">Como tu casa en la playa. Un lugar para detenerse, respirar y volver a sentirse en casa.</p>
+    <div class="hero-kicker" id="heroKicker" data-i18n="hero_kicker">Las Núñez · Santa Elena, Ecuador · Ruta del Spondylus</div>
+    <h1 id="heroTitulo" data-i18n="hero_titulo">Estación<br>del <em>Sol</em></h1>
+    <p class="hero-tagline" id="heroTagline" data-i18n="hero_tagline">Como tu casa en la playa. Un lugar para detenerse, respirar y volver a sentirse en casa.</p>
 
     <!-- BUSCADOR V2 — ESTACIÓN DEL SOL -->
     <div class="hero-search-v2" id="heroSearch">
@@ -1936,6 +1960,7 @@
       <button class="hsv2-buscar" id="hsv2-buscar">Buscar</button>
     </div>
   </div>
+  <div class="hero-dots" id="heroDots"></div>
   <div class="hero-scroll" data-i18n="hero_descubre">Descubre ↓</div>
 </header>
 
@@ -2808,6 +2833,9 @@ const i18n = {
     hero_kicker: 'Las Núñez · Santa Elena, Ecuador · Ruta del Spondylus',
     hero_titulo: 'Estación<br>del <em>Sol</em>',
     hero_tagline: 'Como tu casa en la playa. Un lugar para detenerse, respirar y volver a sentirse en casa.',
+    hero2_kicker: 'Junio — Septiembre · Ruta del Spondylus',
+    hero2_titulo: 'Temporada de <em>Ballenas</em>',
+    hero2_tagline: 'El Pacífico despierta cada año con el espectáculo más grande de la naturaleza. Vívelo desde Estación del Sol.',
     hero_descubre: 'Descubre ↓',
 
     historia_kicker: 'Nuestra historia',
@@ -3050,6 +3078,9 @@ const i18n = {
     hero_kicker: 'Las Núñez · Santa Elena, Ecuador · Spondylus Route',
     hero_titulo: 'Estación<br>del <em>Sol</em>',
     hero_tagline: 'Like your home by the sea. A place to slow down, breathe, and feel at home again.',
+    hero2_kicker: 'June — September · Spondylus Route',
+    hero2_titulo: 'Whale <em>Season</em>',
+    hero2_tagline: 'The Pacific wakes up every year with nature\'s greatest show. Experience it from Estación del Sol.',
     hero_descubre: 'Discover ↓',
 
     historia_kicker: 'Our story',
@@ -3403,8 +3434,78 @@ document.addEventListener('DOMContentLoaded', () => {
   aplicarIdioma(localStorage.getItem('idioma') || 'es');
   configurarLimitesFecha('hsv2-checkin', 'hsv2-checkout');
   ajustarAlturaPromoBar();
+  iniciarHeroSlides();
 });
 window.addEventListener('resize', ajustarAlturaPromoBar);
+
+/* ═════════ HERO — SLIDES ═════════ */
+const HERO_SLIDES = [
+  {
+    bg: "linear-gradient(180deg, rgba(27,73,101,0.3) 0%, rgba(27,73,101,0.7) 100%), url('https://images.unsplash.com/photo-1516370873344-fb7c61054fa9?w=2000&q=80')",
+    kicker: 'hero_kicker', titulo: 'hero_titulo', tagline: 'hero_tagline',
+  },
+  {
+    bg: "linear-gradient(rgba(10,40,60,0.55), rgba(10,40,60,0.55)), url('https://images.unsplash.com/photo-1568430462989-44163eb1752f?w=2000&q=80')",
+    kicker: 'hero2_kicker', titulo: 'hero2_titulo', tagline: 'hero2_tagline',
+  },
+];
+let heroSlideIdx = 0;
+let heroActiveLayer = 0;
+let heroSlideTimer = null;
+
+function pintarHeroSlide(i) {
+  const slide = HERO_SLIDES[i];
+  if (!slide) return;
+  heroSlideIdx = i;
+
+  const layers = [document.getElementById('heroBg0'), document.getElementById('heroBg1')];
+  const entrante = layers[1 - heroActiveLayer];
+  const saliente = layers[heroActiveLayer];
+  if (entrante && saliente) {
+    entrante.style.background = `${slide.bg} center/cover`;
+    entrante.classList.add('active');
+    saliente.classList.remove('active');
+    heroActiveLayer = 1 - heroActiveLayer;
+  }
+
+  const inner = document.querySelector('.hero-inner');
+  if (inner) inner.classList.add('hero-text-fading');
+  setTimeout(() => {
+    const kickerEl = document.getElementById('heroKicker');
+    const tituloEl = document.getElementById('heroTitulo');
+    const taglineEl = document.getElementById('heroTagline');
+    if (kickerEl) { kickerEl.setAttribute('data-i18n', slide.kicker); kickerEl.textContent = t(slide.kicker); }
+    if (tituloEl) { tituloEl.setAttribute('data-i18n', slide.titulo); tituloEl.innerHTML = t(slide.titulo); }
+    if (taglineEl) { taglineEl.setAttribute('data-i18n', slide.tagline); taglineEl.textContent = t(slide.tagline); }
+    if (inner) inner.classList.remove('hero-text-fading');
+  }, 450);
+
+  document.querySelectorAll('.hero-dot').forEach((d, di) => d.classList.toggle('active', di === i));
+}
+
+function irAHeroSlide(i) {
+  if (i === heroSlideIdx) return;
+  pintarHeroSlide(i);
+  reiniciarHeroAutoplay();
+}
+
+function reiniciarHeroAutoplay() {
+  if (heroSlideTimer) clearInterval(heroSlideTimer);
+  heroSlideTimer = setInterval(() => {
+    pintarHeroSlide((heroSlideIdx + 1) % HERO_SLIDES.length);
+  }, 7000);
+}
+
+function iniciarHeroSlides() {
+  const dotsCont = document.getElementById('heroDots');
+  if (dotsCont) {
+    dotsCont.innerHTML = HERO_SLIDES.map((_, i) =>
+      `<button type="button" class="hero-dot ${i === 0 ? 'active' : ''}" onclick="irAHeroSlide(${i})" aria-label="Slide ${i + 1}"></button>`
+    ).join('');
+  }
+  // El primer slide ya está pintado en el HTML estático; solo precargamos el resto.
+  reiniciarHeroAutoplay();
+}
 
 /* ═════════ DATOS DE HABITACIONES ═════════ */
 /* Nombre / descripción / camas se traducen vía i18n usando la clave i18nKey de cada habitación. */
