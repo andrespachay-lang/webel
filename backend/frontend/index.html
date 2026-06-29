@@ -1096,6 +1096,74 @@
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
   }
 
+  /* ───────── NEWSLETTER ───────── */
+  .newsletter {
+    background: var(--carbon);
+    padding: 4rem 2rem;
+    border-bottom: 1px solid rgba(250,246,240,0.1);
+  }
+  .newsletter-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: end;
+  }
+  .newsletter-kicker {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sol);
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+  .newsletter-texto {
+    color: rgba(250, 246, 240, 0.7);
+    font-size: 0.95rem;
+  }
+  .newsletter-form {
+    display: flex;
+    align-items: stretch;
+    gap: 1.5rem;
+  }
+  .newsletter-campo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .newsletter-campo input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--sol);
+    color: var(--crema);
+    font-size: 1rem;
+    font-family: var(--sans);
+    padding: 0.5rem 0;
+  }
+  .newsletter-campo input::placeholder { color: rgba(250, 246, 240, 0.5); }
+  .newsletter-campo input:focus { outline: none; }
+  .newsletter-btn {
+    flex-shrink: 0;
+    background: transparent;
+    border: 1px solid var(--crema);
+    color: var(--crema);
+    padding: 0 2rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .newsletter-btn:hover {
+    background: var(--sol);
+    border-color: var(--sol);
+    color: var(--carbon);
+  }
+  @media (max-width: 768px) {
+    .newsletter-inner { grid-template-columns: 1fr; gap: 1.5rem; }
+  }
+
   /* ───────── FOOTER ───────── */
   footer {
     background: var(--carbon);
@@ -2508,6 +2576,22 @@
   </div>
 </section>
 
+<!-- NEWSLETTER -->
+<section class="newsletter">
+  <div class="newsletter-inner">
+    <div>
+      <div class="newsletter-kicker" data-i18n="news_kicker">Newsletter</div>
+      <div class="newsletter-texto" data-i18n="news_texto">Recibe noticias y promociones de Estación del Sol en tu correo.</div>
+    </div>
+    <form class="newsletter-form" id="newsletter-form">
+      <div class="newsletter-campo">
+        <input type="email" id="newsletter-email" data-i18n-placeholder="news_placeholder" placeholder="Tu correo" required>
+      </div>
+      <button type="submit" class="newsletter-btn" data-i18n="news_boton">Inscribirme</button>
+    </form>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
   <div class="foot-grid">
@@ -2909,6 +2993,12 @@ const i18n = {
     cta_texto: 'Solo 7 habitaciones — recibimos pocos huéspedes a la vez para que la experiencia sea íntima. Reserva con anticipación.',
     cta_boton: 'Ver habitaciones disponibles',
 
+    news_kicker: 'Newsletter',
+    news_texto: 'Recibe noticias y promociones de Estación del Sol en tu correo.',
+    news_placeholder: 'Tu correo',
+    news_boton: 'Inscribirme',
+    news_gracias: '¡Gracias por suscribirte! Pronto recibirás noticias de Estación del Sol.',
+
     foot_tag: 'Como tu casa en la playa.',
     foot_desc: 'Hotel Estación del Sol en Las Núñez, Santa Elena, Ruta del Spondylus, Ecuador.',
     foot_h_hotel: 'Hotel',
@@ -3154,6 +3244,12 @@ const i18n = {
     cta_titulo: 'Shall we <em>expect you</em>?',
     cta_texto: 'Only 7 rooms — we welcome few guests at a time so the experience stays intimate. Book ahead.',
     cta_boton: 'View available rooms',
+
+    news_kicker: 'Newsletter',
+    news_texto: 'Receive news and offers from Estación del Sol in your inbox.',
+    news_placeholder: 'Your email',
+    news_boton: 'Enroll',
+    news_gracias: 'Thanks for subscribing! You will soon receive news from Estación del Sol.',
 
     foot_tag: 'Like your home by the sea.',
     foot_desc: 'Estación del Sol hotel in Las Núñez, Santa Elena, Spondylus Route, Ecuador.',
@@ -3484,6 +3580,14 @@ function avanzarPromoBar() {
 function iniciarPromoBarRotativa() {
   setInterval(avanzarPromoBar, 5000);
 }
+
+/* ═════════ NEWSLETTER ═════════ */
+document.getElementById('newsletter-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const form = e.target;
+  alert(t('news_gracias'));
+  form.reset();
+});
 
 /* ═════════ HERO — SLIDES ═════════ */
 const HERO_SLIDES = [
