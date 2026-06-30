@@ -1258,11 +1258,11 @@
   /* ───────── POPUP PROMO ───────── */
   #promo-popup-overlay {
     position: fixed; inset: 0;
-    background: rgba(27, 73, 101, 0.55);
-    backdrop-filter: blur(6px);
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(4px);
     z-index: 9998;
     display: flex; align-items: center; justify-content: center;
-    padding: 1.5rem;
+    padding: 1rem;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.4s ease;
@@ -1272,98 +1272,121 @@
     pointer-events: all;
   }
   .promo-popup {
-    background: var(--crema);
-    border-radius: 20px;
-    overflow: hidden;
-    max-width: 480px;
-    width: 100%;
-    box-shadow: 0 24px 80px rgba(27,73,101,0.25);
-    transform: scale(0.92) translateY(24px);
-    transition: transform 0.4s ease;
     position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    max-width: 520px;
+    width: 100%;
+    max-height: 92vh;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.35);
+    transform: scale(0.93) translateY(20px);
+    transition: transform 0.4s ease;
   }
   #promo-popup-overlay.visible .promo-popup {
     transform: scale(1) translateY(0);
   }
-  .promo-popup-img {
-    width: 100%;
-    aspect-ratio: 4/3;
-    object-fit: cover;
-    display: block;
+  .promo-popup-bg {
+    position: absolute; inset: 0;
+    background: url('images/promo-popup.jpg') center/cover no-repeat;
   }
-  .promo-popup-body {
-    padding: 1.75rem 2rem 2rem;
-    text-align: center;
+  .promo-popup-bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.18) 0%,
+      rgba(0,0,0,0.45) 55%,
+      rgba(0,0,0,0.72) 100%
+    );
   }
+  .promo-popup-content {
+    position: relative;
+    z-index: 1;
+    padding: 3.5rem 2.25rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 520px;
+    justify-content: flex-end;
+  }
+  .promo-popup-x {
+    position: absolute;
+    top: 1rem; right: 1.1rem;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    border-radius: 50%;
+    width: 34px; height: 34px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    z-index: 2;
+    transition: background 0.2s;
+    line-height: 1;
+  }
+  .promo-popup-x:hover { background: rgba(255,255,255,0.3); }
   .promo-popup-kicker {
     font-size: 0.68rem;
     letter-spacing: 0.28em;
     text-transform: uppercase;
     color: var(--sol);
     font-weight: 600;
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.75rem;
   }
   .promo-popup-titulo {
     font-family: var(--serif);
     font-weight: 300;
-    font-size: 1.6rem;
-    color: var(--pacifico);
-    line-height: 1.15;
-    margin-bottom: 0.75rem;
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    color: white;
+    line-height: 1.1;
+    margin-bottom: 1rem;
   }
-  .promo-popup-titulo em { font-style: italic; }
-  .promo-popup-texto {
-    font-size: 0.9rem;
-    color: var(--carbon-suave);
-    margin-bottom: 1.5rem;
-    line-height: 1.6;
-  }
-  .promo-popup-btns {
-    display: flex;
-    gap: 0.75rem;
-    justify-content: center;
-  }
-  .promo-popup-cta {
-    background: var(--pacifico);
-    color: var(--crema);
-    padding: 0.7rem 1.6rem;
-    border-radius: 100px;
-    font-size: 0.8rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    font-weight: 500;
-    cursor: pointer;
+  .promo-popup-titulo em { font-style: italic; color: var(--arena); }
+  .promo-popup-email {
+    width: 100%;
+    padding: 0.9rem 1.25rem;
+    border-radius: 8px;
     border: none;
-    transition: all 0.3s;
-  }
-  .promo-popup-cta:hover { background: var(--sol); color: var(--carbon); }
-  .promo-popup-cerrar {
-    background: transparent;
-    border: 1px solid rgba(27,73,101,0.2);
-    color: var(--carbon-suave);
-    padding: 0.7rem 1.4rem;
-    border-radius: 100px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: all 0.3s;
     font-family: var(--sans);
-  }
-  .promo-popup-cerrar:hover { border-color: var(--pacifico); color: var(--pacifico); }
-  .promo-popup-x {
-    position: absolute;
-    top: 0.85rem; right: 1rem;
-    background: rgba(255,255,255,0.8);
-    border: none;
-    border-radius: 50%;
-    width: 30px; height: 30px;
-    font-size: 1rem;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+    background: rgba(255,255,255,0.95);
     color: var(--carbon);
-    line-height: 1;
-    transition: background 0.2s;
   }
-  .promo-popup-x:hover { background: white; }
+  .promo-popup-email::placeholder { color: rgba(44,62,80,0.5); }
+  .promo-popup-email:focus { outline: 2px solid var(--sol); }
+  .promo-popup-cta {
+    width: 100%;
+    background: var(--sol);
+    color: var(--carbon);
+    padding: 0.9rem 1rem;
+    border-radius: 8px;
+    font-family: var(--sans);
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s;
+    margin-bottom: 0.6rem;
+  }
+  .promo-popup-cta:hover { background: var(--crema); }
+  .promo-popup-cerrar {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.6);
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-family: var(--sans);
+    text-align: center;
+    width: 100%;
+    padding: 0.25rem;
+    transition: color 0.2s;
+  }
+  .promo-popup-cerrar:hover { color: white; }
+  @media (max-width: 500px) {
+    .promo-popup-content { padding: 3rem 1.5rem 2rem; min-height: 460px; }
+  }
 
   /* ───────── BANNER COOKIES ───────── */
   #cookie-banner {
@@ -2868,15 +2891,14 @@
 <div id="promo-popup-overlay">
   <div class="promo-popup">
     <button class="promo-popup-x" onclick="cerrarPromoPopup()" aria-label="Cerrar">✕</button>
-    <img class="promo-popup-img" src="images/promo-popup.jpg" alt="Próximas promociones Estación del Sol">
-    <div class="promo-popup-body">
+    <div class="promo-popup-bg"></div>
+    <div class="promo-popup-content">
       <div class="promo-popup-kicker" data-i18n="popup_kicker">Próximamente</div>
       <p class="promo-popup-titulo" data-i18n="popup_titulo">Promociones <em>especiales</em> en camino.</p>
       <p class="promo-popup-texto" data-i18n="popup_texto">Estamos preparando ofertas exclusivas para tu próxima escapada al Pacífico. Suscríbete y sé el primero en enterarte.</p>
-      <div class="promo-popup-btns">
-        <button class="promo-popup-cta" onclick="document.querySelector('.newsletter').scrollIntoView({behavior:'smooth'});cerrarPromoPopup();" data-i18n="popup_cta">Avisarme</button>
-        <button class="promo-popup-cerrar" onclick="cerrarPromoPopup()" data-i18n="popup_cerrar">Ahora no</button>
-      </div>
+      <input type="email" class="promo-popup-email" data-i18n-placeholder="news_placeholder" placeholder="Tu correo electrónico">
+      <button class="promo-popup-cta" onclick="document.querySelector('.newsletter').scrollIntoView({behavior:'smooth'});cerrarPromoPopup();" data-i18n="popup_cta">Avisarme</button>
+      <button class="promo-popup-cerrar" onclick="cerrarPromoPopup()" data-i18n="popup_cerrar">Ahora no</button>
     </div>
   </div>
 </div>
