@@ -228,6 +228,64 @@ async function enviarNotificacionCheckinHotel(checkin, reserva, rutaFotoCedula =
   });
 }
 
+// ── Correo con datos bancarios al huésped ─────────────────────────────────────
+async function enviarDatosBancarios({ correo, nombre, total, codigo }) {
+  const transporte = crearTransporte();
+
+  const banco1 = {
+    nombre:   process.env.BANCO_1_NOMBRE       || '',
+    tipo:     process.env.BANCO_1_TIPO_CUENTA  || '',
+    cuenta:   process.env.BANCO_1_CUENTA       || '',
+    titular:  process.env.BANCO_1_TITULAR      || '',
+    cedula:   process.env.BANCO_1_CEDULA       || '',
+  };
+  const banco2 = {
+    nombre:   process.env.BANCO_2_NOMBRE       || '',
+    tipo:     process.env.BANCO_2_TIPO_CUENTA  || '',
+    cuenta:   process.env.BANCO_2_CUENTA       || '',
+    titular:  process.env.BANCO_2_TITULAR      || '',
+    cedula:   process.env.BANCO_2_CEDULA       || '',
+  };
+
+  function blocoB(label, b) {
+    return `
+      <div style="background:#F4ECDE;border-radius:6px;padding:1.1rem 1.3rem;margin-bottom:0.85rem;font-size:0.92rem;line-height:1.9;">
+        <div style="font-weight:700;color:#1B4965;margin-bottom:0.4rem;">${label}</div>
+        <table style="border-collapse:collapse;width:100%;">
+          <tr><td style="color:#5A6C7D;width:40%;">Banco</td><td style="font-weight:600;color:#2C3E50;">${b.nombre}</td></tr>
+          <tr><td style="color:#5A6C7D;">Tipo de cuenta</td><td style="font-weight:600;color:#2C3E50;">${b.tipo}</td></tr>
+          <tr><td style="color:#5A6C7D;">Número</td><td style="font-weight:600;color:#2C3E50;">${b.cuenta}</td></tr>
+          <tr><td style="color:#5A6C7D;">Titular</td><td style="font-weight:600;color:#2C3E50;">${b.titular}</td></tr>
+          <tr><td style="color:#5A6C7D;">Cédula</td><td style="font-weight:600;color:#2C3E50;">${b.cedula}</td></tr>
+        </table>
+      </div>`;
+  }
+
+  const contenido = `
+    <p>Hola <strong>${nombre}</strong>,</p>
+    <p>Aquí tienes los datos para completar tu pago por transferencia bancaria
+       de tu reserva <strong>${codigo}</strong> por un total de <strong>$${Number(total).toFixed(2)}</strong>:</p>
+
+    ${blocoB('Opción 1', banco1)}
+    ${blocoB('Opción 2', banco2)}
+
+    <p style="font-size:0.85rem;color:#5A6C7D;margin-top:1rem;">
+      Una vez realizada la transferencia, vuelve al sitio y adjunta tu
+      comprobante para confirmar tu reserva. El hotel verificará el pago
+      y te enviará la confirmación final.
+    </p>
+    <p>¿Necesitas ayuda? Escríbenos al
+      <a href="https://wa.me/593986721666" style="color:#D4A574;">+593 98 672 1666</a>.
+    </p>`;
+
+  await transporte.sendMail({
+    from: `"Estación del Sol" <${process.env.EMAIL_USER}>`,
+    to: correo,
+    subject: `Datos para tu transferencia — Estación del Sol (${codigo})`,
+    html: plantillaBase(contenido),
+  });
+}
+
 // ── Correo de contacto al hotel ───────────────────────────────────────────────
 async function enviarMensajeContacto({ nombre, correo, mensaje }) {
   const transporte = crearTransporte();
@@ -259,4 +317,5 @@ module.exports = {
   enviarConfirmacionCheckin,
   enviarNotificacionCheckinHotel,
   enviarMensajeContacto,
+  enviarDatosBancarios,
 };

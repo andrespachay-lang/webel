@@ -28,6 +28,14 @@ db.pragma('foreign_keys = ON');
 
 crearTablaReservas(db);
 crearTablaCheckins(db);
+db.exec(`
+  CREATE TABLE IF NOT EXISTS datos_bancarios_log (
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    correo       TEXT NOT NULL,
+    codigo_reserva TEXT,
+    enviado_en   TEXT NOT NULL
+  )
+`);
 app.set('db', db);
 
 console.log(`[DB] Base de datos iniciada en ${dbPath}`);
@@ -81,11 +89,12 @@ app.use('/api', limiteGeneral);
 app.use('/api/reservas', limiteReservas);
 
 // ── Rutas ─────────────────────────────────────────────────────────────────────
-app.use('/api/reservas',    require('./routes/reservas'));
-app.use('/api/checkin',     require('./routes/checkin'));
-app.use('/api/admin',       require('./routes/admin'));
-app.use('/api/contacto',    require('./routes/contacto'));
-app.use('/api/webhook',     require('./routes/webhook'));
+app.use('/api/reservas',            require('./routes/reservas'));
+app.use('/api/checkin',             require('./routes/checkin'));
+app.use('/api/admin',               require('./routes/admin'));
+app.use('/api/contacto',            require('./routes/contacto'));
+app.use('/api/webhook',             require('./routes/webhook'));
+app.use('/api/enviar-datos-bancarios', require('./routes/datosbancarios'));
 
 // Ruta de salud
 app.get('/api/salud', (req, res) => {

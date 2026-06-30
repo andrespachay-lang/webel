@@ -2992,7 +2992,7 @@
 
       <div class="form-group">
         <label data-i18n="checkout_correo">Correo electrónico</label>
-        <input type="email" placeholder="tu@correo.com" required>
+        <input type="email" id="checkout-correo" placeholder="tu@correo.com" required>
       </div>
 
       <div class="form-row">
@@ -3065,43 +3065,43 @@
 
       <!-- Bloque Transferencia -->
       <div id="bloque-transferencia" style="display:none;">
-        <div style="background:rgba(27,73,101,0.06);border-radius:8px;padding:1.25rem 1.5rem;margin-bottom:0.85rem;font-size:0.9rem;">
-          <div style="font-weight:600;color:var(--pacifico);margin-bottom:0.5rem;" data-i18n="transf_datos_titulo">Datos para transferencia</div>
-          <div style="color:var(--carbon-suave);line-height:1.9;">
-            <span data-i18n="transf_banco">Banco:</span> <strong style="color:var(--carbon);">Banco Pichincha</strong><br>
-            <span data-i18n="transf_tipo">Tipo:</span> <strong style="color:var(--carbon);">Cuenta de Ahorros</strong><br>
-            <span data-i18n="transf_numero">Número:</span> <strong style="color:var(--carbon);">3466750600</strong><br>
-            <span data-i18n="transf_titular">Titular:</span> <strong style="color:var(--carbon);">Víctor Pachay Alcívar</strong><br>
-            <span data-i18n="transf_cedula">Cédula:</span> <strong style="color:var(--carbon);">1301370605</strong>
+
+        <!-- Paso A: botón para recibir datos por correo -->
+        <div id="transf-paso-a">
+          <p style="font-size:0.88rem;color:var(--carbon-suave);margin-bottom:1rem;" data-i18n="transf_intro">
+            Te enviaremos los datos de las cuentas bancarias directamente a tu correo por seguridad.
+          </p>
+          <button type="button" id="btn-enviar-datos" onclick="enviarDatosBancarios()" style="width:100%;padding:0.85rem;background:var(--pacifico);color:#FAF6F0;border:none;border-radius:8px;font-size:0.9rem;letter-spacing:0.05em;cursor:pointer;text-transform:uppercase;font-weight:600;" data-i18n="transf_btn_enviar">
+            Enviarme los datos bancarios por correo
+          </button>
+          <div id="transf-enviando" style="display:none;text-align:center;padding:0.7rem;font-size:0.85rem;color:var(--carbon-suave);" data-i18n="transf_enviando">Enviando…</div>
+        </div>
+
+        <!-- Paso B: aparece tras envío exitoso -->
+        <div id="transf-paso-b" style="display:none;">
+          <div style="background:rgba(46,125,79,0.1);border:1px solid rgba(46,125,79,0.3);border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.25rem;font-size:0.88rem;color:#2e7d4f;">
+            <strong>✔</strong> <span data-i18n="transf_enviado_msg">Te enviamos los datos a tu correo. Una vez transferido, adjunta tu comprobante aquí.</span>
+          </div>
+
+          <!-- Comprobante de transferencia -->
+          <div class="form-group" id="bloque-comprobante">
+            <label data-i18n="comprobante_label">Comprobante de transferencia</label>
+            <div class="comprobante-zona" id="comprobante-zona" onclick="document.getElementById('comprobante-input').click()">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="display:block;margin:0 auto 0.6rem;color:var(--sol);">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+              <p style="font-size:0.85rem;color:var(--carbon-suave);margin:0;">
+                <strong style="color:var(--pacifico);" data-i18n="comprobante_toca">Toca para adjuntar comprobante</strong><br>
+                <span data-i18n="comprobante_formatos">JPG, PNG o PDF · máx. 2 MB</span>
+              </p>
+              <input type="file" id="comprobante-input" accept=".jpg,.jpeg,.png,.pdf" style="display:none;" onchange="mostrarComprobante(event)">
+            </div>
+            <div id="comprobante-nombre" style="font-size:0.82rem;color:var(--pacifico);margin-top:0.4rem;display:none;"></div>
           </div>
         </div>
-        <div style="background:rgba(27,73,101,0.06);border-radius:8px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;font-size:0.9rem;">
-          <div style="color:var(--carbon-suave);line-height:1.9;">
-            <span data-i18n="transf_banco">Banco:</span> <strong style="color:var(--carbon);">Banco Guayaquil</strong><br>
-            <span data-i18n="transf_tipo">Tipo:</span> <strong style="color:var(--carbon);">Cuenta de Ahorros</strong><br>
-            <span data-i18n="transf_numero">Número:</span> <strong style="color:var(--carbon);">42559169</strong><br>
-            <span data-i18n="transf_titular">Titular:</span> <strong style="color:var(--carbon);">María Chávez</strong><br>
-            <span data-i18n="transf_cedula">Cédula:</span> <strong style="color:var(--carbon);">0906499454</strong><br>
-            <span data-i18n="transf_correo">Correo:</span> <strong style="color:var(--carbon);">mantonieta59.mc@gmail.com</strong>
-          </div>
-        </div>
-        <!-- Comprobante de transferencia -->
-        <div class="form-group" id="bloque-comprobante">
-          <label data-i18n="comprobante_label">Comprobante de transferencia</label>
-          <div class="comprobante-zona" id="comprobante-zona" onclick="document.getElementById('comprobante-input').click()">
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="display:block;margin:0 auto 0.6rem;color:var(--sol);">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-              <polyline points="17 8 12 3 7 8"/>
-              <line x1="12" y1="3" x2="12" y2="15"/>
-            </svg>
-            <p style="font-size:0.85rem;color:var(--carbon-suave);margin:0;">
-              <strong style="color:var(--pacifico);" data-i18n="comprobante_toca">Toca para adjuntar comprobante</strong><br>
-              <span data-i18n="comprobante_formatos">JPG, PNG o PDF · máx. 2 MB</span>
-            </p>
-          <input type="file" id="comprobante-input" accept=".jpg,.jpeg,.png,.pdf" style="display:none;" onchange="mostrarComprobante(event)">
-          </div>
-          <div id="comprobante-nombre" style="font-size:0.82rem;color:var(--pacifico);margin-top:0.4rem;display:none;"></div>
-        </div>
+
       </div><!-- /bloque-transferencia -->
 
       <div class="checkout-cta">
@@ -3412,6 +3412,11 @@ const i18n = {
     pp_numero_hint: 'Debe ser el número con el que creaste tu cuenta PayPhone',
 
     transf_datos_titulo: 'Datos para transferencia',
+    transf_intro: 'Te enviaremos los datos de las cuentas bancarias directamente a tu correo por seguridad.',
+    transf_btn_enviar: 'Enviarme los datos bancarios por correo',
+    transf_enviando: 'Enviando…',
+    transf_enviado_msg: 'Te enviamos los datos a tu correo. Una vez transferido, adjunta tu comprobante aquí.',
+    transf_error_correo: 'Completa tu correo electrónico en el paso anterior.',
     transf_banco: 'Banco:',
     transf_tipo: 'Tipo:',
     transf_numero: 'Número:',
@@ -3684,6 +3689,11 @@ const i18n = {
     pp_numero_hint: 'Must be the number you used to create your PayPhone account',
 
     transf_datos_titulo: 'Transfer details',
+    transf_intro: 'We\'ll send your bank account details directly to your email for security.',
+    transf_btn_enviar: 'Send me the bank details by email',
+    transf_enviando: 'Sending…',
+    transf_enviado_msg: 'We\'ve sent the details to your email. Once the transfer is done, attach your receipt here.',
+    transf_error_correo: 'Please fill in your email address in the previous step.',
     transf_banco: 'Bank:',
     transf_tipo: 'Type:',
     transf_numero: 'Account number:',
@@ -3955,6 +3965,11 @@ const i18n = {
     pp_numero_hint: 'Muss die Nummer sein, mit der Sie Ihr PayPhone-Konto erstellt haben',
 
     transf_datos_titulo: 'Überweisungsdaten',
+    transf_intro: 'Wir senden Ihnen die Bankdaten aus Sicherheitsgründen direkt an Ihre E-Mail-Adresse.',
+    transf_btn_enviar: 'Bankdaten per E-Mail zusenden',
+    transf_enviando: 'Wird gesendet…',
+    transf_enviado_msg: 'Wir haben die Daten an Ihre E-Mail gesendet. Nach der Überweisung laden Sie hier Ihren Beleg hoch.',
+    transf_error_correo: 'Bitte geben Sie Ihre E-Mail-Adresse im vorherigen Schritt ein.',
     transf_banco: 'Bank:',
     transf_tipo: 'Kontotyp:',
     transf_numero: 'Kontonummer:',
@@ -4984,9 +4999,29 @@ function selectPay(el) {
   el.classList.add('active');
 
   const metodo = el.dataset.metodo || '';
-  document.getElementById('bloque-payphone').style.display     = metodo === 'PayPhone'     ? 'block' : 'none';
+  document.getElementById('bloque-payphone').style.display      = metodo === 'PayPhone'      ? 'block' : 'none';
   document.getElementById('bloque-transferencia').style.display = metodo === 'Transferencia' ? 'block' : 'none';
+
+  // Reset transferencia flow when switching methods
+  if (metodo === 'Transferencia') {
+    document.getElementById('transf-paso-a').style.display = 'block';
+    document.getElementById('transf-paso-b').style.display = 'none';
+    actualizarBtnConfirmar();
+  } else {
+    document.getElementById('btn-confirmar').disabled = false;
+  }
+
   recalcularResumen(metodo);
+}
+
+function actualizarBtnConfirmar() {
+  const metodoActivo = document.querySelector('.pay-method.active')?.dataset.metodo || '';
+  if (metodoActivo !== 'Transferencia') { document.getElementById('btn-confirmar').disabled = false; return; }
+  const tieneComprobante = !!document.getElementById('comprobante-input')?.files[0];
+  const btn = document.getElementById('btn-confirmar');
+  btn.disabled = !tieneComprobante;
+  btn.style.opacity = tieneComprobante ? '' : '0.45';
+  btn.style.cursor  = tieneComprobante ? '' : 'not-allowed';
 }
 
 function mostrarComprobante(evento) {
@@ -5001,6 +5036,45 @@ function mostrarComprobante(evento) {
   const nombreEl = document.getElementById('comprobante-nombre');
   nombreEl.textContent = `✔ ${archivo.name}`;
   nombreEl.style.display = 'block';
+  actualizarBtnConfirmar();
+}
+
+async function enviarDatosBancarios() {
+  const correo = document.getElementById('checkout-correo')?.value?.trim()
+               || document.getElementById('correo')?.value?.trim()
+               || '';
+  if (!correo) {
+    alert(t('transf_error_correo') || 'Completa tu correo electrónico en el paso anterior.');
+    return;
+  }
+
+  const nombre = (document.querySelector('#step-1 input[placeholder="Andrés"]')?.value || '').trim();
+  const total  = document.getElementById('resumen-total')?.textContent?.replace(/[^0-9.]/g, '') || '0';
+  // código aún no existe (la reserva no se creó) — enviamos sin código por ahora
+  const codigoTemp = 'PENDIENTE';
+
+  const btnEnv  = document.getElementById('btn-enviar-datos');
+  const spinner = document.getElementById('transf-enviando');
+  btnEnv.disabled = true;
+  spinner.style.display = 'block';
+
+  try {
+    const resp = await fetch(`${API_BASE}/api/enviar-datos-bancarios`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ correo, nombre, total, codigo: codigoTemp }),
+    });
+    const datos = await resp.json();
+    if (!resp.ok) throw new Error(datos.error || 'Error al enviar');
+
+    document.getElementById('transf-paso-a').style.display = 'none';
+    document.getElementById('transf-paso-b').style.display = 'block';
+    actualizarBtnConfirmar();
+  } catch (err) {
+    alert(err.message);
+    btnEnv.disabled = false;
+    spinner.style.display = 'none';
+  }
 }
 
 /* ═════════ POLLING — espera confirmación PayPhone ═════════ */
@@ -5085,7 +5159,7 @@ async function enviarReserva() {
     apellido:          document.querySelector('#step-1 input[placeholder="Pérez"]')?.value || '',
     cedula:            document.querySelector('#step-1 input[placeholder="0912345678"]')?.value || '',
     pais:              document.querySelector('#step-1 select')?.value || 'Ecuador',
-    correo:            document.querySelector('#step-1 input[type="email"]')?.value || '',
+    correo:            document.getElementById('checkout-correo')?.value || '',
     // Para PayPhone usamos el teléfono de la app; para otros, el del formulario
     telefono:          metodoPago === 'PayPhone'
                          ? (telefonoPayphone || document.querySelector('#step-1 input[type="tel"]')?.value || '')
