@@ -1255,6 +1255,116 @@
     color: rgba(250,246,240,0.4);
   }
 
+  /* ───────── POPUP PROMO ───────── */
+  #promo-popup-overlay {
+    position: fixed; inset: 0;
+    background: rgba(27, 73, 101, 0.55);
+    backdrop-filter: blur(6px);
+    z-index: 9998;
+    display: flex; align-items: center; justify-content: center;
+    padding: 1.5rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+  #promo-popup-overlay.visible {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .promo-popup {
+    background: var(--crema);
+    border-radius: 20px;
+    overflow: hidden;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 24px 80px rgba(27,73,101,0.25);
+    transform: scale(0.92) translateY(24px);
+    transition: transform 0.4s ease;
+    position: relative;
+  }
+  #promo-popup-overlay.visible .promo-popup {
+    transform: scale(1) translateY(0);
+  }
+  .promo-popup-img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    display: block;
+  }
+  .promo-popup-body {
+    padding: 1.75rem 2rem 2rem;
+    text-align: center;
+  }
+  .promo-popup-kicker {
+    font-size: 0.68rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--sol);
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+  }
+  .promo-popup-titulo {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 1.6rem;
+    color: var(--pacifico);
+    line-height: 1.15;
+    margin-bottom: 0.75rem;
+  }
+  .promo-popup-titulo em { font-style: italic; }
+  .promo-popup-texto {
+    font-size: 0.9rem;
+    color: var(--carbon-suave);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+  .promo-popup-btns {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+  .promo-popup-cta {
+    background: var(--pacifico);
+    color: var(--crema);
+    padding: 0.7rem 1.6rem;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s;
+  }
+  .promo-popup-cta:hover { background: var(--sol); color: var(--carbon); }
+  .promo-popup-cerrar {
+    background: transparent;
+    border: 1px solid rgba(27,73,101,0.2);
+    color: var(--carbon-suave);
+    padding: 0.7rem 1.4rem;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: var(--sans);
+  }
+  .promo-popup-cerrar:hover { border-color: var(--pacifico); color: var(--pacifico); }
+  .promo-popup-x {
+    position: absolute;
+    top: 0.85rem; right: 1rem;
+    background: rgba(255,255,255,0.8);
+    border: none;
+    border-radius: 50%;
+    width: 30px; height: 30px;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--carbon);
+    line-height: 1;
+    transition: background 0.2s;
+  }
+  .promo-popup-x:hover { background: white; }
+
   /* ───────── BANNER COOKIES ───────── */
   #cookie-banner {
     position: fixed;
@@ -2754,6 +2864,23 @@
   </div>
 </footer>
 
+<!-- POPUP PROMO HABITACIONES -->
+<div id="promo-popup-overlay">
+  <div class="promo-popup">
+    <button class="promo-popup-x" onclick="cerrarPromoPopup()" aria-label="Cerrar">✕</button>
+    <img class="promo-popup-img" src="images/promo-verano.jpg" alt="Próximas promociones Estación del Sol">
+    <div class="promo-popup-body">
+      <div class="promo-popup-kicker" data-i18n="popup_kicker">Próximamente</div>
+      <p class="promo-popup-titulo" data-i18n="popup_titulo">Promociones <em>especiales</em> en camino.</p>
+      <p class="promo-popup-texto" data-i18n="popup_texto">Estamos preparando ofertas exclusivas para tu próxima escapada al Pacífico. Suscríbete y sé el primero en enterarte.</p>
+      <div class="promo-popup-btns">
+        <button class="promo-popup-cta" onclick="document.querySelector('.newsletter').scrollIntoView({behavior:'smooth'});cerrarPromoPopup();" data-i18n="popup_cta">Avisarme</button>
+        <button class="promo-popup-cerrar" onclick="cerrarPromoPopup()" data-i18n="popup_cerrar">Ahora no</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- BANNER DE COOKIES -->
 <div id="cookie-banner" style="display:none;">
   <div class="cookie-inner">
@@ -3133,6 +3260,12 @@ const i18n = {
     cta_texto: 'Solo 7 habitaciones — recibimos pocos huéspedes a la vez para que la experiencia sea íntima. Reserva con anticipación.',
     cta_boton: 'Ver habitaciones disponibles',
 
+    popup_kicker: 'Próximamente',
+    popup_titulo: 'Promociones <em>especiales</em> en camino.',
+    popup_texto: 'Estamos preparando ofertas exclusivas para tu próxima escapada al Pacífico. Suscríbete y sé el primero en enterarte.',
+    popup_cta: 'Avisarme',
+    popup_cerrar: 'Ahora no',
+
     cookie_titulo: 'Usamos cookies',
     cookie_texto: 'Este sitio usa cookies para mejorar tu experiencia de navegación y analizar el tráfico de forma anónima.',
     cookie_aceptar: 'Aceptar todo',
@@ -3400,6 +3533,12 @@ const i18n = {
     cta_texto: 'Only 7 rooms — we welcome few guests at a time so the experience stays intimate. Book ahead.',
     cta_boton: 'View available rooms',
 
+    popup_kicker: 'Coming soon',
+    popup_titulo: '<em>Special offers</em> on the way.',
+    popup_texto: "We're preparing exclusive deals for your next Pacific getaway. Subscribe and be the first to know.",
+    popup_cta: 'Notify me',
+    popup_cerrar: 'Not now',
+
     cookie_titulo: 'We use cookies',
     cookie_texto: 'This website uses cookies to help us make your experience better and analyse traffic anonymously.',
     cookie_aceptar: 'Accept all',
@@ -3664,6 +3803,12 @@ const i18n = {
     cta_titulo: 'Dürfen wir Sie <em>erwarten</em>?',
     cta_texto: 'Nur 7 Zimmer – wir empfangen jeweils wenige Gäste, damit das Erlebnis persönlich bleibt. Frühzeitig buchen.',
     cta_boton: 'Verfügbare Zimmer ansehen',
+
+    popup_kicker: 'Demnächst',
+    popup_titulo: '<em>Sonderangebote</em> sind unterwegs.',
+    popup_texto: 'Wir bereiten exklusive Angebote für Ihren nächsten Kurzurlaub am Pazifik vor. Abonnieren Sie und erfahren Sie es als Erster.',
+    popup_cta: 'Benachrichtigen',
+    popup_cerrar: 'Jetzt nicht',
 
     cookie_titulo: 'Wir verwenden Cookies',
     cookie_texto: 'Diese Website verwendet Cookies, um Ihre Erfahrung zu verbessern und den Datenverkehr anonym zu analysieren.',
@@ -4009,6 +4154,28 @@ function avanzarPromoBar() {
 function iniciarPromoBarRotativa() {
   setInterval(avanzarPromoBar, 5000);
 }
+
+/* ═════════ POPUP PROMO HABITACIONES ═════════ */
+function cerrarPromoPopup() {
+  const overlay = document.getElementById('promo-popup-overlay');
+  overlay.classList.remove('visible');
+  sessionStorage.setItem('promoPopupVisto', '1');
+}
+
+(function initPromoPopup() {
+  if (sessionStorage.getItem('promoPopupVisto')) return;
+  const seccion = document.getElementById('habitaciones');
+  if (!seccion) return;
+  const obs = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      setTimeout(() => {
+        document.getElementById('promo-popup-overlay').classList.add('visible');
+      }, 600);
+      obs.disconnect();
+    }
+  }, { threshold: 0.2 });
+  obs.observe(seccion);
+})();
 
 /* ═════════ BANNER COOKIES ═════════ */
 function aceptarCookies(tipo) {
