@@ -1263,144 +1263,98 @@
     z-index: 9998;
     display: flex; align-items: center; justify-content: center;
     padding: 1rem;
-    opacity: 0;
-    pointer-events: none;
+    opacity: 0; pointer-events: none;
     transition: opacity 0.4s ease;
   }
-  #promo-popup-overlay.visible {
-    opacity: 1;
-    pointer-events: all;
-  }
-  /* Imagen 1122×1402 → ratio 0.8:1 (retrato) */
+  #promo-popup-overlay.visible { opacity: 1; pointer-events: all; }
   .promo-popup {
-    position: relative;
+    display: flex;
     border-radius: 20px;
     overflow: hidden;
-    width: min(420px, calc(92vh * 1122 / 1402));
-    height: min(92vh, calc(420px * 1402 / 1122));
+    width: min(780px, calc(100vw - 2rem));
+    max-height: 92vh;
     box-shadow: 0 32px 80px rgba(0,0,0,0.4);
     transform: scale(0.93) translateY(20px);
     transition: transform 0.4s ease;
-    flex-shrink: 0;
   }
-  #promo-popup-overlay.visible .promo-popup {
-    transform: scale(1) translateY(0);
+  #promo-popup-overlay.visible .promo-popup { transform: scale(1) translateY(0); }
+  /* Columna izquierda — imagen */
+  .promo-popup-img-col {
+    flex: 0 0 45%;
+    background: url('images/promo-playa.webp') center center / cover no-repeat;
+    min-height: 460px;
   }
-  .promo-popup-bg {
-    position: absolute; inset: 0;
-    background: url('images/promo-playa.webp') center top / cover no-repeat;
-  }
-  .promo-popup-bg::after {
-    content: '';
-    position: absolute; inset: 0;
-    background: linear-gradient(
-      to bottom,
-      rgba(0,0,0,0.0)  0%,
-      rgba(0,0,0,0.0)  38%,
-      rgba(0,0,0,0.55) 60%,
-      rgba(0,0,0,0.82) 100%
-    );
-  }
-  .promo-popup-content {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
+  /* Columna derecha — formulario */
+  .promo-popup-form-col {
+    flex: 1;
+    background: var(--crema);
+    padding: 2.5rem 2rem 2rem;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    padding: 2rem 1.75rem 1.75rem;
+    justify-content: center;
+    position: relative;
   }
   .promo-popup-x {
     position: absolute;
-    top: 0.9rem; right: 0.9rem;
-    background: rgba(0,0,0,0.25);
-    border: none;
-    border-radius: 50%;
-    width: 34px; height: 34px;
-    font-size: 1rem;
-    cursor: pointer;
+    top: 0.85rem; right: 0.85rem;
+    background: rgba(27,73,101,0.1);
+    border: none; border-radius: 50%;
+    width: 32px; height: 32px;
+    font-size: 0.95rem; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    color: white;
-    z-index: 2;
-    transition: background 0.2s;
-    line-height: 1;
+    color: var(--pacifico); z-index: 2;
+    transition: background 0.2s; line-height: 1;
   }
-  .promo-popup-x:hover { background: rgba(0,0,0,0.5); }
+  .promo-popup-x:hover { background: rgba(27,73,101,0.2); }
   .promo-popup-kicker {
-    font-size: 0.65rem;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: var(--sol);
-    font-weight: 600;
-    margin-bottom: 0.5rem;
+    font-size: 0.65rem; letter-spacing: 0.28em;
+    text-transform: uppercase; color: var(--sol);
+    font-weight: 600; margin-bottom: 0.6rem;
   }
   .promo-popup-titulo {
-    font-family: var(--serif);
-    font-weight: 300;
-    font-size: clamp(1.6rem, 4vw, 2.2rem);
-    color: white;
-    line-height: 1.1;
-    margin-bottom: 0.5rem;
+    font-family: var(--serif); font-weight: 300;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    color: var(--pacifico); line-height: 1.15;
+    margin-bottom: 0.6rem;
   }
-  .promo-popup-titulo em { font-style: italic; color: var(--arena); }
+  .promo-popup-titulo em { font-style: italic; color: var(--sol); }
   .promo-popup-texto {
-    font-size: 0.82rem;
-    color: rgba(255,255,255,0.75);
-    line-height: 1.5;
-    margin-bottom: 1rem;
+    font-size: 0.84rem; color: var(--carbon-suave);
+    line-height: 1.6; margin-bottom: 1.25rem;
   }
   .promo-popup-email {
-    width: 100%;
-    padding: 0.8rem 1.1rem;
+    width: 100%; padding: 0.8rem 1rem;
     border-radius: 8px;
-    border: none;
-    font-family: var(--sans);
-    font-size: 0.92rem;
+    border: 1px solid rgba(212,165,116,0.5);
+    font-family: var(--sans); font-size: 0.92rem;
     margin-bottom: 0.65rem;
-    background: rgba(255,255,255,0.95);
-    color: var(--carbon);
+    background: white; color: var(--carbon);
   }
-  .promo-popup-email::placeholder { color: rgba(44,62,80,0.45); }
-  .promo-popup-email:focus { outline: 2px solid var(--sol); }
+  .promo-popup-email::placeholder { color: rgba(44,62,80,0.4); }
+  .promo-popup-email:focus { outline: 2px solid var(--sol); border-color: transparent; }
   .promo-popup-cta {
-    width: 100%;
-    background: var(--sol);
-    color: var(--carbon);
-    padding: 0.85rem 1rem;
-    border-radius: 8px;
-    font-family: var(--sans);
-    font-size: 0.8rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    font-weight: 700;
-    cursor: pointer;
-    border: none;
-    transition: all 0.3s;
-    margin-bottom: 0.5rem;
+    width: 100%; background: var(--pacifico);
+    color: var(--crema); padding: 0.85rem 1rem;
+    border-radius: 8px; font-family: var(--sans);
+    font-size: 0.8rem; letter-spacing: 0.1em;
+    text-transform: uppercase; font-weight: 700;
+    cursor: pointer; border: none;
+    transition: background 0.25s; margin-bottom: 0.5rem;
   }
-  .promo-popup-cta:hover { background: var(--crema); }
+  .promo-popup-cta:hover { background: var(--carbon); }
   .promo-popup-cerrar {
-    background: none;
-    border: none;
-    color: rgba(255,255,255,0.55);
-    font-size: 0.78rem;
-    cursor: pointer;
-    font-family: var(--sans);
-    text-align: center;
-    width: 100%;
-    padding: 0.2rem;
+    background: none; border: none;
+    color: rgba(44,62,80,0.4); font-size: 0.78rem;
+    cursor: pointer; font-family: var(--sans);
+    text-align: center; width: 100%; padding: 0.2rem;
     transition: color 0.2s;
   }
-  .promo-popup-cerrar:hover { color: white; }
-  @media (max-width: 480px) {
-    .promo-popup {
-      width: calc(100vw - 2rem);
-      height: calc((100vw - 2rem) * 1402 / 1122);
-      max-height: 92vh;
-      border-radius: 14px;
-    }
-    .promo-popup-content { padding: 1.5rem 1.25rem 1.25rem; }
-    .promo-popup-titulo { font-size: 1.5rem; }
+  .promo-popup-cerrar:hover { color: var(--carbon); }
+  @media (max-width: 600px) {
+    .promo-popup { flex-direction: column; width: calc(100vw - 2rem); }
+    .promo-popup-img-col { flex: 0 0 200px; min-height: 200px; }
+    .promo-popup-form-col { padding: 1.5rem 1.25rem 1.25rem; }
+    .promo-popup-titulo { font-size: 1.4rem; }
   }
 
   /* ───────── BANNER COOKIES ───────── */
@@ -2906,8 +2860,10 @@
 <div id="promo-popup-overlay">
   <div class="promo-popup">
     <button class="promo-popup-x" onclick="cerrarPromoPopup()" aria-label="Cerrar">✕</button>
-    <div class="promo-popup-bg"></div>
-    <div class="promo-popup-content">
+    <!-- Columna izquierda: imagen -->
+    <div class="promo-popup-img-col"></div>
+    <!-- Columna derecha: formulario -->
+    <div class="promo-popup-form-col">
       <div class="promo-popup-kicker" data-i18n="popup_kicker">Próximamente</div>
       <p class="promo-popup-titulo" data-i18n="popup_titulo">Promociones <em>especiales</em> en camino.</p>
       <p class="promo-popup-texto" data-i18n="popup_texto">Estamos preparando ofertas exclusivas para tu próxima escapada al Pacífico. Suscríbete y sé el primero en enterarte.</p>
