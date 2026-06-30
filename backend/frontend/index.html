@@ -2868,7 +2868,7 @@
       <p class="promo-popup-titulo" data-i18n="popup_titulo">Promociones <em>especiales</em> en camino.</p>
       <p class="promo-popup-texto" data-i18n="popup_texto">Estamos preparando ofertas exclusivas para tu próxima escapada al Pacífico. Suscríbete y sé el primero en enterarte.</p>
       <input type="email" class="promo-popup-email" data-i18n-placeholder="news_placeholder" placeholder="Tu correo electrónico">
-      <button class="promo-popup-cta" onclick="document.querySelector('.newsletter').scrollIntoView({behavior:'smooth'});cerrarPromoPopup();" data-i18n="popup_cta">Avisarme</button>
+      <button class="promo-popup-cta" onclick="enviarCorreoPopup()" data-i18n="popup_cta">Avisarme</button>
       <button class="promo-popup-cerrar" onclick="cerrarPromoPopup()" data-i18n="popup_cerrar">Ahora no</button>
     </div>
   </div>
@@ -4168,6 +4168,25 @@ function cerrarPromoPopup() {
   const overlay = document.getElementById('promo-popup-overlay');
   overlay.classList.remove('visible');
   sessionStorage.setItem('promoPopupVisto', '1');
+}
+
+function enviarCorreoPopup() {
+  const input = document.querySelector('.promo-popup-email');
+  const correo = input ? input.value.trim() : '';
+  if (!correo || !correo.includes('@')) {
+    input && input.focus();
+    return;
+  }
+  // Reutiliza el mismo flujo que el newsletter (sin backend aún)
+  const cta = document.querySelector('.promo-popup-cta');
+  if (cta) { cta.disabled = true; cta.textContent = '✔'; }
+  // Sincronizar con el campo del newsletter si existe
+  const newsInput = document.getElementById('newsletter-email');
+  if (newsInput) newsInput.value = correo;
+  setTimeout(() => {
+    cerrarPromoPopup();
+    alert(t('news_gracias'));
+  }, 600);
 }
 
 (function initPromoPopup() {
