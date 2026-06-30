@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Preguntas Frecuentes — Estación del Sol</title>
+<meta name="description" content="Preguntas frecuentes sobre reservas, habitaciones, pagos y políticas del Hotel Estación del Sol en Las Núñez, Santa Elena, Ecuador." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pacifico: #1B4965;
+    --brisa: #62B6CB;
+    --crema: #FAF6F0;
+    --arena: #E8D5B7;
+    --sol: #D4A574;
+    --carbon: #2C3E50;
+    --carbon-suave: #5A6C7D;
+    --linea: rgba(27, 73, 101, 0.1);
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--sans);
+    background: var(--crema);
+    color: var(--carbon);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { text-decoration: none; color: inherit; }
+
+  /* NAV */
+  .nav {
+    background: var(--pacifico);
+    padding: 1.25rem 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .nav-brand {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    color: var(--crema);
+  }
+  .nav-brand span { font-style: italic; font-weight: 300; color: var(--sol); }
+  .nav-back {
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(250,246,240,0.7);
+    transition: color 0.3s;
+  }
+  .nav-back:hover { color: var(--sol); }
+
+  /* HERO */
+  .hero {
+    background: var(--pacifico);
+    padding: 5rem 2rem 4rem;
+    text-align: center;
+  }
+  .hero-kicker {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--sol);
+    margin-bottom: 1rem;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--crema);
+    margin-bottom: 0.75rem;
+  }
+  .hero h1 em { font-style: italic; color: var(--arena); }
+  .hero p {
+    color: rgba(250,246,240,0.7);
+    font-size: 0.95rem;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* CONTENIDO */
+  .contenido {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 4rem 2rem 6rem;
+  }
+
+  /* CATEGORIAS NAV */
+  .cat-nav {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 3.5rem;
+  }
+  .cat-btn {
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    padding: 0.5rem 1.1rem;
+    border-radius: 100px;
+    border: 1px solid var(--linea);
+    color: var(--carbon-suave);
+    background: var(--crema);
+    cursor: pointer;
+    transition: all 0.25s;
+    font-family: var(--sans);
+  }
+  .cat-btn:hover, .cat-btn.active {
+    background: var(--pacifico);
+    color: var(--crema);
+    border-color: var(--pacifico);
+  }
+
+  /* GRUPO DE CATEGORIA */
+  .grupo { margin-bottom: 3rem; }
+  .grupo-titulo {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: var(--pacifico);
+    margin-bottom: 1.25rem;
+    padding-left: 0.25rem;
+  }
+  .grupo-titulo em { font-style: italic; color: var(--sol); }
+
+  /* ACORDEON */
+  .faq-item {
+    background: rgba(250,246,240,0.6);
+    border: 1px solid var(--linea);
+    border-radius: 12px;
+    margin-bottom: 0.7rem;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .faq-item.open {
+    border-color: rgba(212,165,116,0.4);
+  }
+  .faq-q {
+    width: 100%;
+    text-align: left;
+    padding: 1.15rem 1.5rem;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--sans);
+    font-size: 0.96rem;
+    font-weight: 500;
+    color: var(--carbon);
+    gap: 1rem;
+  }
+  .faq-icon {
+    width: 26px; height: 26px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 1px solid var(--linea);
+    color: var(--pacifico);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    transition: all 0.3s;
+  }
+  .faq-item.open .faq-icon {
+    background: var(--sol);
+    border-color: var(--sol);
+    color: var(--crema);
+    transform: rotate(45deg);
+  }
+  .faq-icon::before, .faq-icon::after {
+    content: '';
+    position: absolute;
+    background: currentColor;
+  }
+  .faq-icon::before { width: 11px; height: 1.3px; }
+  .faq-icon::after { width: 1.3px; height: 11px; }
+
+  .faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+  }
+  .faq-a-inner {
+    padding: 0 1.5rem 1.4rem;
+    color: var(--carbon-suave);
+    font-size: 0.92rem;
+    line-height: 1.7;
+  }
+  .faq-a-inner strong { color: var(--carbon); font-weight: 500; }
+
+  /* CTA FINAL */
+  .cta-final {
+    margin-top: 4rem;
+    text-align: center;
+    padding: 2.5rem;
+    background: var(--arena);
+    border-radius: 16px;
+  }
+  .cta-final h3 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 1.4rem;
+    color: var(--pacifico);
+    margin-bottom: 0.5rem;
+  }
+  .cta-final h3 em { font-style: italic; }
+  .cta-final p {
+    color: var(--carbon-suave);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--pacifico);
+    color: var(--crema);
+    padding: 0.85rem 1.75rem;
+    border-radius: 100px;
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition: all 0.3s;
+  }
+  .cta-btn:hover { background: var(--sol); color: var(--carbon); }
+
+  /* FOOTER */
+  footer {
+    background: var(--carbon);
+    color: rgba(250,246,240,0.5);
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.82rem;
+  }
+  footer a { color: var(--sol); }
+
+  @media (max-width: 600px) {
+    .contenido { padding: 3rem 1.25rem 4rem; }
+    .hero { padding: 3.5rem 1.25rem 3rem; }
+    .faq-q { font-size: 0.9rem; padding: 1rem 1.1rem; }
+    .cat-nav { gap: 0.4rem; }
+    .cat-btn { font-size: 0.72rem; padding: 0.45rem 0.9rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" class="nav-brand">Estación del <span>Sol</span></a>
+  <a href="/" class="nav-back">← Volver al inicio</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-kicker">Antes de reservar</div>
+  <h1>Preguntas <em>Frecuentes</em></h1>
+  <p>Todo lo que necesitas saber antes de tu estadía en Las Núñez.</p>
+</div>
+
+<!-- CONTENIDO -->
+<div class="contenido">
+
+  <!-- FILTRO DE CATEGORIAS -->
+  <div class="cat-nav" id="catNav">
+    <button class="cat-btn active" data-cat="todas">Todas</button>
+    <button class="cat-btn" data-cat="reservas">Reservas y pagos</button>
+    <button class="cat-btn" data-cat="habitaciones">Habitaciones</button>
+    <button class="cat-btn" data-cat="politicas">Políticas</button>
+    <button class="cat-btn" data-cat="zona">Ubicación y zona</button>
+    <button class="cat-btn" data-cat="cancelaciones">Cancelaciones</button>
+  </div>
+
+  <!-- RESERVAS Y PAGOS -->
+  <div class="grupo" data-group="reservas">
+    <div class="grupo-titulo">Reservas y <em>pagos</em></div>
+
+    <div class="faq-item">
+      <button class="faq-q">¿Cómo puedo reservar una habitación?<span class="faq-icon"></span></button>
+      <div class="faq-a"><div class="faq-a-inner">Puedes reservar directamente en nuestro sitio web seleccionando fechas y huéspedes, o escribiéndonos por <strong>WhatsApp al +593 98 672 1666</strong>. Te confirmamos disponibilidad y coordinamos el pago.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">¿Qué métodos de pago aceptan?<span class="faq-icon"></span></button>
+      <div class="faq-a"><div class="faq-a-inner">Aceptamos <strong>transferencia bancaria</strong> y <strong>pago en el hotel al llegar</strong>. Estamos trabajando para habilitar pago con tarjeta directamente en el sitio próximamente.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">¿Tienen descuento por pago por transferencia?<span class="faq-icon"></span></button>
+      <div class="faq-a"><div class="faq-a-inner">Sí. Si pagas tu reserva por <strong>transferencia bancaria anticipada</strong>, obtienes un <strong>5% de descuento</strong> sobre el valor total de tu estadía.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">¿Cómo se calcula el precio de mi reserva?<span class="faq-icon"></span></button>
+      <div class="faq-a"><div class="faq-a-inner">La tarifa es de <strong>$20 por persona por noche</strong>. Si viajas solo, la tarifa individual es de <strong>$25 fijo</strong> por noche. Los niños de 6 a 10 años pagan el 50%, y el primer niño de 0 a 5 años por habitación no paga si duerme con sus padres. Todo precio incluye <strong>IVA del 15%</strong> calculado al finalizar tu reserva.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">¿Emiten factura?<span class="faq-icon"></span></button>
+      <div class="faq-a"><div class="faq-a-inner">Sí, podemos emitir el comprobante correspondiente. Indícanoslo al momento de reservar.</div></div>
+    </div>
+  </div>
+
+  <!-- HABITACIONES -->
+  <div class="grupo" data-group="habitaciones">
+    <div class="grupo-titulo">Sobre las <em>habitaciones</em></div>
+
+    <div class="faq-item">
+      <button class="faq-q">¿Cuántas habitaciones tiene el hotel?<span class="faq-icon"></span></button>
+      <div class="faq-a"><div class="faq-a-inner">Contamos con <strong>7 habitaciones</strong> distribuidas en dos bloques, con vista al mar, a la piscina y a la montaña.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">¿Cuántas personas caben por habitación?<span class="faq-icon"></span></button>
+      <div class="faq-a"><div class="faq-a-inner">Según la habitación, la capacidad va de <strong>3 a 5 personas</strong>. Cada ficha de habitación en nuestro sitio indica su capacidad máxima exacta.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">¿Todas las habitaciones tienen baño privado?<span class="faq-icon"></span></button>
+      <div class="faq-a"><div class="faq-a-inner">Sí, las 7 habitaciones cuentan con <strong>baño privado, aire acondicionado y wifi</strong> sin excepción.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">¿Las habitaciones tienen televisor?<span class="faq-icon"></span></button>
+      <div class="faq-a"><div class="faq-a-inner">No. Decidimos no poner televisores para que la estadía se sienta como una verdadera desconexión: solo el mar, la brisa y la calma de Las Núñez.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">¿Puedo elegir la vista de mi habitación?<span class="faq-icon"></span></button>
+      <div class="faq-a"><div class="faq-a-inner">Sí. Tenemos habitaciones con <strong>vista al mar</strong>, <strong>vista a la piscina</strong> y <strong>vista a la montaña</strong>. Puedes elegir directamente desde nuestra página de habitaciones.</div></div>
+    </div>
+  </div>
+
+  <!-- POLITICAS -->
+  <div class="grupo" data-group="politicas">
+    <div class="grupo-titulo">Políticas del <em>hotel</em></div>
+
+    <div class="faq-item">
+      <button class="faq-q">¿Cuál es el horario de check-in y check-out?<span class="faq-icon"></span></button>
+      <div class="faq-a"><div class="faq-a-inner">El check-in es a partir de las <strong>3:00 pm</strong> y el check-out hasta las <strong>2:00 pm</strong>. Si necesitas un horario distinto, escríbenos y vemos disponibilidad.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">¿Puedo hacer check-in en línea?<span class="faq-icon"></span></button>
+      <div class="faq-a"><div class="faq-a-inner">Sí. Una vez confirmada tu reserva te enviamos un enlace de check-in en línea para que llenes tus datos antes de llegar y agilizar tu ingreso.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">¿Aceptan mascotas?<span class="faq-icon"></span></button>
+      <div class="faq-a"><div class="faq-a-inner">Sí, somos <strong>pet-friendly</strong>. Aceptamos hasta <strong>1 mascota por habitación</strong> con un costo adicional de <strong>$5 por noche</strong>.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">¿Los niños pagan?<span class="faq-icon"></span></button>
+      <div class="faq-a"><div class="faq-a-inner">Depende de la edad: <strong>0 a 5 años</strong> no pagan si duermen con sus padres (1 por habitación), <strong>6 a 10 años</strong> pagan el 50% de la tarifa, y <strong>11 años en adelante</strong> pagan tarifa completa.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">¿Tienen piscina y áreas comunes?<span class="faq-icon"></span></button>
+      <div class="faq-a"><div class="faq-a-inner">Sí. Contamos con <strong>piscina propia</strong>, <strong>terraza panorámica</strong> con vista 360°, mirador, área social y zona de karaoke.</div></div>
+    </div>
+  </div>
+
+  <!-- UBICACION Y ZONA -->
+  <div class="grupo" data-group="zona">
+    <div class="grupo-titulo">Ubicación y <em>zona</em></div>
+
+    <div class="faq-item">
+      <button class="faq-q">¿Dónde está exactamente el hotel?<span class="faq-icon"></span></button>
+      <div class="faq-a"><div class="faq-a-inner">Estamos en <strong>Las Núñez, Santa Elena, Ecuador</strong>, sobre la Ruta del Spondylus. Puedes ver la ubicación exacta en Google Maps desde nuestra página de Ubicación.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">¿Qué tan lejos está de Montañita?<span class="faq-icon"></span></button>
+      <div class="faq-a"><div class="faq-a-inner">Montañita está a unos <strong>10 minutos</strong>. Olón está a 5 minutos y Manglaralto a 15 minutos.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">¿Es temporada de ballenas?<span class="faq-icon"></span></button>
+      <div class="faq-a"><div class="faq-a-inner">La temporada de avistamiento de ballenas jorobadas en la costa ecuatoriana va de <strong>junio a septiembre</strong>. Si viajas en esas fechas, puedes verlas desde nuestra terraza.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">¿Tienen parqueo?<span class="faq-icon"></span></button>
+      <div class="faq-a"><div class="faq-a-inner">Sí, contamos con <strong>estacionamiento gratuito</strong> dentro de las instalaciones del hotel.</div></div>
+    </div>
+  </div>
+
+  <!-- CANCELACIONES -->
+  <div class="grupo" data-group="cancelaciones">
+    <div class="grupo-titulo"><em>Cancelaciones</em> y cambios</div>
+
+    <div class="faq-item">
+      <button class="faq-q">¿Puedo cancelar mi reserva?<span class="faq-icon"></span></button>
+      <div class="faq-a"><div class="faq-a-inner">Sí, escríbenos por WhatsApp lo antes posible. Evaluamos cada caso según el tiempo de anticipación y la disponibilidad de la habitación.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">¿Puedo cambiar las fechas de mi reserva?<span class="faq-icon"></span></button>
+      <div class="faq-a"><div class="faq-a-inner">Sí, siempre que haya disponibilidad en las nuevas fechas. Contáctanos con anticipación para coordinar el cambio.</div></div>
+    </div>
+  </div>
+
+  <!-- CTA FINAL -->
+  <div class="cta-final">
+    <h3>¿No encontraste tu <em>respuesta?</em></h3>
+    <p>Escríbenos directamente y te respondemos lo más pronto posible.</p>
+    <a href="https://wa.me/593986721666?text=Hola%2C%20tengo%20una%20pregunta%20sobre%20Estaci%C3%B3n%20del%20Sol" class="cta-btn" target="_blank">Escribir por WhatsApp</a>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Estación del Sol · <a href="/privacy-policy.html">Política de Privacidad</a> · Las Núñez, Santa Elena, Ecuador</p>
+</footer>
+
+<script>
+  // Acordeón
+  document.querySelectorAll('.faq-item').forEach(item => {
+    const btn = item.querySelector('.faq-q');
+    const ans = item.querySelector('.faq-a');
+    btn.addEventListener('click', () => {
+      const isOpen = item.classList.contains('open');
+      // Cierra todos
+      document.querySelectorAll('.faq-item').forEach(i => {
+        i.classList.remove('open');
+        i.querySelector('.faq-a').style.maxHeight = null;
+      });
+      // Abre el actual si no estaba abierto
+      if (!isOpen) {
+        item.classList.add('open');
+        ans.style.maxHeight = ans.scrollHeight + 'px';
+      }
+    });
+  });
+
+  // Filtro de categorías
+  const catBtns = document.querySelectorAll('.cat-btn');
+  const grupos = document.querySelectorAll('.grupo');
+  catBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      catBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat = btn.dataset.cat;
+      grupos.forEach(g => {
+        g.style.display = (cat === 'todas' || g.dataset.group === cat) ? 'block' : 'none';
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
