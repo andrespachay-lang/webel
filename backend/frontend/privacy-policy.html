@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Política de Privacidad — Estación del Sol</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pacifico: #1B4965;
+    --sol: #D4A574;
+    --crema: #FAF6F0;
+    --arena: #E8D5B7;
+    --carbon: #2C3E50;
+    --carbon-suave: #5A6C7D;
+    --linea: rgba(27, 73, 101, 0.1);
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--sans);
+    background: var(--crema);
+    color: var(--carbon);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* NAV */
+  .nav {
+    background: var(--pacifico);
+    padding: 1.25rem 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .nav-brand {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    color: var(--crema);
+    text-decoration: none;
+  }
+  .nav-brand span { font-style: italic; font-weight: 300; color: var(--sol); }
+  .nav-back {
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(250,246,240,0.7);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-back:hover { color: var(--sol); }
+
+  /* HERO */
+  .hero {
+    background: var(--pacifico);
+    padding: 5rem 2rem 4rem;
+    text-align: center;
+  }
+  .hero-kicker {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--sol);
+    margin-bottom: 1rem;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--crema);
+    margin-bottom: 1rem;
+  }
+  .hero h1 em { font-style: italic; color: var(--arena); }
+  .hero-fecha {
+    font-size: 0.8rem;
+    color: rgba(250,246,240,0.5);
+    letter-spacing: 0.1em;
+  }
+
+  /* CONTENIDO */
+  .contenido {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+  }
+
+  .seccion {
+    margin-bottom: 3rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid var(--linea);
+  }
+  .seccion:last-child {
+    border-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  .seccion-num {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--sol);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+  .seccion h2 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 1.6rem;
+    color: var(--pacifico);
+    margin-bottom: 1.25rem;
+    line-height: 1.2;
+  }
+  .seccion h2 em { font-style: italic; }
+  .seccion p {
+    color: var(--carbon-suave);
+    margin-bottom: 1rem;
+    font-size: 0.98rem;
+  }
+  .seccion p:last-child { margin-bottom: 0; }
+  .seccion ul {
+    list-style: none;
+    margin: 0.75rem 0;
+  }
+  .seccion ul li {
+    color: var(--carbon-suave);
+    font-size: 0.98rem;
+    padding: 0.4rem 0;
+    padding-left: 1.25rem;
+    position: relative;
+  }
+  .seccion ul li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 50%;
+    transform: translateY(-50%);
+    width: 5px; height: 5px;
+    background: var(--sol);
+    border-radius: 50%;
+  }
+  .seccion strong { color: var(--carbon); font-weight: 500; }
+
+  /* CONTACTO BOX */
+  .contacto-box {
+    background: rgba(212,165,116,0.1);
+    border: 1px solid rgba(212,165,116,0.25);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1.25rem;
+  }
+  .contacto-box p {
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+  }
+  .contacto-box a {
+    color: var(--pacifico);
+    font-weight: 500;
+    text-decoration: none;
+  }
+  .contacto-box a:hover { color: var(--sol); }
+
+  /* FOOTER */
+  footer {
+    background: var(--carbon);
+    color: rgba(250,246,240,0.5);
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.82rem;
+  }
+  footer a {
+    color: var(--sol);
+    text-decoration: none;
+  }
+
+  @media (max-width: 600px) {
+    .contenido { padding: 3rem 1.25rem; }
+    .hero { padding: 3.5rem 1.25rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" class="nav-brand">Estación del <span>Sol</span></a>
+  <a href="/" class="nav-back">← Volver al inicio</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-kicker">Legal · Privacidad</div>
+  <h1>Política de <em>Privacidad</em></h1>
+  <div class="hero-fecha">Última actualización: junio 2026</div>
+</div>
+
+<!-- CONTENIDO -->
+<div class="contenido">
+
+  <div class="seccion">
+    <div class="seccion-num">Introducción</div>
+    <h2>Tu privacidad nos <em>importa.</em></h2>
+    <p>En Estación del Sol recopilamos solo la información estrictamente necesaria para gestionar tu reserva y brindarte una buena estadía. No vendemos tus datos ni los compartimos con terceros con fines comerciales.</p>
+    <p>Esta política aplica al sitio web <strong>hotelestaciondelsol.com</strong> y a cualquier comunicación relacionada con tu reserva.</p>
+  </div>
+
+  <div class="seccion">
+    <div class="seccion-num">01</div>
+    <h2>¿Qué información <em>recopilamos?</em></h2>
+    <p>Solo recopilamos lo que necesitamos para confirmar y gestionar tu reserva:</p>
+    <ul>
+      <li>Nombre y apellido</li>
+      <li>Número de cédula o pasaporte</li>
+      <li>Correo electrónico</li>
+      <li>Número de teléfono o WhatsApp</li>
+      <li>Fechas de llegada y salida</li>
+      <li>Número de huéspedes</li>
+      <li>Solicitudes especiales que nos compartas</li>
+    </ul>
+    <p>Para el check-in en línea también podemos solicitar una foto de tu documento de identidad, únicamente con fines de verificación.</p>
+  </div>
+
+  <div class="seccion">
+    <div class="seccion-num">02</div>
+    <h2>¿Para qué usamos <em>tus datos?</em></h2>
+    <p>Usamos tu información exclusivamente para:</p>
+    <ul>
+      <li>Confirmar y gestionar tu reserva</li>
+      <li>Enviarte la confirmación y detalles de tu estadía por correo</li>
+      <li>Coordinar tu llegada y check-in</li>
+      <li>Comunicarnos contigo por WhatsApp si es necesario</li>
+      <li>Cumplir con los requisitos legales de hospedaje en Ecuador</li>
+    </ul>
+    <p>No usamos tus datos para publicidad, no te enviamos correos no solicitados ni compartimos tu información con terceros con fines comerciales.</p>
+  </div>
+
+  <div class="seccion">
+    <div class="seccion-num">03</div>
+    <h2>¿Con quién compartimos <em>tu información?</em></h2>
+    <p>No vendemos ni cedemos tus datos personales. Únicamente podríamos compartir información con:</p>
+    <ul>
+      <li><strong>Google</strong> — a través de Search Console y Analytics para entender el tráfico del sitio, sin datos personales identificables</li>
+      <li><strong>Autoridades ecuatorianas</strong> — si la ley lo requiere en el marco de la actividad hotelera</li>
+    </ul>
+    <p>Ningún otro tercero tiene acceso a tus datos personales.</p>
+  </div>
+
+  <div class="seccion">
+    <div class="seccion-num">04</div>
+    <h2>¿Cuánto tiempo guardamos <em>tus datos?</em></h2>
+    <p>Conservamos tu información durante el tiempo necesario para cumplir con los fines descritos en esta política y con las obligaciones legales de hospedaje en Ecuador.</p>
+    <p>Como regla general, eliminamos o anonimizamos los datos de reservas pasadas después de <strong>2 años</strong> desde la fecha de tu estadía.</p>
+    <p>Puedes solicitar la eliminación de tus datos en cualquier momento escribiéndonos.</p>
+  </div>
+
+  <div class="seccion">
+    <div class="seccion-num">05</div>
+    <h2>Cookies y <em>tecnologías similares</em></h2>
+    <p>Este sitio usa cookies mínimas para funcionar correctamente:</p>
+    <ul>
+      <li><strong>Preferencia de idioma</strong> — recuerda si elegiste español, inglés o alemán</li>
+      <li><strong>Google Analytics</strong> — datos anónimos de navegación para mejorar el sitio</li>
+    </ul>
+    <p>No usamos cookies de publicidad ni de seguimiento entre sitios. Puedes desactivar las cookies desde la configuración de tu navegador sin afectar la funcionalidad principal del sitio.</p>
+  </div>
+
+  <div class="seccion">
+    <div class="seccion-num">06</div>
+    <h2>Tus <em>derechos</em></h2>
+    <p>Tienes derecho a:</p>
+    <ul>
+      <li>Acceder a los datos personales que tenemos sobre ti</li>
+      <li>Solicitar la corrección de datos incorrectos</li>
+      <li>Solicitar la eliminación de tus datos</li>
+      <li>Oponerte al uso de tu información</li>
+    </ul>
+    <p>Si eres residente de la Unión Europea, estos derechos están amparados por el <strong>Reglamento General de Protección de Datos (GDPR)</strong>. Responderemos a tu solicitud en un plazo máximo de 30 días.</p>
+    <p>Para ejercer cualquiera de estos derechos, contáctanos directamente.</p>
+  </div>
+
+  <div class="seccion">
+    <div class="seccion-num">07</div>
+    <h2>Seguridad de <em>tus datos</em></h2>
+    <p>Tomamos medidas razonables para proteger tu información personal contra accesos no autorizados. Sin embargo, ningún sistema de transmisión de datos por internet es completamente seguro.</p>
+    <p>Si tienes alguna preocupación sobre la seguridad de tus datos, contáctanos de inmediato.</p>
+  </div>
+
+  <div class="seccion">
+    <div class="seccion-num">08</div>
+    <h2>Cambios a esta <em>política</em></h2>
+    <p>Podemos actualizar esta política ocasionalmente. Cuando lo hagamos, actualizaremos la fecha en la parte superior de esta página. Te recomendamos revisarla periódicamente.</p>
+    <p>El uso continuado del sitio después de cualquier cambio implica tu aceptación de la política actualizada.</p>
+  </div>
+
+  <div class="seccion">
+    <div class="seccion-num">09</div>
+    <h2><em>Contáctanos</em></h2>
+    <p>Si tienes preguntas sobre esta política o quieres ejercer tus derechos, escríbenos:</p>
+    <div class="contacto-box">
+      <p>📧 <a href="mailto:arena@hotelestaciondelsol.com">arena@hotelestaciondelsol.com</a></p>
+      <p>💬 <a href="https://wa.me/593986721666">WhatsApp +593 98 672 1666</a></p>
+      <p>📍 Las Núñez, Santa Elena, Ecuador</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Estación del Sol · <a href="/privacy-policy.html">Política de Privacidad</a> · Las Núñez, Santa Elena, Ecuador</p>
+</footer>
+
+</body>
+</html>

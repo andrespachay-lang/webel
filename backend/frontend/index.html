@@ -1148,6 +1148,30 @@
   }
   .newsletter-campo input::placeholder { color: rgba(250, 246, 240, 0.5); }
   .newsletter-campo input:focus { outline: none; }
+  .newsletter-check {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.85rem;
+    cursor: pointer;
+  }
+  .newsletter-check input[type="checkbox"] {
+    width: 14px; height: 14px;
+    accent-color: var(--sol);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .newsletter-check span {
+    font-size: 0.78rem;
+    color: rgba(250, 246, 240, 0.55);
+  }
+  .newsletter-check a {
+    color: var(--sol);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .newsletter-check a:hover { color: var(--crema); }
+
   .newsletter-btn {
     flex-shrink: 0;
     background: transparent;
@@ -2591,6 +2615,10 @@
     <form class="newsletter-form" id="newsletter-form">
       <div class="newsletter-campo">
         <input type="email" id="newsletter-email" data-i18n-placeholder="news_placeholder" placeholder="Tu correo" required>
+        <label class="newsletter-check">
+          <input type="checkbox" required>
+          <span data-i18n="news_privacidad">Acepto la <a href="/privacy-policy.html" target="_blank" data-i18n="news_privacidad_link">Política de Privacidad</a></span>
+        </label>
       </div>
       <button type="submit" class="newsletter-btn" data-i18n="news_boton">Inscribirme</button>
     </form>
@@ -3004,6 +3032,8 @@ const i18n = {
     news_placeholder: 'Tu correo',
     news_boton: 'Inscribirme',
     news_gracias: '¡Gracias por suscribirte! Pronto recibirás noticias de Estación del Sol.',
+    news_privacidad: 'Acepto la <a href="/privacy-policy.html" target="_blank">Política de Privacidad</a>',
+    news_privacidad_link: 'Política de Privacidad',
 
     foot_tag: 'Como tu casa en la playa.',
     foot_desc: 'Hotel Estación del Sol en Las Núñez, Santa Elena, Ruta del Spondylus, Ecuador.',
@@ -3257,6 +3287,8 @@ const i18n = {
     news_placeholder: 'Your email',
     news_boton: 'Enroll',
     news_gracias: 'Thanks for subscribing! You will soon receive news from Estación del Sol.',
+    news_privacidad: 'I accept the <a href="/privacy-policy.html" target="_blank">Privacy Policy</a>',
+    news_privacidad_link: 'Privacy Policy',
 
     foot_tag: 'Like your home by the sea.',
     foot_desc: 'Estación del Sol hotel in Las Núñez, Santa Elena, Spondylus Route, Ecuador.',
