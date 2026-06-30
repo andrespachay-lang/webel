@@ -1255,6 +1255,75 @@
     color: rgba(250,246,240,0.4);
   }
 
+  /* ───────── BANNER COOKIES ───────── */
+  #cookie-banner {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(680px, calc(100% - 2rem));
+    background: var(--crema);
+    border: 1px solid var(--arena);
+    border-radius: 16px;
+    box-shadow: 0 8px 40px rgba(27,73,101,0.18);
+    z-index: 9999;
+    padding: 1.75rem 2rem;
+    animation: cookieIn 0.4s ease;
+  }
+  @keyframes cookieIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+  .cookie-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .cookie-titulo {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    color: var(--pacifico);
+    margin-bottom: 0.4rem;
+    font-weight: 300;
+  }
+  .cookie-texto {
+    font-size: 0.9rem;
+    color: var(--carbon-suave);
+    line-height: 1.6;
+  }
+  .cookie-btns {
+    display: flex;
+    gap: 0.75rem;
+  }
+  .cookie-btn {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border-radius: 100px;
+    font-family: var(--sans);
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    border: none;
+  }
+  .cookie-btn--accept {
+    background: var(--pacifico);
+    color: var(--crema);
+  }
+  .cookie-btn--accept:hover { background: var(--sol); color: var(--carbon); }
+  .cookie-btn--essential {
+    background: transparent;
+    color: var(--pacifico);
+    border: 1px solid rgba(27,73,101,0.3);
+  }
+  .cookie-btn--essential:hover { border-color: var(--pacifico); }
+  @media (max-width: 500px) {
+    .cookie-btns { flex-direction: column; }
+    #cookie-banner { padding: 1.5rem; }
+  }
+
   /* ───────── WHATSAPP FLOAT ───────── */
   .wa-btn {
     position: fixed;
@@ -2684,6 +2753,20 @@
   </div>
 </footer>
 
+<!-- BANNER DE COOKIES -->
+<div id="cookie-banner" style="display:none;">
+  <div class="cookie-inner">
+    <div>
+      <p class="cookie-titulo" data-i18n="cookie_titulo">Usamos cookies</p>
+      <p class="cookie-texto" data-i18n="cookie_texto">Este sitio usa cookies para mejorar tu experiencia de navegación y analizar el tráfico de forma anónima.</p>
+    </div>
+    <div class="cookie-btns">
+      <button class="cookie-btn cookie-btn--accept" onclick="aceptarCookies('all')" data-i18n="cookie_aceptar">Aceptar todo</button>
+      <button class="cookie-btn cookie-btn--essential" onclick="aceptarCookies('essential')" data-i18n="cookie_esencial">Solo esenciales</button>
+    </div>
+  </div>
+</div>
+
 <!-- WHATSAPP FLOAT -->
 <a href="https://wa.me/593986721666?text=Hola%2C%20quisiera%20info%20sobre%20Estaci%C3%B3n%20del%20Sol" class="wa-btn" target="_blank" aria-label="WhatsApp">
   <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
@@ -3049,6 +3132,11 @@ const i18n = {
     cta_texto: 'Solo 7 habitaciones — recibimos pocos huéspedes a la vez para que la experiencia sea íntima. Reserva con anticipación.',
     cta_boton: 'Ver habitaciones disponibles',
 
+    cookie_titulo: 'Usamos cookies',
+    cookie_texto: 'Este sitio usa cookies para mejorar tu experiencia de navegación y analizar el tráfico de forma anónima.',
+    cookie_aceptar: 'Aceptar todo',
+    cookie_esencial: 'Solo esenciales',
+
     news_kicker: 'Newsletter',
     news_texto: 'Recibe noticias y promociones de Estación del Sol en tu correo.',
     news_placeholder: 'Tu correo',
@@ -3310,6 +3398,11 @@ const i18n = {
     cta_texto: 'Only 7 rooms — we welcome few guests at a time so the experience stays intimate. Book ahead.',
     cta_boton: 'View available rooms',
 
+    cookie_titulo: 'We use cookies',
+    cookie_texto: 'This website uses cookies to help us make your experience better and analyse traffic anonymously.',
+    cookie_aceptar: 'Accept all',
+    cookie_esencial: 'Essential only',
+
     news_kicker: 'Newsletter',
     news_texto: 'Receive news and offers from Estación del Sol in your inbox.',
     news_placeholder: 'Your email',
@@ -3568,6 +3661,11 @@ const i18n = {
     cta_titulo: 'Dürfen wir Sie <em>erwarten</em>?',
     cta_texto: 'Nur 7 Zimmer – wir empfangen jeweils wenige Gäste, damit das Erlebnis persönlich bleibt. Frühzeitig buchen.',
     cta_boton: 'Verfügbare Zimmer ansehen',
+
+    cookie_titulo: 'Wir verwenden Cookies',
+    cookie_texto: 'Diese Website verwendet Cookies, um Ihre Erfahrung zu verbessern und den Datenverkehr anonym zu analysieren.',
+    cookie_aceptar: 'Alle akzeptieren',
+    cookie_esencial: 'Nur wesentliche',
 
     news_kicker: 'Newsletter',
     news_texto: 'Erhalten Sie Neuigkeiten und Angebote von Estación del Sol in Ihrem Postfach.',
@@ -3907,6 +4005,26 @@ function avanzarPromoBar() {
 function iniciarPromoBarRotativa() {
   setInterval(avanzarPromoBar, 5000);
 }
+
+/* ═════════ BANNER COOKIES ═════════ */
+function aceptarCookies(tipo) {
+  localStorage.setItem('cookieConsent', tipo);
+  const banner = document.getElementById('cookie-banner');
+  if (banner) {
+    banner.style.animation = 'none';
+    banner.style.opacity = '0';
+    banner.style.transform = 'translateX(-50%) translateY(20px)';
+    banner.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+    setTimeout(() => { banner.style.display = 'none'; }, 300);
+  }
+}
+
+(function initCookieBanner() {
+  if (!localStorage.getItem('cookieConsent')) {
+    const banner = document.getElementById('cookie-banner');
+    if (banner) banner.style.display = 'block';
+  }
+})();
 
 /* ═════════ NEWSLETTER ═════════ */
 document.getElementById('newsletter-form').addEventListener('submit', (e) => {
