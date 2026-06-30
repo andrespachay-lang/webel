@@ -1258,7 +1258,7 @@
   /* ───────── POPUP PROMO ───────── */
   #promo-popup-overlay {
     position: fixed; inset: 0;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.55);
     backdrop-filter: blur(4px);
     z-index: 9998;
     display: flex; align-items: center; justify-content: center;
@@ -1271,51 +1271,53 @@
     opacity: 1;
     pointer-events: all;
   }
+  /* Imagen 1122×1402 → ratio 0.8:1 (retrato) */
   .promo-popup {
     position: relative;
-    border-radius: 16px;
+    border-radius: 20px;
     overflow: hidden;
-    max-width: 680px;
-    width: 100%;
-    max-height: 92vh;
-    box-shadow: 0 32px 80px rgba(0,0,0,0.35);
+    width: min(420px, calc(92vh * 1122 / 1402));
+    height: min(92vh, calc(420px * 1402 / 1122));
+    box-shadow: 0 32px 80px rgba(0,0,0,0.4);
     transform: scale(0.93) translateY(20px);
     transition: transform 0.4s ease;
+    flex-shrink: 0;
   }
   #promo-popup-overlay.visible .promo-popup {
     transform: scale(1) translateY(0);
   }
   .promo-popup-bg {
     position: absolute; inset: 0;
-    background: url('images/promo-playa.webp') center/cover no-repeat;
+    background: url('images/promo-playa.webp') center top / cover no-repeat;
   }
   .promo-popup-bg::after {
     content: '';
     position: absolute; inset: 0;
     background: linear-gradient(
       to bottom,
-      rgba(0,0,0,0.05) 0%,
-      rgba(0,0,0,0.35) 50%,
-      rgba(0,0,0,0.78) 100%
+      rgba(0,0,0,0.0)  0%,
+      rgba(0,0,0,0.0)  38%,
+      rgba(0,0,0,0.55) 60%,
+      rgba(0,0,0,0.82) 100%
     );
   }
   .promo-popup-content {
-    position: relative;
+    position: absolute;
+    inset: 0;
     z-index: 1;
-    padding: 3.5rem 2.5rem 2.5rem;
     display: flex;
     flex-direction: column;
-    min-height: 460px;
     justify-content: flex-end;
+    padding: 2rem 1.75rem 1.75rem;
   }
   .promo-popup-x {
     position: absolute;
-    top: 1rem; right: 1.1rem;
-    background: rgba(255,255,255,0.15);
+    top: 0.9rem; right: 0.9rem;
+    background: rgba(0,0,0,0.25);
     border: none;
     border-radius: 50%;
     width: 34px; height: 34px;
-    font-size: 1.1rem;
+    font-size: 1rem;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     color: white;
@@ -1323,71 +1325,82 @@
     transition: background 0.2s;
     line-height: 1;
   }
-  .promo-popup-x:hover { background: rgba(255,255,255,0.3); }
+  .promo-popup-x:hover { background: rgba(0,0,0,0.5); }
   .promo-popup-kicker {
-    font-size: 0.68rem;
+    font-size: 0.65rem;
     letter-spacing: 0.28em;
     text-transform: uppercase;
     color: var(--sol);
     font-weight: 600;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
   }
   .promo-popup-titulo {
     font-family: var(--serif);
     font-weight: 300;
-    font-size: clamp(2rem, 5vw, 2.6rem);
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
     color: white;
     line-height: 1.1;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
   }
   .promo-popup-titulo em { font-style: italic; color: var(--arena); }
+  .promo-popup-texto {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
   .promo-popup-email {
     width: 100%;
-    padding: 0.9rem 1.25rem;
+    padding: 0.8rem 1.1rem;
     border-radius: 8px;
     border: none;
     font-family: var(--sans);
-    font-size: 0.95rem;
-    margin-bottom: 0.75rem;
+    font-size: 0.92rem;
+    margin-bottom: 0.65rem;
     background: rgba(255,255,255,0.95);
     color: var(--carbon);
   }
-  .promo-popup-email::placeholder { color: rgba(44,62,80,0.5); }
+  .promo-popup-email::placeholder { color: rgba(44,62,80,0.45); }
   .promo-popup-email:focus { outline: 2px solid var(--sol); }
   .promo-popup-cta {
     width: 100%;
     background: var(--sol);
     color: var(--carbon);
-    padding: 0.9rem 1rem;
+    padding: 0.85rem 1rem;
     border-radius: 8px;
     font-family: var(--sans);
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     border: none;
     transition: all 0.3s;
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.5rem;
   }
   .promo-popup-cta:hover { background: var(--crema); }
   .promo-popup-cerrar {
     background: none;
     border: none;
-    color: rgba(255,255,255,0.6);
-    font-size: 0.8rem;
+    color: rgba(255,255,255,0.55);
+    font-size: 0.78rem;
     cursor: pointer;
     font-family: var(--sans);
     text-align: center;
     width: 100%;
-    padding: 0.25rem;
+    padding: 0.2rem;
     transition: color 0.2s;
   }
   .promo-popup-cerrar:hover { color: white; }
-  @media (max-width: 600px) {
-    .promo-popup { max-width: 100%; border-radius: 12px; }
-    .promo-popup-content { padding: 2.5rem 1.25rem 1.75rem; min-height: 380px; }
-    .promo-popup-titulo { font-size: clamp(1.5rem, 7vw, 2rem); }
+  @media (max-width: 480px) {
+    .promo-popup {
+      width: calc(100vw - 2rem);
+      height: calc((100vw - 2rem) * 1402 / 1122);
+      max-height: 92vh;
+      border-radius: 14px;
+    }
+    .promo-popup-content { padding: 1.5rem 1.25rem 1.25rem; }
+    .promo-popup-titulo { font-size: 1.5rem; }
   }
 
   /* ───────── BANNER COOKIES ───────── */
