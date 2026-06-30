@@ -1275,7 +1275,7 @@
     position: relative;
     border-radius: 16px;
     overflow: hidden;
-    max-width: 520px;
+    max-width: 680px;
     width: 100%;
     max-height: 92vh;
     box-shadow: 0 32px 80px rgba(0,0,0,0.35);
@@ -1287,25 +1287,25 @@
   }
   .promo-popup-bg {
     position: absolute; inset: 0;
-    background: url('images/promo-popup.jpg') center/cover no-repeat;
+    background: url('images/promo-playa.webp') center/cover no-repeat;
   }
   .promo-popup-bg::after {
     content: '';
     position: absolute; inset: 0;
     background: linear-gradient(
       to bottom,
-      rgba(0,0,0,0.18) 0%,
-      rgba(0,0,0,0.45) 55%,
-      rgba(0,0,0,0.72) 100%
+      rgba(0,0,0,0.05) 0%,
+      rgba(0,0,0,0.35) 50%,
+      rgba(0,0,0,0.78) 100%
     );
   }
   .promo-popup-content {
     position: relative;
     z-index: 1;
-    padding: 3.5rem 2.25rem 2.5rem;
+    padding: 3.5rem 2.5rem 2.5rem;
     display: flex;
     flex-direction: column;
-    min-height: 520px;
+    min-height: 460px;
     justify-content: flex-end;
   }
   .promo-popup-x {
@@ -1384,8 +1384,10 @@
     transition: color 0.2s;
   }
   .promo-popup-cerrar:hover { color: white; }
-  @media (max-width: 500px) {
-    .promo-popup-content { padding: 3rem 1.5rem 2rem; min-height: 460px; }
+  @media (max-width: 600px) {
+    .promo-popup { max-width: 100%; border-radius: 12px; }
+    .promo-popup-content { padding: 2.5rem 1.25rem 1.75rem; min-height: 380px; }
+    .promo-popup-titulo { font-size: clamp(1.5rem, 7vw, 2rem); }
   }
 
   /* ───────── BANNER COOKIES ───────── */
