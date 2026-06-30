@@ -1993,6 +1993,8 @@
       <button type="button" id="lang-es" onclick="aplicarIdioma('es')">ES</button>
       <span class="lang-sep">/</span>
       <button type="button" id="lang-en" onclick="aplicarIdioma('en')">EN</button>
+      <span class="lang-sep">/</span>
+      <button type="button" id="lang-de" onclick="aplicarIdioma('de')">DE</button>
     </li>
     <li class="nav-social">
       <a href="https://www.instagram.com/estaciondelsol.ec/" target="_blank" aria-label="Instagram">
@@ -2044,17 +2046,17 @@
     <div class="hero-search-v2" id="heroSearch">
 
       <div class="hsv2-field">
-        <label>Llegada</label>
+        <label data-i18n="hsv_llegada">Llegada</label>
         <input type="date" id="hsv2-checkin">
       </div>
 
       <div class="hsv2-field">
-        <label>Salida</label>
+        <label data-i18n="hsv_salida">Salida</label>
         <input type="date" id="hsv2-checkout">
       </div>
 
       <div class="hsv2-guests" id="hsv2-guestsField">
-        <label>Huéspedes</label>
+        <label data-i18n="hsv_huespedes">Huéspedes</label>
         <div class="hsv2-guests-val" id="hsv2-guestsVal">
           <span id="hsv2-guestsText">2 adultos · 1 habitación</span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
@@ -2075,7 +2077,7 @@
         </div>
       </div>
 
-      <button class="hsv2-buscar" id="hsv2-buscar">Buscar</button>
+      <button class="hsv2-buscar" id="hsv2-buscar" data-i18n="hsv_buscar">Buscar</button>
     </div>
   </div>
   <div class="hero-dots" id="heroDots"></div>
@@ -2970,6 +2972,11 @@ const i18n = {
     nav_ubicacion: 'Ubicación',
     nav_reservar: 'Reservar',
 
+    hsv_llegada: 'Llegada',
+    hsv_salida: 'Salida',
+    hsv_huespedes: 'Huéspedes',
+    hsv_buscar: 'Buscar',
+
     hero_kicker: 'Las Núñez · Santa Elena, Ecuador · Ruta del Spondylus',
     hero_titulo: 'Estación<br>del <em>Sol</em>',
     hero_tagline: 'Como tu casa en la playa. Un lugar para detenerse, respirar y volver a sentirse en casa.',
@@ -3225,6 +3232,11 @@ const i18n = {
     nav_ubicacion: 'Location',
     nav_reservar: 'Book Now',
 
+    hsv_llegada: 'Check-in',
+    hsv_salida: 'Check-out',
+    hsv_huespedes: 'Guests',
+    hsv_buscar: 'Search',
+
     hero_kicker: 'Las Núñez · Santa Elena, Ecuador · Spondylus Route',
     hero_titulo: 'Estación<br>del <em>Sol</em>',
     hero_tagline: 'Like your home by the sea. A place to slow down, breathe, and feel at home again.',
@@ -3467,6 +3479,264 @@ const i18n = {
     hab_B4_nombre: 'Sendero Room',
     hab_B4_descripcion: 'On the second floor, with a view of the hills. The room for those who come to read, write, or do absolutely nothing. Cross breeze all day long.',
     hab_B4_camas: 'Bunk bed with double bed below and floating single bed above',
+  },
+
+  de: {
+    promo_transferencia: 'Zahlen Sie per Überweisung und erhalten Sie <strong>5% Rabatt</strong> auf Ihren Aufenthalt.',
+    promo_ballenas: 'Wie zu Hause am Meer – genau dann, wenn <strong>die Wale</strong> die Nachbarschaft besuchen. 🐋',
+    nav_brand_sub: 'Strandhotel',
+    nav_historia: 'Unsere Geschichte',
+    nav_habitaciones: 'Zimmer',
+    nav_resenas: 'Bewertungen',
+    nav_ubicacion: 'Lage',
+    nav_reservar: 'Buchen',
+
+    hsv_llegada: 'Anreise',
+    hsv_salida: 'Abreise',
+    hsv_huespedes: 'Gäste',
+    hsv_buscar: 'Suchen',
+
+    hero_kicker: 'Las Núñez · Santa Elena, Ecuador · Spondylus-Route',
+    hero_titulo: 'Estación<br>del <em>Sol</em>',
+    hero_tagline: 'Wie zu Hause am Meer. Ein Ort zum Innehalten, Durchatmen und Ankommen.',
+    hero2_kicker: 'Juni — September · Spondylus-Route',
+    hero2_titulo: 'Wal-<em>Saison</em>',
+    hero2_tagline: 'Jedes Jahr erwacht der Pazifik mit dem größten Naturschauspiel der Welt. Erleben Sie es von Estación del Sol.',
+    hero_descubre: 'Entdecken ↓',
+
+    historia_kicker: 'Unsere Geschichte',
+    historia_titulo: 'Fünfzehn Jahre, in denen wir Sie <em>wie Familie</em> empfangen.',
+    historia_lead: 'Estación del Sol entstand in Las Núñez aus einer einfachen Frage: Was macht einen Ort zum Zuhause, auch wenn man weit weg von zu Hause ist?',
+    historia_p1: 'Die Antwort fanden wir in den kleinen Dingen. Das Morgenlicht, das durch das Fenster fällt. Das Meeresrauschen, nur wenige Schritte entfernt. Ein entspanntes Gespräch am Pool. Ein heißer Kaffee nach einer langen Reise.',
+    historia_p2: 'Wir sind ein familiengeführtes Hotel. Deshalb wissen wir: jemanden willkommen zu heißen bedeutet nicht nur, eine Tür zu öffnen – es bedeutet, dass man wiederkommen möchte.',
+    historia_anos: 'Jahre Gastfreundschaft an der ecuadorianischen Küste',
+
+    hab_kicker: 'Unsere Zimmer',
+    hab_titulo: 'Sieben Zimmer, <em>drei Aussichten.</em>',
+    hab_intro: 'Jedes Zimmer verfügt über ein eigenes Bad, Klimaanlage und WLAN. Was sich unterscheidet – und woran Sie sich erinnern werden – ist das, was Sie beim Aufwachen sehen.',
+    vista_mar_titulo: 'Meerblick',
+    vista_mar_meta: 'Zweites Stockwerk · 2 Zimmer',
+    vista_piscina_titulo: 'Poolblick',
+    vista_piscina_meta: 'Oberes erstes Stockwerk · 2 Zimmer',
+    vista_montana_titulo: 'Bergblick',
+    vista_montana_meta: 'Verschiedene Etagen · 3 Zimmer',
+
+    desc_cita: 'Ich bin ans Meer gefahren, um glücklich zu sein.',
+
+    terraza_kicker: 'Panoramaterrasse',
+    terraza_titulo: 'Der <em style="color:var(--arena);">höchste</em> Aussichtspunkt der Gegend.',
+    terraza_p1: 'Von unserer Terrasse aus haben Sie einen 360°-Blick, den nur wenige Unterkünfte in der Region bieten können. Der Pazifik auf der einen Seite, grüne Hügel auf der anderen – und der Sonnenuntergang direkt vor Ihnen.',
+    terraza_p2: 'Der perfekte Platz für den Morgenkaffee, ein Buch am Nachmittag oder einfach nur schweigend zuzusehen, wie die Sonne ins Meer sinkt.',
+    terraza_360: 'Panoramablick',
+    terraza_2do: 'Obergeschoss',
+    terraza_inf: 'Offener Horizont',
+
+    resenas_kicker: 'Was unsere Gäste sagen',
+    resenas_titulo: 'Fünf Sterne, <em>so viele Geschichten.</em>',
+    resenas_count: '· Basierend auf 5 Bewertungen',
+
+    ubic_kicker: 'Wo wir sind',
+    ubic_titulo: 'Im Herzen der <em>Spondylus-Route.</em>',
+    ubic_p1: 'Strand Las Núñez, Santa Elena, Ecuador. Nur wenige Minuten von Olón, Montañita und Manglaralto entfernt – und doch weit genug, dass der Stadtlärm Sie nie erreicht.',
+    ubic_p2: 'Die perfekte Ausgangsbasis, um die Küste zu erkunden, zu surfen, frischen Fisch am Meer zu essen oder einfach gar nichts zu tun.',
+    ubic_li1: 'Strand Las Núñez',
+    ubic_li1_d: 'direkt vor dem Hotel',
+    ubic_li2_d: '5 Minuten',
+    ubic_li3_d: '10 Minuten',
+    ubic_li4_d: '15 Minuten',
+    ubic_li5: 'Flughafen Guayaquil',
+    ubic_li5_d: '2 Std. 30 Min.',
+    ubic_maps: 'Auf Google Maps ansehen',
+
+    cta_titulo: 'Dürfen wir Sie <em>erwarten</em>?',
+    cta_texto: 'Nur 7 Zimmer – wir empfangen jeweils wenige Gäste, damit das Erlebnis persönlich bleibt. Frühzeitig buchen.',
+    cta_boton: 'Verfügbare Zimmer ansehen',
+
+    news_kicker: 'Newsletter',
+    news_texto: 'Erhalten Sie Neuigkeiten und Angebote von Estación del Sol in Ihrem Postfach.',
+    news_placeholder: 'Ihre E-Mail',
+    news_boton: 'Anmelden',
+    news_gracias: 'Vielen Dank für Ihre Anmeldung! Sie erhalten bald Neuigkeiten von Estación del Sol.',
+    news_privacidad: 'Ich akzeptiere die <a href="/privacy-policy.html" target="_blank">Datenschutzerklärung</a>',
+    news_privacidad_link: 'Datenschutzerklärung',
+
+    foot_tag: 'Wie zu Hause am Meer.',
+    foot_desc: 'Hotel Estación del Sol in Las Núñez, Santa Elena, Spondylus-Route, Ecuador.',
+    foot_h_hotel: 'Hotel',
+    foot_h_contacto: 'Kontakt',
+    foot_h_siguenos: 'Folgen Sie uns',
+    foot_derechos: '© 2026 Estación del Sol. Alle Rechte vorbehalten.',
+    foot_hecho: 'Mit Ruhe gestaltet auf der Spondylus-Route.',
+
+    vista_mar: 'Meerblick',
+    vista_piscina: 'Poolblick',
+    vista_montana: 'Bergblick',
+    vista_parque: 'Gartenblick',
+    piso_segundo: 'Zweites Stockwerk',
+    piso_primero_alto: 'Oberes erstes Stockwerk',
+    piso_primero_alto_a: 'Oberes erstes Stockwerk · Block A',
+    bano_privado: 'Eigenes Bad',
+    ac: 'Klimaanlage',
+    wifi: 'WLAN',
+    hasta_personas: 'Bis zu {n} Personen',
+    segundo_piso_feat: 'Zweites Stockwerk',
+    primer_piso_alto_feat: 'Oberes erstes Stockwerk',
+    bloque_a_feat: 'Block A',
+
+    hab_card_hasta: 'Bis zu {n} Personen · {vista}',
+    hab_card_persona_noche: '/Person · Nacht',
+    hab_card_ver: 'Ansehen',
+    hab_feat_bano: 'Eigenes Bad',
+    hab_feat_ac: 'Klimaanlage',
+    hab_feat_wifi: 'WLAN',
+
+    modal_hasta_personas: '{piso} · Bis zu {n} Personen',
+    modal_camas_label: 'Betten:',
+    modal_llegada: 'Check-in',
+    modal_salida: 'Check-out',
+    modal_horarios: 'Check-in ab 15:00 Uhr · Check-out bis 12:00 Uhr',
+    modal_huespedes: 'Gäste',
+    modal_precio: 'Preis',
+    modal_precio_valor: '20 $ / Person / Nacht',
+    modal_precio_valor_individual: '25 $ / Zimmer / Nacht (1 Person)',
+    modal_selecciona_fechas: 'Wählen Sie die Daten, um den Gesamtpreis zu sehen',
+    modal_reservar_ahora: 'Jetzt buchen →',
+    modal_agregar_carrito: 'In den Warenkorb',
+    modal_huesped_1: 'Gast',
+    modal_huespedes_n: 'Gäste',
+    modal_detalle_total: '{precio} × {noches} {nochesLabel} + 15% MwSt.',
+    modal_detalle_precio_normal: '20 $ × {g} {personas}',
+    modal_detalle_precio_individual: '25 $ Einzelzimmer',
+    persona_singular: 'Person',
+    persona_plural: 'Personen',
+    noche_singular: 'Nacht',
+    noche_plural: 'Nächte',
+
+    carrito_fab_label: 'Warenkorb',
+    carrito_titulo: 'Ihr Warenkorb',
+    carrito_total: 'Geschätzter Gesamtpreis',
+    carrito_pagar: 'Alles buchen',
+    carrito_vacio: 'Ihr Warenkorb ist leer. Wählen Sie ein Zimmer aus der Detailansicht.',
+    carrito_quitar: 'Entfernen',
+    carrito_subtotal_label: 'Zwischensumme ({n} Zimmer)',
+    alert_carrito_vacio: 'Ihr Warenkorb ist leer.',
+
+    alert_fechas_invalidas: 'Bitte gültige Daten auswählen',
+    alert_fechas_ocupadas: 'Dieses Zimmer ist für diese Daten bereits gebucht. Bitte wählen Sie andere Daten.',
+    resumen_precio_detail: 'Zwischensumme ({precio} × {noches})',
+    resumen_precio_normal: '20 $ × {g}',
+    resumen_precio_individual: '25 $ Einzelzimmer',
+    resumen_total_iva: '{total} $ USD (inkl. 15% MwSt.)',
+    resumen_total_nota: 'inkl. 15% MwSt.',
+
+    checkout_paso1: 'Daten',
+    checkout_paso2: 'Zahlung',
+    checkout_paso3: 'Bestätigung',
+    checkout_volver: 'Zurück',
+    checkout_tus_datos: 'Ihre <em>Daten</em>',
+    checkout_datos_intro: 'Wir benötigen nur das Wesentliche für Ihre Buchung.',
+    checkout_nombre: 'Vorname',
+    checkout_apellido: 'Nachname',
+    checkout_cedula: 'Ausweis- / Passnummer',
+    checkout_pais: 'Land',
+    checkout_correo: 'E-Mail',
+    checkout_telefono: 'Telefon / WhatsApp',
+    checkout_mensaje: 'Nachricht an den Gastgeber (optional)',
+    checkout_mensaje_placeholder: 'Wir kommen abends an – könnten Sie etwas Kleines zum Essen bereitstellen?',
+    checkout_acepta_marketing: 'Ich möchte Angebote und Neuigkeiten von Estación del Sol per E-Mail erhalten.',
+    checkout_continuar_pago: 'Weiter zur Zahlung →',
+    opt_pais_ec: 'Ecuador',
+    opt_pais_co: 'Kolumbien',
+    opt_pais_pe: 'Peru',
+    opt_pais_us: 'Vereinigte Staaten',
+    opt_pais_es: 'Spanien',
+    opt_pais_otro: 'Sonstiges',
+
+    checkout_metodo_pago: '<em>Zahlungsmethode</em>',
+    checkout_pago_intro: 'Wählen Sie, wie Sie Ihre Buchung bezahlen möchten.',
+    pago_payphone_desc: 'In der App zahlen · sicher',
+    pago_transferencia: 'Banküberweisung',
+    pago_transferencia_dto: '−5% Rabatt',
+    recordatorio_transferencia: '💡 Hinweis: Zahlen Sie per <strong>Banküberweisung</strong> und erhalten Sie <strong>5% Rabatt</strong> auf Ihre Buchung.',
+    pp_como_funciona: 'So funktioniert es',
+    pp_paso1: 'Klicken Sie auf <strong style="color:var(--pacifico);">Buchung bestätigen</strong>',
+    pp_paso2: 'Sie erhalten eine Benachrichtigung in Ihrer <strong>PayPhone</strong>-App',
+    pp_paso3: 'Bestätigen Sie die Zahlung in der App in Sekunden',
+    pp_paso4: 'Ihre Buchung wird automatisch bestätigt',
+    pp_numero_label: 'Ihre bei PayPhone registrierte Nummer',
+    pp_numero_placeholder: '0984 111 222',
+    pp_numero_hint: 'Muss die Nummer sein, mit der Sie Ihr PayPhone-Konto erstellt haben',
+
+    transf_datos_titulo: 'Überweisungsdaten',
+    transf_banco: 'Bank:',
+    transf_tipo: 'Kontotyp:',
+    transf_numero: 'Kontonummer:',
+    transf_titular: 'Kontoinhaber:',
+    transf_cedula: 'Ausweisnummer:',
+    transf_correo: 'E-Mail:',
+    comprobante_label: 'Überweisungsbeleg',
+    comprobante_toca: 'Tippen Sie, um den Beleg anzuhängen',
+    comprobante_formatos: 'JPG, PNG oder PDF · max. 2 MB',
+    comprobante_max_size: 'Der Beleg darf nicht größer als 2 MB sein. Bild komprimieren und erneut versuchen.',
+
+    checkout_atras: '← Zurück',
+    checkout_confirmar_reserva: 'Buchung bestätigen',
+    checkout_procesando: 'Wird verarbeitet…',
+
+    espera_titulo: 'Warten auf <em style="font-style:italic;">Ihre Freigabe</em>',
+    espera_p1: 'Öffnen Sie Ihre <strong>PayPhone</strong>-App und bestätigen Sie die Zahlung.',
+    espera_codigo: 'Ihr Buchungscode: <strong id="codigo-espera" style="color:var(--pacifico);letter-spacing:0.1em;"></strong>',
+    espera_verificando: 'Zahlungsstatus wird geprüft…',
+    espera_expiro: '⏱ Die Wartezeit ist abgelaufen. <a href="#" onclick="closeCheckout();return false;" style="color:var(--sol)">Erneut versuchen</a> oder kontaktieren Sie uns.',
+    espera_rechazado: 'Die Zahlung wurde {estado}. <a href="#" onclick="closeCheckout();return false;" style="color:var(--sol)">Erneut versuchen</a>',
+    espera_estado_cancelado: 'storniert',
+    espera_estado_rechazado: 'abgelehnt',
+
+    confirm_titulo: 'Buchung <em>bestätigt</em>',
+    confirm_p1: 'Überprüfen Sie Ihre E-Mail – wir haben Ihnen alle Details zugeschickt.',
+    confirm_p2: 'Wir erwarten Sie schon mit offenen Türen.',
+    confirm_volver: 'Zurück zur Startseite',
+
+    resumen_llegada: 'Check-in',
+    resumen_salida: 'Check-out',
+    resumen_huespedes: 'Gäste',
+    resumen_noches: 'Nächte',
+    resumen_descuento: 'Überweisungsrabatt (5%)',
+    resumen_iva: '15% MwSt.',
+    resumen_total_label: 'Gesamt',
+
+    alert_ingresa_telefono_payphone: 'Geben Sie Ihre bei PayPhone registrierte Nummer ein',
+    alert_falta_campo: 'Fehlendes Feld: {campo}',
+    alert_error_reserva: 'Fehler bei der Buchungsverarbeitung',
+    alert_error_conexion: 'Verbindung zum Server fehlgeschlagen. Versuchen Sie es erneut oder kontaktieren Sie uns auf WhatsApp.',
+
+    hab_B5_nombre: 'Zimmer Pacífico',
+    hab_B5_descripcion: 'Ein Zimmer im zweiten Stockwerk von Block B mit direktem Meerblick. Hier aufzuwachen bedeutet, die Wellen zu hören, noch bevor man die Augen öffnet. Ideal für Paare oder kleine Familien.',
+    hab_B5_camas: 'Doppelbett + schwebendes Einzelbett + zusätzliches Einzelbett',
+
+    hab_B6_nombre: 'Zimmer Marea',
+    hab_B6_descripcion: 'Das meistgebuchte Zimmer des Hotels. Panoramablick auf den Pazifik, eine beständige Brise und goldenes Licht beim Sonnenuntergang. Geräumig für bis zu 4 Personen.',
+    hab_B6_camas: 'Doppelbett + schwebendes Einzelbett + zusätzliches Einzelbett',
+
+    hab_B2_nombre: 'Zimmer Aurora',
+    hab_B2_descripcion: 'Das geräumigste Zimmer in Block B. Für kleine Gruppen oder Familien gedacht. Direkter Blick auf den Pool und den Innenhof.',
+    hab_B2_camas: 'Etagenbett mit Doppelbett unten und Doppelbett oben + Einzelbett seitlich',
+
+    hab_B3_nombre: 'Zimmer Coral',
+    hab_B3_descripcion: 'Ein gemütliches Zimmer im oberen ersten Stockwerk mit Blick auf den Innenhof und Pool. Perfekt für Paare oder kleine Familien, die nah am Herz des Hotels sein möchten.',
+    hab_B3_camas: 'Etagenbett mit Doppelbett unten und schwebendem Einzelbett oben',
+
+    hab_A1_nombre: 'Zimmer Cordillera',
+    hab_A1_descripcion: 'Das größte Zimmer des Hotels. In Block A, über der Gemeinschaftsküche und dem Aufenthaltsraum. Ideal für Gruppen oder große Familien, die nah an den Gemeinschaftsbereichen sein möchten.',
+    hab_A1_camas: 'Doppelbett + 3 zusätzliche Einzelbetten',
+
+    hab_B1_nombre: 'Zimmer Mirador',
+    hab_B1_descripcion: 'Blick auf die grünen Hügel im Landesinneren. Der Sonnenaufgang fällt sanft durch das Fenster und die Stille ist vollkommen. Für alle, die wirklich zur Ruhe kommen möchten.',
+    hab_B1_camas: 'Etagenbett mit Doppelbett unten und schwebendem Einzelbett oben',
+
+    hab_B4_nombre: 'Zimmer Sendero',
+    hab_B4_descripcion: 'Im zweiten Stockwerk mit Blick auf die Hügel. Das Zimmer für alle, die lesen, schreiben oder einfach gar nichts tun möchten. Den ganzen Tag über Durchzugsluft.',
+    hab_B4_camas: 'Etagenbett mit Doppelbett unten und schwebendem Einzelbett oben',
   }
 };
 
@@ -3507,10 +3777,10 @@ function aplicarIdioma(lang) {
   // Botón de idioma — estado visual
   const btnEs = document.getElementById('lang-es');
   const btnEn = document.getElementById('lang-en');
-  if (btnEs && btnEn) {
-    btnEs.classList.toggle('activo', lang === 'es');
-    btnEn.classList.toggle('activo', lang === 'en');
-  }
+  const btnDe = document.getElementById('lang-de');
+  if (btnEs) btnEs.classList.toggle('activo', lang === 'es');
+  if (btnEn) btnEn.classList.toggle('activo', lang === 'en');
+  if (btnDe) btnDe.classList.toggle('activo', lang === 'de');
 
   // Re-renderizar contenido dinámico que depende del idioma
   if (typeof renderCarruseles === 'function' && document.querySelector('.carrusel')) {
@@ -4342,7 +4612,7 @@ function iniciarCheckoutGrupo() {
 
 function formatFecha(s) {
   const d = new Date(s);
-  const locale = idiomaActual === 'en' ? 'en-US' : 'es-EC';
+  const locale = idiomaActual === 'en' ? 'en-US' : idiomaActual === 'de' ? 'de-DE' : 'es-EC';
   return d.toLocaleDateString(locale, { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
