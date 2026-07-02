@@ -4799,7 +4799,7 @@ function updateModalTotal() {
   }
 
   const noches = Math.round((co - ci) / 86400000);
-  const subtotal = calcularSubtotalHabitacion(g, noches);
+  const subtotal = calcularSubtotalHabitacion(g, noches) + (modalRoom.mascota ? 5 * noches : 0);
   const iva = subtotal * 0.15;
   const total = subtotal + iva;
   const precioLabel = g === 1
@@ -4890,6 +4890,8 @@ function cerrarCarrito() {
 
 /* ═════════ CHECKOUT ═════════ */
 let checkoutSubtotalBase = 0;
+let checkoutConMascota = false;
+let checkoutNoches = 0;
 let modoGrupo = false;
 let carritoActivo = [];
 
@@ -4912,11 +4914,11 @@ function iniciarCheckout() {
   const ci = document.getElementById('m-checkin').value;
   const co = document.getElementById('m-checkout').value;
   const g = document.getElementById('m-guests').value;
-  if (!iniciarCheckoutConDatos(currentHab, ci, co, g)) return;
+  if (!iniciarCheckoutConDatos(currentHab, ci, co, g, modalRoom.mascota)) return;
   closeModal();
 }
 
-function iniciarCheckoutConDatos(hab, ci, co, g) {
+function iniciarCheckoutConDatos(hab, ci, co, g, mascota) {
   if (!ci || !co || new Date(co) <= new Date(ci)) {
     alert(t('alert_fechas_invalidas'));
     return false;
@@ -4928,7 +4930,9 @@ function iniciarCheckoutConDatos(hab, ci, co, g) {
   currentHab = hab;
   modoGrupo = false;
   const noches = Math.round((new Date(co) - new Date(ci)) / 86400000);
-  checkoutSubtotalBase = calcularSubtotalHabitacion(parseInt(g), noches);
+  checkoutConMascota = !!mascota;
+  checkoutNoches = noches;
+  checkoutSubtotalBase = calcularSubtotalHabitacion(parseInt(g), noches) + (checkoutConMascota ? 5 * noches : 0);
 
   mostrarResumenModoUnico();
 
