@@ -93,7 +93,10 @@ async function enviarConfirmacionHuesped(reserva) {
       ¿Tienes preguntas? Escríbenos al
       <a href="https://wa.me/593986721666" style="color:#D4A574;">+593 98 672 1666</a>
       o a este correo. Con gusto te ayudamos.
-    </p>`;
+    </p>
+
+    <p style="margin-top:8px;">Agiliza tu llegada haciendo el check-in en línea:</p>
+    <a href="https://hotelestaciondelsol.com/checkin.html?codigo=${reserva.codigo}" class="btn">Hacer check-in en línea</a>`;
 
   await transporte.sendMail({
     from: `"Estación del Sol" <${process.env.EMAIL_USER}>`,
