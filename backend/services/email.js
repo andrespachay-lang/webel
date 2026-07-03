@@ -89,11 +89,6 @@ async function enviarConfirmacionHuesped(reserva) {
       y el <strong>check-out</strong> hasta las <strong>12:00</strong> mediodía.
     </p>
 
-    <p>Para hacer tu check-in en línea y agilizar tu llegada, puedes hacerlo desde:</p>
-    <a href="${process.env.FRONTEND_URL}/checkin.html?codigo=${reserva.codigo}" class="btn">
-      Hacer check-in en línea
-    </a>
-
     <p style="margin-top:24px;font-size:0.9rem;color:#5A6C7D;">
       ¿Tienes preguntas? Escríbenos al
       <a href="https://wa.me/593986721666" style="color:#D4A574;">+593 98 672 1666</a>
