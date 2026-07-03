@@ -4,7 +4,6 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Check-in en Línea — Estación del Sol</title>
-<meta http-equiv="refresh" content="0; url=/" />
 <meta name="description" content="Haz tu check-in en línea para Hotel Estación del Sol, Las Núñez, Santa Elena, Ecuador.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -185,7 +184,7 @@
   }
   .btn-ant:hover { color: var(--pacifico); }
 
-  /* Alerta de aviso de código */
+  /* Aviso de horario */
   .aviso-codigo {
     background: rgba(212, 165, 116, 0.12);
     border: 1px solid rgba(212, 165, 116, 0.4);
@@ -328,35 +327,14 @@
   <div class="form-card" id="form-card">
 
     <div class="pasos">
-      <div class="paso activo" id="paso-1">1 · Reserva</div>
-      <div class="paso"       id="paso-2">2 · Datos</div>
-      <div class="paso"       id="paso-3">3 · Llegada</div>
+      <div class="paso activo" id="paso-1">1 · Datos</div>
+      <div class="paso"       id="paso-2">2 · Llegada</div>
     </div>
 
     <div class="alerta-error" id="alerta-error"></div>
 
-    <!-- ── Paso 1: Código de reserva ── -->
+    <!-- ── Paso 1: Datos personales ── -->
     <div class="seccion-form visible" id="s1">
-      <h2>Tu <em>código</em> de reserva</h2>
-      <p>Encuéntralo en el correo de confirmación que recibiste al reservar.</p>
-
-      <div class="aviso-codigo">
-        Si aún no tienes reserva, <strong><a href="index.html#habitaciones" style="color:var(--sol)">reserva aquí</a></strong> primero.
-      </div>
-
-      <div class="grupo" id="g-codigo">
-        <label>Código de reserva</label>
-        <input type="text" id="codigo" placeholder="EDS-2026-0001" maxlength="14" style="text-transform:uppercase;letter-spacing:0.15em;" />
-        <span class="error-msg">Ingresa un código válido (EDS-AAAA-NNNN)</span>
-      </div>
-
-      <div class="acciones">
-        <button class="btn-sig" onclick="validarCodigo()">Continuar →</button>
-      </div>
-    </div>
-
-    <!-- ── Paso 2: Datos personales ── -->
-    <div class="seccion-form" id="s2">
       <h2>Tus <em>datos</em></h2>
       <p>Usamos esta información para tu registro de alojamiento.</p>
 
@@ -422,13 +400,12 @@
       </div>
 
       <div class="acciones">
-        <button class="btn-sig" onclick="validarPaso2()">Continuar →</button>
-        <button class="btn-ant" onclick="irAPaso(1)">← Atrás</button>
+        <button class="btn-sig" onclick="validarPaso1()">Continuar →</button>
       </div>
     </div>
 
-    <!-- ── Paso 3: Llegada ── -->
-    <div class="seccion-form" id="s3">
+    <!-- ── Paso 2: Llegada ── -->
+    <div class="seccion-form" id="s2">
       <h2>Tu <em>llegada</em></h2>
       <p>Así podemos estar listos cuando llegues.</p>
 
@@ -462,7 +439,7 @@
 
       <div class="acciones">
         <button class="btn-sig" id="btn-enviar" onclick="enviarCheckin()">Completar check-in ☀</button>
-        <button class="btn-ant" onclick="irAPaso(2)">← Atrás</button>
+        <button class="btn-ant" onclick="irAPaso(1)">← Atrás</button>
       </div>
     </div>
 
@@ -504,45 +481,22 @@
 </footer>
 
 <script>
-  // ── Configuración ──────────────────────────────────────────────────────────
-  const API = '';  // mismo origen; si el backend está en otro puerto: 'http://localhost:3000'
+  const API = '';
 
   let pasoActual = 1;
-  let codigoValidado = '';
-
-  // Leer código desde URL si viene del correo de confirmación
-  window.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(location.search);
-    const codigo = params.get('codigo');
-    if (codigo) {
-      document.getElementById('codigo').value = codigo.toUpperCase();
-    }
-  });
 
   // ── Navegación entre pasos ─────────────────────────────────────────────────
   function irAPaso(n) {
     document.getElementById(`s${pasoActual}`).classList.remove('visible');
     document.getElementById(`paso-${pasoActual}`).classList.remove('activo');
+    document.getElementById(`paso-${pasoActual}`).classList.add('listo');
 
     pasoActual = n;
     document.getElementById(`s${pasoActual}`).classList.add('visible');
+    document.getElementById(`paso-${pasoActual}`).classList.remove('listo');
     document.getElementById(`paso-${pasoActual}`).classList.add('activo');
     ocultarError();
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  // ── Validar código de reserva ──────────────────────────────────────────────
-  async function validarCodigo() {
-    const codigo = document.getElementById('codigo').value.trim().toUpperCase();
-    const grupo  = document.getElementById('g-codigo');
-
-    if (!/^EDS-\d{4}-\d{4}$/.test(codigo)) {
-      grupo.classList.add('error');
-      return;
-    }
-    grupo.classList.remove('error');
-    codigoValidado = codigo;
-    irAPaso(2);
   }
 
   // ── Manejar archivo subido ─────────────────────────────────────────────────
@@ -550,7 +504,7 @@
     const archivo = evento.target.files[0];
     if (!archivo) return;
 
-    const zona    = document.getElementById('zona-archivo');
+    const zona     = document.getElementById('zona-archivo');
     const nombreEl = document.getElementById('archivo-nombre');
 
     if (archivo.size > 5 * 1024 * 1024) {
@@ -565,21 +519,20 @@
     document.getElementById('g-foto').classList.remove('error');
   }
 
-  // ── Validar Paso 2 (datos personales) ──────────────────────────────────────
-  function validarPaso2() {
-    const nombre      = document.getElementById('nombre').value.trim();
-    const apellido     = document.getElementById('apellido').value.trim();
-    const cedula       = document.getElementById('cedula').value.trim();
-    const direccion    = document.getElementById('direccion').value.trim();
-    const telefono     = document.getElementById('telefono').value.trim();
-    const emergencia   = document.getElementById('contacto-emergencia').value.trim();
-    const foto         = document.getElementById('foto-cedula').files[0];
-    const acepta       = document.getElementById('acepto-terminos').checked;
+  // ── Validar Paso 1 (datos personales) ──────────────────────────────────────
+  function validarPaso1() {
+    const nombre    = document.getElementById('nombre').value.trim();
+    const apellido  = document.getElementById('apellido').value.trim();
+    const cedula    = document.getElementById('cedula').value.trim();
+    const direccion = document.getElementById('direccion').value.trim();
+    const telefono  = document.getElementById('telefono').value.trim();
+    const emergencia = document.getElementById('contacto-emergencia').value.trim();
+    const foto      = document.getElementById('foto-cedula').files[0];
+    const acepta    = document.getElementById('acepto-terminos').checked;
 
     let hayError = false;
     const marcar = (id, condicion) => {
-      const grupo = document.getElementById(id);
-      grupo.classList.toggle('error', condicion);
+      document.getElementById(id).classList.toggle('error', condicion);
       if (condicion) hayError = true;
     };
 
@@ -593,34 +546,33 @@
     marcar('g-terminos',   !acepta);
 
     if (hayError) return;
-    irAPaso(3);
+    irAPaso(2);
   }
 
   // ── Enviar check-in ────────────────────────────────────────────────────────
   async function enviarCheckin() {
-    const nombre      = document.getElementById('nombre').value.trim();
-    const apellido     = document.getElementById('apellido').value.trim();
-    const cedula       = document.getElementById('cedula').value.trim();
-    const direccion    = document.getElementById('direccion').value.trim();
-    const telefono     = document.getElementById('telefono').value.trim();
-    const emergencia   = document.getElementById('contacto-emergencia').value.trim();
-    const hora         = document.getElementById('hora-llegada').value;
-    const personas     = document.getElementById('personas').value;
-    const solicitudes  = document.getElementById('solicitudes').value.trim();
-    const foto         = document.getElementById('foto-cedula').files[0];
-    const acepta       = document.getElementById('acepto-terminos').checked;
+    const nombre     = document.getElementById('nombre').value.trim();
+    const apellido   = document.getElementById('apellido').value.trim();
+    const cedula     = document.getElementById('cedula').value.trim();
+    const direccion  = document.getElementById('direccion').value.trim();
+    const telefono   = document.getElementById('telefono').value.trim();
+    const emergencia = document.getElementById('contacto-emergencia').value.trim();
+    const hora       = document.getElementById('hora-llegada').value;
+    const personas   = document.getElementById('personas').value;
+    const solicitudes = document.getElementById('solicitudes').value.trim();
+    const foto       = document.getElementById('foto-cedula').files[0];
+    const acepta     = document.getElementById('acepto-terminos').checked;
 
-    // Validación
-    let hayError = false;
+    // Verificar datos del paso 1 por si acaso
     if (!nombre || !apellido || !cedula || !direccion || !telefono || !emergencia || !foto || !acepta) {
-      // Datos del paso 2 incompletos: regresa para corregirlos
-      irAPaso(2);
-      validarPaso2();
+      irAPaso(1);
+      validarPaso1();
       return;
     }
-    if (!hora)   { document.getElementById('g-hora').classList.add('error');   hayError = true; }
-    else          document.getElementById('g-hora').classList.remove('error');
 
+    let hayError = false;
+    if (!hora) { document.getElementById('g-hora').classList.add('error'); hayError = true; }
+    else         document.getElementById('g-hora').classList.remove('error');
     if (hayError) return;
 
     const btn = document.getElementById('btn-enviar');
@@ -630,7 +582,6 @@
 
     try {
       const formData = new FormData();
-      formData.append('codigo_reserva',      codigoValidado);
       formData.append('nombre',              nombre);
       formData.append('apellido',            apellido);
       formData.append('cedula',              cedula);
@@ -641,7 +592,7 @@
       formData.append('personas',            personas);
       formData.append('solicitudes',         solicitudes);
       formData.append('acepto_terminos',     acepta ? 'true' : 'false');
-      formData.append('foto_cedula', foto);
+      formData.append('foto_cedula',         foto);
 
       const resp = await fetch(`${API}/api/checkin`, {
         method: 'POST',
@@ -654,7 +605,6 @@
         throw new Error(datos.error || 'Error al registrar el check-in');
       }
 
-      // Mostrar éxito
       document.getElementById('form-card').style.display = 'none';
       document.getElementById('exito').classList.add('visible');
 
