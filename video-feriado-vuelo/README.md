@@ -1,6 +1,6 @@
 # Feriado en helicóptero — claquetas animadas (HyperFrames)
 
-Video vertical 1080×1920 (reel), 55 s, 30 fps. Composición en `index.html`.
+Video vertical 1080×1920 (reel), 55 s, 30 fps, con música y efectos de sonido. Composición en `index.html`.
 
 | # | Tiempo | Claqueta | Archivo |
 |---|--------|----------|---------|
@@ -19,12 +19,27 @@ Video vertical 1080×1920 (reel), 55 s, 30 fps. Composición en `index.html`.
 
 Video completo: `renders/feriado-vuelo-completo.mp4`.
 
+## Sonido
+
+Banda sonora 100 % sintetizada (sin samples externos, libre de derechos) con `tools/make_audio.py`,
+en tres pistas separadas en `assets/audio/` para mezclarlas a gusto en tu editor:
+
+- `music.mp3` — base tropical-pop a 120 BPM (Am–F–C–G). Se corta en "no termina aquí…" con un riser y vuelve con un golpe en el mapa de Olón.
+- `heli.mp3` — rotor del helicóptero en cada escena donde aparece, con paneo izquierda/derecha según su movimiento y aceleración en el despegue final.
+- `sfx.mp3` — efectos sincronizados con las animaciones: whooshes, pops de letras, tachón, bips de la mira, caída del pin, máquina de escribir, ticks del contador de km, ding en Olón, olas, clic del CTA.
+
+El video final está normalizado a −14 LUFS (estándar para Reels/TikTok). Si le pones voz en off, baja `music.mp3`
+(atributo `data-volume` del `<audio id="music">` en `index.html`) o usa las pistas por separado.
+Para regenerar el audio: `python3 tools/make_audio.py` (requiere numpy y ffmpeg).
+
 ## Editar / volver a renderizar
 
 ```bash
 npx hyperframes preview   # Studio: editar textos y tiempos
 npx hyperframes check     # validar
 npx hyperframes render -o renders/feriado-vuelo-completo.mp4
+# normalizar volumen para redes:
+ffmpeg -i renders/feriado-vuelo-completo.mp4 -c:v copy -af "acompressor=threshold=0.12:ratio=3:attack=5:release=120,loudnorm=I=-14:TP=-1:LRA=9" -c:a aac -b:a 256k final.mp4
 ```
 
 GSAP y las fuentes (Anton, Montserrat, Pacifico — OFL) están incluidas en `assets/`, no necesita internet para renderizar.
