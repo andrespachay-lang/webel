@@ -1,0 +1,922 @@
+<!doctype html>
+<html lang="es" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Feriado: Guayaquil → Olón</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <script src="assets/vendor/MotionPathPlugin.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Anton";
+        src: url("assets/fonts/anton-latin-400-normal.woff2") format("woff2");
+        font-weight: 400;
+      }
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/inter-latin-400-normal.woff2") format("woff2");
+        font-weight: 400;
+      }
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/inter-latin-700-normal.woff2") format("woff2");
+        font-weight: 700;
+      }
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/inter-latin-900-normal.woff2") format("woff2");
+        font-weight: 900;
+      }
+      @font-face {
+        font-family: "Caveat";
+        src: url("assets/fonts/caveat-latin-700-normal.woff2") format("woff2");
+        font-weight: 700;
+      }
+
+      :root {
+        --navy: #0b1f3a;
+        --deep: #071427;
+        --celeste: #3fa9f5;
+        --sky: #8fd3ff;
+        --white: #f7fbff;
+        --sun: #ffb321;
+        --coral: #e8461f;
+        --sand: #f3dcae;
+        --sea: #1474c4;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--deep);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+        color: var(--white);
+      }
+      .scene {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      .fill {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .stack {
+        position: absolute;
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 0 60px;
+      }
+      .display {
+        font-family: "Anton", sans-serif;
+        text-transform: uppercase;
+        line-height: 0.98;
+        letter-spacing: 0.01em;
+      }
+      .kicker {
+        font-family: "Inter", sans-serif;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+      }
+      .hand {
+        font-family: "Caveat", cursive;
+        font-weight: 700;
+      }
+      .mask {
+        display: block;
+        overflow: hidden;
+      }
+      .line {
+        display: block;
+        padding-top: 0.14em;
+      }
+      .chip {
+        display: inline-block;
+        padding: 14px 34px;
+        border-radius: 999px;
+        font-family: "Inter", sans-serif;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+      }
+      svg {
+        display: block;
+      }
+
+      /* S1 */
+      #s1 {
+        background: radial-gradient(120% 80% at 50% 30%, #163a66 0%, var(--navy) 55%, var(--deep) 100%);
+      }
+      #s1-strike {
+        position: absolute;
+        left: -4%;
+        top: 52%;
+        width: 108%;
+        height: 26px;
+        background: var(--coral);
+        border-radius: 13px;
+        transform-origin: left center;
+      }
+      /* S2 */
+      #s2 {
+        background: linear-gradient(180deg, #2b8ce0 0%, var(--celeste) 45%, var(--sky) 100%);
+      }
+      /* S3 */
+      #s3 {
+        background: var(--celeste);
+      }
+      .flag-band {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 20%;
+        transform-origin: left center;
+      }
+      .cal {
+        width: 400px;
+        height: 470px;
+        border-radius: 36px;
+        background: var(--white);
+        box-shadow: 0 30px 60px rgba(7, 20, 39, 0.35);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      .cal-head {
+        height: 120px;
+        background: var(--coral);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Inter";
+        font-weight: 900;
+        font-size: 54px;
+        letter-spacing: 0.2em;
+        color: var(--white);
+      }
+      .cal-num {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Anton";
+        font-size: 270px;
+        color: var(--navy);
+        line-height: 1;
+      }
+      /* S4 */
+      #s4 {
+        background: var(--navy);
+      }
+      /* S5 */
+      #s5 {
+        background: linear-gradient(180deg, #ff8a3d 0%, #ff5a7a 38%, #6a4bb8 70%, var(--navy) 100%);
+      }
+      /* S6 */
+      #s6 {
+        background: #e9f4ff;
+      }
+      /* S7 */
+      #s7 {
+        background: linear-gradient(180deg, #1c6fd1 0%, var(--celeste) 60%, #bfe6ff 100%);
+      }
+      /* S8 */
+      #s8 {
+        background: var(--sun);
+      }
+      /* S9 */
+      #s9 {
+        background: #0a2547;
+      }
+      /* S10 */
+      #s10 {
+        background: var(--sky);
+      }
+      /* S11 */
+      #s11 {
+        background: linear-gradient(180deg, #ffcf6b 0%, #ff9a52 50%, #ff6f61 100%);
+      }
+      /* S12 */
+      #s12 {
+        background: var(--navy);
+      }
+      .bubble {
+        background: var(--white);
+        color: var(--navy);
+        border-radius: 40px;
+        padding: 34px 44px;
+        display: flex;
+        align-items: center;
+        gap: 26px;
+        box-shadow: 0 24px 50px rgba(0, 0, 0, 0.35);
+      }
+      .avatar {
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        background: var(--navy);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Anton";
+        font-size: 60px;
+        color: var(--white);
+        flex: none;
+      }
+      #s12-cursor {
+        display: inline-block;
+        width: 6px;
+        height: 56px;
+        background: var(--celeste);
+        margin-left: 6px;
+        vertical-align: middle;
+      }
+
+      /* Wipe */
+      #wipe-layer {
+        pointer-events: none;
+      }
+      .wipe {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        top: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="47"
+      data-width="1080"
+      data-height="1920"
+    >
+      <svg width="0" height="0" style="position: absolute">
+        <defs>
+          <symbol id="plane" viewBox="-40 -36 102 72">
+            <path
+              d="M60 0 C60 -5 52 -7 44 -7 L18 -7 L-2 -34 L-12 -34 L2 -7 L-22 -7 L-30 -18 L-38 -18 L-32 -2 L-34 0 L-32 2 L-38 18 L-30 18 L-22 7 L2 7 L-12 34 L-2 34 L18 7 L44 7 C52 7 60 5 60 0 Z"
+            />
+          </symbol>
+          <symbol id="cloud" viewBox="0 0 200 100">
+            <path
+              d="M30 90 C5 90 0 62 22 54 C18 30 46 18 64 32 C74 8 118 4 130 32 C150 20 178 30 176 54 C198 58 198 90 172 90 Z"
+            />
+          </symbol>
+          <symbol id="pin" viewBox="-30 -80 60 84">
+            <path d="M0 0 C-6 -16 -28 -34 -28 -52 A28 28 0 0 1 28 -52 C28 -34 6 -16 0 0 Z" />
+            <circle cx="0" cy="-52" r="11" fill="#fff" />
+          </symbol>
+          <symbol id="house" viewBox="-20 -22 40 40">
+            <path d="M-16 -4 L0 -20 L16 -4 L16 16 L-16 16 Z" />
+            <rect x="-5" y="4" width="10" height="12" fill="rgba(255,255,255,0.75)" />
+          </symbol>
+          <symbol id="wave" viewBox="0 0 120 40">
+            <path
+              d="M0 26 C15 6 30 6 45 26 C60 46 75 46 90 26 C100 13 110 10 120 14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="9"
+              stroke-linecap="round"
+            />
+          </symbol>
+        </defs>
+      </svg>
+
+      <!-- ============ S1 · Cero planes aburridos ============ -->
+      <section id="s1" class="scene clip" data-start="0" data-duration="3.2" data-track-index="0">
+        <div id="s1-clouds" class="fill"></div>
+        <div class="stack" style="top: 560px">
+          <span class="mask"><span id="s1-k" class="kicker line" style="font-size: 52px; color: var(--sky)">Este feriado:</span></span>
+          <span class="mask" style="margin-top: 40px"><span id="s1-a" class="display line" style="font-size: 230px">Cero</span></span>
+          <span class="mask"><span id="s1-b" class="display line" style="font-size: 200px; color: var(--sun)">planes</span></span>
+          <div style="position: relative; margin-top: 4px">
+            <span class="mask"><span id="s1-c" class="display line" style="font-size: 190px; color: rgba(247, 251, 255, 0.55)">aburridos</span></span>
+            <div id="s1-strike"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ S2 · Nos vamos a volar ============ -->
+      <section id="s2" class="scene clip" data-start="3.2" data-duration="2.8" data-track-index="0">
+        <div id="s2-clouds" class="fill"></div>
+        <svg id="s2-svg" class="fill" viewBox="0 0 1080 1920">
+          <path id="s2-trail" d="M-120 1500 C 250 1450 300 1180 540 1150 C 800 1120 860 1320 1220 640" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-dasharray="4 26" opacity="0.9" />
+          <g id="s2-plane"><use href="#plane" x="-60" y="-42" width="140" height="100" fill="#fff" /></g>
+        </svg>
+        <div class="stack" style="top: 520px">
+          <span class="mask"><span id="s2-k" class="kicker line" style="font-size: 64px; color: var(--navy)">Nos vamos a</span></span>
+          <span class="mask"><span id="s2-v" class="display line" style="font-size: 290px; color: var(--white); text-shadow: 0 16px 0 rgba(11, 31, 58, 0.25)">¡Volar!</span></span>
+        </div>
+      </section>
+
+      <!-- ============ S3 · 9 y 10 de octubre ============ -->
+      <section id="s3" class="scene clip" data-start="6" data-duration="4" data-track-index="0">
+        <div class="flag-band s3-band" style="top: 0%; background: var(--celeste)"></div>
+        <div class="flag-band s3-band" style="top: 20%; background: var(--white)"></div>
+        <div class="flag-band s3-band" style="top: 40%; background: var(--celeste)"></div>
+        <div class="flag-band s3-band" style="top: 60%; background: var(--white)"></div>
+        <div class="flag-band s3-band" style="top: 80%; background: var(--celeste)"></div>
+        <div class="stack" style="top: 250px">
+          <span class="mask"><span id="s3-k" class="chip line" style="background: var(--navy); color: var(--white); font-size: 40px">Este</span></span>
+        </div>
+        <div class="stack" style="top: 420px; flex-direction: row; justify-content: center; gap: 30px; align-items: center">
+          <div id="s3-cal1" class="cal"><div class="cal-head">OCT</div><div class="cal-num">9</div></div>
+          <div id="s3-y" class="display" style="font-size: 130px; color: var(--navy)">y</div>
+          <div id="s3-cal2" class="cal"><div class="cal-head">OCT</div><div class="cal-num">10</div></div>
+        </div>
+        <div class="stack" style="top: 1050px">
+          <span class="mask"><span id="s3-a" class="display line" style="font-size: 120px; color: var(--navy)">Celebra a la ciudad</span></span>
+          <span class="mask" style="margin-top: 26px"><span id="s3-b" class="hand line" style="font-size: 110px; color: var(--coral)">como nunca antes</span></span>
+        </div>
+        <svg id="s3-stars" class="fill" viewBox="0 0 1080 1920"></svg>
+      </section>
+
+      <!-- ============ S4 · Sobrevuela el río Guayas ============ -->
+      <section id="s4" class="scene clip" data-start="10" data-duration="5" data-track-index="0">
+        <svg id="s4-svg" class="fill" viewBox="0 0 1080 1920">
+          <g id="s4-blocks"></g>
+          <path id="s4-river" d="M820 -60 C 760 300 900 520 760 820 C 640 1080 820 1300 700 1560 C 640 1700 660 1820 640 2000" fill="none" stroke="#1d7fe0" stroke-width="190" stroke-linecap="round" />
+          <path id="s4-river-hi" d="M820 -60 C 760 300 900 520 760 820 C 640 1080 820 1300 700 1560 C 640 1700 660 1820 640 2000" fill="none" stroke="#5cc0ff" stroke-width="16" stroke-dasharray="40 60" opacity="0.6" />
+          <path id="s4-santay" d="M800 1000 C 830 940 880 960 870 1060 C 860 1160 820 1240 790 1220 C 760 1190 770 1060 800 1000 Z" fill="#2fbf71" />
+          <g id="s4-labels" font-family="Inter" font-weight="900" fill="#0b1f3a">
+            <text id="s4-l1" x="836" y="1130" font-size="26" text-anchor="middle" transform="rotate(-80 836 1130)" letter-spacing="3">ISLA SANTAY</text>
+          </g>
+          <g id="s4-gye">
+            <circle id="s4-pulse" cx="560" cy="1040" r="40" fill="none" stroke="#ffb321" stroke-width="6" />
+            <use href="#pin" x="530" y="960" width="60" height="84" fill="#ff5a36" />
+          </g>
+          <path id="s4-fly" d="M560 2000 C 600 1700 640 1500 620 1300 C 600 1100 720 980 700 820 C 680 620 760 420 740 -80" fill="none" stroke="#fff" stroke-width="8" stroke-dasharray="2 22" stroke-linecap="round" />
+          <g id="s4-plane"><use href="#plane" x="-60" y="-42" width="120" height="86" fill="#fff" /></g>
+        </svg>
+        <div class="stack" style="top: 180px">
+          <span class="mask"><span id="s4-k" class="kicker line" style="font-size: 52px; color: var(--sun)">Sobrevuela</span></span>
+          <span class="mask"><span id="s4-a" class="display line" style="font-size: 170px">el río</span></span>
+          <span class="mask"><span id="s4-b" class="display line" style="font-size: 200px; color: var(--celeste)">Guayas</span></span>
+        </div>
+        <div id="s4-gye-label" class="stack" style="top: 1090px; align-items: flex-start; padding-left: 300px">
+          <span class="chip" style="background: var(--white); color: var(--navy); font-size: 34px">Guayaquil</span>
+        </div>
+      </section>
+
+      <!-- ============ S5 · Íconos de la ciudad ============ -->
+      <section id="s5" class="scene clip" data-start="15" data-duration="4" data-track-index="0">
+        <div class="stack" style="top: 220px">
+          <span class="mask"><span id="s5-k" class="kicker line" style="font-size: 50px; color: #fff3d6">Contempla sus</span></span>
+          <span class="mask"><span id="s5-a" class="display line" style="font-size: 200px">icónicos</span></span>
+          <span class="mask"><span id="s5-b" class="display line" style="font-size: 200px; color: var(--sun)">edificios</span></span>
+        </div>
+        <svg id="s5-svg" class="fill" viewBox="0 0 1080 1920">
+          <circle id="s5-sun" cx="540" cy="1160" r="170" fill="#ffd36b" opacity="0.9" />
+          <g id="s5-city" fill="#0b1f3a">
+            <!-- Cerro Santa Ana + faro -->
+            <g id="s5-b1"><path d="M-20 1500 C 60 1330 200 1290 300 1330 C 330 1360 360 1420 380 1500 Z" /><rect x="168" y="1180" width="34" height="130" /><path d="M160 1180 L210 1180 L200 1150 L170 1150 Z" /><circle cx="185" cy="1140" r="14" fill="#ffb321" /></g>
+            <!-- The Point -->
+            <g id="s5-b2"><path d="M420 1500 L420 960 L470 900 L520 960 L520 1500 Z" /><path d="M445 980 L495 980 L495 1480 L445 1480 Z" fill="#163a66" /></g>
+            <!-- Torre Morisca -->
+            <g id="s5-b3"><rect x="600" y="1150" width="70" height="350" /><circle cx="635" cy="1200" r="24" fill="#fff3d6" /><path d="M594 1150 L676 1150 L635 1060 Z" /><rect x="631" y="1030" width="8" height="40" /></g>
+            <!-- La Perla (rueda) -->
+            <g id="s5-wheel-g">
+              <path d="M840 1500 L900 1300 L960 1500" fill="none" stroke="#0b1f3a" stroke-width="14" />
+              <g id="s5-wheel">
+                <circle cx="900" cy="1300" r="130" fill="none" stroke="#0b1f3a" stroke-width="12" />
+                <g id="s5-spokes" stroke="#0b1f3a" stroke-width="5"></g>
+              </g>
+            </g>
+            <rect x="260" y="1380" width="90" height="120" />
+            <rect x="530" y="1330" width="60" height="170" />
+            <rect x="700" y="1270" width="80" height="230" />
+            <rect x="980" y="1360" width="120" height="140" />
+          </g>
+          <rect x="0" y="1500" width="1080" height="420" fill="#0b1f3a" />
+          <g id="s5-water" stroke="#3fa9f5" stroke-width="6" stroke-linecap="round" opacity="0.7"></g>
+          <g id="s5-tags" font-family="Inter" font-weight="900" font-size="26" letter-spacing="2">
+            <g class="s5-tag" id="s5-t1"><line x1="185" y1="1130" x2="185" y2="1060" stroke="#fff" stroke-width="3" /><rect x="70" y="1010" width="230" height="52" rx="26" fill="#fff" /><text x="185" y="1045" text-anchor="middle" fill="#0b1f3a">LAS PEÑAS</text></g>
+            <g class="s5-tag" id="s5-t2"><line x1="470" y1="895" x2="470" y2="840" stroke="#fff" stroke-width="3" /><rect x="360" y="790" width="220" height="52" rx="26" fill="#fff" /><text x="470" y="825" text-anchor="middle" fill="#0b1f3a">THE POINT</text></g>
+            <g class="s5-tag" id="s5-t3"><line x1="635" y1="1025" x2="680" y2="960" stroke="#fff" stroke-width="3" /><rect x="590" y="908" width="270" height="52" rx="26" fill="#fff" /><text x="725" y="943" text-anchor="middle" fill="#0b1f3a">TORRE MORISCA</text></g>
+            <g class="s5-tag" id="s5-t4"><line x1="900" y1="1165" x2="900" y2="1110" stroke="#fff" stroke-width="3" /><rect x="800" y="1058" width="200" height="52" rx="26" fill="#fff" /><text x="900" y="1093" text-anchor="middle" fill="#0b1f3a">LA PERLA</text></g>
+          </g>
+          <text id="s5-malecon" x="540" y="1640" text-anchor="middle" font-family="Caveat" font-weight="700" font-size="80" fill="#ffd36b">Malecón 2000</text>
+        </svg>
+      </section>
+
+      <!-- ============ S6 · Busca tu casa ============ -->
+      <section id="s6" class="scene clip" data-start="19" data-duration="3.5" data-track-index="0">
+        <svg id="s6-svg" class="fill" viewBox="0 0 1080 1920">
+          <g id="s6-streets" stroke="#ffffff" stroke-width="22"></g>
+          <g id="s6-houses"></g>
+          <g id="s6-target">
+            <circle cx="0" cy="0" r="54" fill="#ffb321" opacity="0.35" id="s6-ring" />
+            <use href="#house" x="-30" y="-32" width="60" height="60" fill="#ff5a36" />
+          </g>
+          <g id="s6-lens">
+            <circle cx="0" cy="0" r="130" fill="rgba(255,255,255,0.25)" stroke="#0b1f3a" stroke-width="22" />
+            <line x1="92" y1="92" x2="200" y2="200" stroke="#0b1f3a" stroke-width="34" stroke-linecap="round" />
+          </g>
+          <g id="s6-pin"><use href="#pin" x="-45" y="-126" width="90" height="126" fill="#ff5a36" /></g>
+        </svg>
+        <div class="stack" style="top: 160px">
+          <div id="s6-card" style="background: var(--navy); border-radius: 40px; padding: 40px 70px 50px">
+            <span class="mask"><span id="s6-a" class="display line" style="font-size: 190px; color: var(--sun)">¡Busca</span></span>
+            <span class="mask"><span id="s6-b" class="display line" style="font-size: 190px">tu casa!</span></span>
+          </div>
+        </div>
+        <div id="s6-here" class="stack" style="top: 1500px">
+          <span class="hand" style="font-size: 96px; color: var(--navy)">¡aquí estoy!</span>
+        </div>
+      </section>
+
+      <!-- ============ S7 · Vista desde el aire ============ -->
+      <section id="s7" class="scene clip" data-start="22.5" data-duration="3.5" data-track-index="0">
+        <div id="s7-clouds" class="fill"></div>
+        <div class="stack" style="top: 220px">
+          <span class="mask"><span id="s7-a" class="kicker line" style="font-size: 50px; color: var(--white)">Una vista que solo</span></span>
+          <span class="mask"><span id="s7-b" class="kicker line" style="font-size: 50px; color: var(--white)">puedes vivir desde el</span></span>
+        </div>
+        <div class="stack" style="top: 470px">
+          <svg id="s7-gauge" width="620" height="620" viewBox="-310 -310 620 620">
+            <defs>
+              <clipPath id="s7-clip"><circle r="270" /></clipPath>
+            </defs>
+            <circle r="300" fill="#0b1f3a" />
+            <g clip-path="url(#s7-clip)">
+              <g id="s7-horizon">
+                <rect x="-500" y="-500" width="1000" height="500" fill="#3fa9f5" />
+                <rect x="-500" y="0" width="1000" height="500" fill="#c98a4a" />
+                <line x1="-500" y1="0" x2="500" y2="0" stroke="#fff" stroke-width="6" />
+                <g stroke="#fff" stroke-width="4">
+                  <line x1="-60" y1="-60" x2="60" y2="-60" /><line x1="-100" y1="-120" x2="100" y2="-120" /><line x1="-60" y1="60" x2="60" y2="60" /><line x1="-100" y1="120" x2="100" y2="120" />
+                </g>
+              </g>
+            </g>
+            <path d="M-160 0 L-50 0 L-20 30 L20 30 L50 0 L160 0" fill="none" stroke="#ffb321" stroke-width="16" stroke-linejoin="round" stroke-linecap="round" />
+            <circle r="10" fill="#ffb321" />
+            <circle r="290" fill="none" stroke="#fff" stroke-width="6" opacity="0.5" />
+          </svg>
+        </div>
+        <div class="stack" style="top: 1130px">
+          <span class="mask"><span id="s7-c" class="display line" style="font-size: 380px; color: var(--navy); text-shadow: 0 18px 0 rgba(255, 179, 33, 0.9)">aire</span></span>
+        </div>
+      </section>
+
+      <!-- ============ S8 · No termina aquí ============ -->
+      <section id="s8" class="scene clip" data-start="26" data-duration="2.5" data-track-index="0">
+        <div class="stack" style="top: 640px">
+          <span id="s8-a" class="hand line" style="font-size: 120px; color: var(--navy)">Y obvio...</span>
+          <span class="mask" style="margin-top: 20px"><span id="s8-b" class="display line" style="font-size: 170px; color: var(--navy)">no termina</span></span>
+          <span class="mask"><span id="s8-c" class="display line" style="font-size: 230px; color: var(--white)">aquí</span></span>
+          <div style="display: flex; gap: 34px; margin-top: 50px">
+            <div class="s8-dot" style="width: 44px; height: 44px; border-radius: 50%; background: var(--navy)"></div>
+            <div class="s8-dot" style="width: 44px; height: 44px; border-radius: 50%; background: var(--navy)"></div>
+            <div class="s8-dot" style="width: 44px; height: 44px; border-radius: 50%; background: var(--navy)"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ S9 · Mapa Guayaquil → Olón ============ -->
+      <section id="s9" class="scene clip" data-start="28.5" data-duration="5.5" data-track-index="0">
+        <svg id="s9-svg" class="fill" viewBox="0 0 1080 1920">
+          <defs>
+            <mask id="s9-route-mask"><path id="s9-route-draw" fill="none" stroke="#fff" stroke-width="30" stroke-linecap="round" /></mask>
+          </defs>
+          <g id="s9-grid" stroke="#ffffff" stroke-opacity="0.06" stroke-width="2"></g>
+          <path id="s9-land" fill="#f3dcae" />
+          <path id="s9-gulf" fill="#0a2547" />
+          <path id="s9-puna" fill="#e8cf9b" />
+          <path id="s9-river" fill="none" stroke="#3fa9f5" stroke-width="10" stroke-linecap="round" />
+          <path id="s9-road" fill="none" stroke="#c9a46a" stroke-width="6" stroke-dasharray="2 14" stroke-linecap="round" />
+          <g id="s9-coastwaves" color="#3fa9f5"></g>
+          <path id="s9-route" fill="none" stroke="#ff5a36" stroke-width="12" stroke-dasharray="26 18" stroke-linecap="round" mask="url(#s9-route-mask)" />
+          <path id="s9-route-path" fill="none" stroke="none" />
+          <g id="s9-gye"><circle id="s9-gye-pulse" r="30" fill="none" stroke="#0b1f3a" stroke-width="5" /><use href="#pin" x="-30" y="-84" width="60" height="84" fill="#0b1f3a" /></g>
+          <g id="s9-olon"><circle id="s9-olon-pulse" r="30" fill="none" stroke="#ff5a36" stroke-width="5" /><use href="#pin" x="-36" y="-100" width="72" height="100" fill="#ff5a36" /></g>
+          <g id="s9-plane"><use href="#plane" x="-50" y="-36" width="100" height="72" fill="#0b1f3a" /></g>
+          <g font-family="Inter" font-weight="900">
+            <text id="s9-ocean" x="60" y="1580" fill="#8fd3ff" font-size="30" letter-spacing="8" opacity="0.8">OCÉANO PACÍFICO</text>
+            <text id="s9-t-gye" x="0" y="0" fill="#0b1f3a" font-size="40" letter-spacing="2">GUAYAQUIL</text>
+            <text id="s9-t-olon" x="0" y="0" fill="#ffffff" font-size="58" letter-spacing="2">OLÓN</text>
+          </g>
+        </svg>
+        <div class="fill" style="height: 760px; background: linear-gradient(180deg, rgba(10, 37, 71, 0.95) 0%, rgba(10, 37, 71, 0.85) 60%, rgba(10, 37, 71, 0) 100%)"></div>
+        <div class="stack" style="top: 150px">
+          <span class="mask"><span id="s9-k" class="chip line" style="background: var(--coral); color: var(--white); font-size: 44px">Domingo 11</span></span>
+          <span class="mask" style="margin-top: 24px"><span id="s9-a" class="display line" style="font-size: 150px">Nos vamos a</span></span>
+          <span class="mask"><span id="s9-b" class="display line" style="font-size: 230px; color: var(--sun); text-shadow: 0 10px 0 #0a2547, 0 0 30px #0a2547">Olón</span></span>
+        </div>
+      </section>
+
+      <!-- ============ S10 · Cambia la arena por el cielo ============ -->
+      <section id="s10" class="scene clip" data-start="34" data-duration="4.5" data-track-index="0">
+        <svg id="s10-svg" class="fill" viewBox="0 0 1080 1920">
+          <circle id="s10-sun" cx="820" cy="340" r="110" fill="#ffd36b" />
+          <g id="s10-sand">
+            <path id="s10-sea" d="M-120 1200 C 200 1160 540 1240 810 1200 C 950 1180 1060 1190 1200 1200 L1200 1920 L-120 1920 Z" fill="#1474c4" />
+            <path id="s10-foam" d="M-120 1330 C 120 1290 360 1370 540 1330 C 720 1290 960 1370 1200 1330 L1200 1920 L-120 1920 Z" fill="#ffffff" />
+            <path d="M0 1370 C 180 1330 360 1410 540 1370 C 720 1330 900 1410 1080 1370 L1080 1920 L0 1920 Z" fill="#f3dcae" />
+          </g>
+          <g id="s10-plane"><use href="#plane" x="-60" y="-42" width="120" height="86" fill="#0b1f3a" /></g>
+        </svg>
+        <div class="stack" style="top: 380px">
+          <span class="mask"><span id="s10-k" class="kicker line" style="font-size: 54px; color: var(--navy)">Cambia la</span></span>
+          <div style="position: relative">
+            <span class="mask"><span id="s10-w1" class="display line" style="font-size: 220px; color: #9a5a1c">arena</span></span>
+            <div id="s10-strike" style="position: absolute; left: -6%; top: 58%; width: 112%; height: 22px; border-radius: 11px; background: var(--coral); transform-origin: left center"></div>
+          </div>
+          <span class="mask"><span id="s10-p" class="kicker line" style="font-size: 54px; color: var(--navy)">por el</span></span>
+          <span class="mask"><span id="s10-w2" class="display line" style="font-size: 270px; color: #0f5fa8">cielo</span></span>
+        </div>
+        <div class="stack" style="top: 1500px">
+          <span class="mask"><span id="s10-a" class="hand line" style="font-size: 84px; color: var(--navy)">descubre la playa desde</span></span>
+          <span class="mask"><span id="s10-b" class="hand line" style="font-size: 84px; color: var(--navy)">otra perspectiva</span></span>
+        </div>
+      </section>
+
+      <!-- ============ S11 · Escápate ============ -->
+      <section id="s11" class="scene clip" data-start="38.5" data-duration="3" data-track-index="0">
+        <svg id="s11-svg" class="fill" viewBox="0 0 1080 1920">
+          <g id="s11-rays" fill="#ffffff" opacity="0.18"></g>
+          <circle cx="540" cy="1180" r="200" fill="#fff1c1" />
+          <path d="M0 1320 C 300 1260 780 1260 1080 1320 L1080 1920 L0 1920 Z" fill="#0b1f3a" />
+          <g id="s11-palm1" fill="#0b1f3a"><path d="M180 1340 C 190 1200 210 1100 250 980 L262 984 C 228 1100 210 1210 206 1340 Z" /><g id="s11-leaves1"><path d="M256 982 C 180 920 110 940 70 990 C 140 960 200 970 256 982 Z" /><path d="M256 982 C 300 900 380 890 430 930 C 360 920 300 940 256 982 Z" /><path d="M256 982 C 230 900 250 840 300 810 C 270 860 262 920 256 982 Z" /><path d="M256 982 C 330 980 380 1020 400 1070 C 350 1030 300 1010 256 982 Z" /><path d="M256 982 C 190 1000 150 1050 140 1100 C 180 1050 220 1020 256 982 Z" /></g></g>
+          <g id="s11-palm2" fill="#0b1f3a"><path d="M880 1330 C 870 1230 850 1150 820 1060 L832 1056 C 862 1140 884 1230 900 1330 Z" /><g id="s11-leaves2"><path d="M826 1058 C 760 1000 700 1010 660 1050 C 720 1030 780 1040 826 1058 Z" /><path d="M826 1058 C 870 990 940 980 990 1020 C 930 1010 870 1020 826 1058 Z" /><path d="M826 1058 C 810 990 830 940 870 910 C 845 960 832 1010 826 1058 Z" /><path d="M826 1058 C 880 1070 930 1110 940 1150 C 900 1110 860 1090 826 1058 Z" /></g></g>
+          <g id="s11-birds" fill="none" stroke="#0b1f3a" stroke-width="7" stroke-linecap="round"></g>
+        </svg>
+        <div class="stack" style="top: 330px">
+          <span class="mask"><span id="s11-a" class="display line" style="font-size: 230px; color: var(--white)">Escápate</span></span>
+          <span class="mask" style="margin-top: 10px"><span id="s11-b" class="hand line" style="font-size: 100px; color: var(--navy)">y disfruta de la naturaleza</span></span>
+        </div>
+      </section>
+
+      <!-- ============ S12 · CTA ============ -->
+      <section id="s12" class="scene clip" data-start="41.5" data-duration="5.5" data-track-index="0">
+        <div id="s12-clouds" class="fill"></div>
+        <svg id="s12-svg" class="fill" viewBox="0 0 1080 1920">
+          <path id="s12-loop" d="M-150 1700 C 200 1700 420 1640 560 1500 C 700 1360 700 1200 560 1180 C 420 1160 380 1340 520 1420 C 700 1520 900 1420 1250 1200" fill="none" stroke="#3fa9f5" stroke-width="8" stroke-dasharray="3 20" stroke-linecap="round" />
+          <g id="s12-plane"><use href="#plane" x="-60" y="-42" width="120" height="86" fill="#ffb321" /></g>
+        </svg>
+        <div class="stack" style="top: 200px">
+          <span class="mask"><span id="s12-a" class="kicker line" style="font-size: 50px; color: var(--sky)">Este feriado</span></span>
+          <span class="mask" style="margin-top: 20px"><span id="s12-b" class="display line" style="font-size: 130px">no te quedes</span></span>
+          <span class="mask"><span id="s12-c" class="display line" style="font-size: 170px; color: var(--sun)">con las ganas</span></span>
+        </div>
+        <div class="stack" style="top: 820px">
+          <div id="s12-tag" class="chip" style="background: var(--coral); color: var(--white); font-size: 70px; padding: 20px 60px">Etiqueta</div>
+          <span class="mask" style="margin-top: 26px"><span id="s12-d" class="hand line" style="font-size: 96px; color: var(--white)">con quien vienes a volar</span></span>
+          <div id="s12-bubble" class="bubble" style="margin-top: 50px">
+            <div class="avatar">@</div>
+            <div style="font-family: Inter; font-weight: 700; font-size: 54px; text-align: left; white-space: nowrap"><span id="s12-typed"></span><span id="s12-cursor"></span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ Wipe transitions ============ -->
+      <div id="wipe-layer" class="scene clip" data-start="0" data-duration="47" data-track-index="1">
+        <div id="wipe-a" data-layout-allow-overflow class="wipe" style="background: var(--sun)"></div>
+        <div id="wipe-b" data-layout-allow-overflow class="wipe" style="background: var(--celeste)"></div>
+      </div>
+    </div>
+
+    <script>
+      gsap.registerPlugin(MotionPathPlugin);
+      const NS = "http://www.w3.org/2000/svg";
+      function rng(seed) {
+        return function () {
+          seed |= 0;
+          seed = (seed + 0x6d2b79f5) | 0;
+          let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+      function el(tag, attrs, parent) {
+        const n = document.createElementNS(NS, tag);
+        for (const k in attrs) n.setAttribute(k, attrs[k]);
+        if (parent) parent.appendChild(n);
+        return n;
+      }
+      function addClouds(id, seed, count, color) {
+        const host = document.getElementById(id);
+        const r = rng(seed);
+        const svg = el("svg", { viewBox: "0 0 1080 1920", width: "1080", height: "1920" }, host);
+        const out = [];
+        for (let i = 0; i < count; i++) {
+          const w = 200 + r() * 260;
+          const g = el("g", {}, svg);
+          el("use", { href: "#cloud", x: r() * 1080 - w / 2, y: r() * 1800, width: w, height: w / 2, fill: color, opacity: 0.15 + r() * 0.35 }, g);
+          out.push(g);
+        }
+        return out;
+      }
+
+      // ---------- Procedural scene art ----------
+      const cl1 = addClouds("s1-clouds", 3, 9, "#ffffff");
+      const cl2 = addClouds("s2-clouds", 7, 10, "#ffffff");
+      const cl7 = addClouds("s7-clouds", 11, 10, "#ffffff");
+      const cl12 = addClouds("s12-clouds", 21, 8, "#3fa9f5");
+
+      // S3 stars of the Guayaquil flag
+      const s3stars = document.getElementById("s3-stars");
+      const starPts = (cx, cy, R) => {
+        let p = "";
+        for (let i = 0; i < 10; i++) {
+          const a = -Math.PI / 2 + (i * Math.PI) / 5;
+          const rr = i % 2 ? R * 0.42 : R;
+          p += (i ? "L" : "M") + (cx + rr * Math.cos(a)).toFixed(1) + " " + (cy + rr * Math.sin(a)).toFixed(1);
+        }
+        return p + "Z";
+      };
+      [270, 540, 810].forEach((x, i) => el("path", { d: starPts(x, 1600, 70), fill: "#ffffff", class: "s3-star" }, s3stars));
+
+      // S4 city blocks on the west bank
+      const blocks = document.getElementById("s4-blocks");
+      const rb = rng(42);
+      for (let y = 40; y < 1920; y += 64) {
+        for (let x = 30; x < 620; x += 64) {
+          if (rb() < 0.18) continue;
+          el("rect", { x, y, width: 50, height: 50, rx: 8, fill: rb() < 0.12 ? "#ffb321" : "#3fa9f5", opacity: 0.12 + rb() * 0.25, class: "s4-block" }, blocks);
+        }
+      }
+
+      // S5 ferris wheel spokes + water lines
+      const spokes = document.getElementById("s5-spokes");
+      for (let i = 0; i < 12; i++) {
+        const a = (i * Math.PI) / 6;
+        el("line", { x1: 900, y1: 1300, x2: 900 + 130 * Math.cos(a), y2: 1300 + 130 * Math.sin(a) }, spokes);
+        el("circle", { cx: 900 + 130 * Math.cos(a), cy: 1300 + 130 * Math.sin(a), r: 12, fill: "#0b1f3a" }, spokes);
+      }
+      const water = document.getElementById("s5-water");
+      const rw = rng(5);
+      for (let i = 0; i < 18; i++) {
+        const x = rw() * 1000, y = 1530 + rw() * 360, w = 60 + rw() * 160;
+        el("line", { x1: x, y1: y, x2: x + w, y2: y, class: "s5-wl" }, water);
+      }
+
+      // S6 neighbourhood
+      const streets = document.getElementById("s6-streets");
+      for (let x = 0; x <= 1080; x += 180) el("line", { x1: x, y1: 0, x2: x, y2: 1920 }, streets);
+      for (let y = 0; y <= 1920; y += 180) el("line", { x1: 0, y1: y, x2: 1080, y2: y }, streets);
+      const houses = document.getElementById("s6-houses");
+      const rh = rng(9);
+      const palette = ["#3fa9f5", "#0b1f3a", "#8fd3ff", "#ffb321", "#2fbf71"];
+      for (let gy = 0; gy < 11; gy++) {
+        for (let gx = 0; gx < 6; gx++) {
+          for (let k = 0; k < 4; k++) {
+            const x = gx * 180 + 20 + (k % 2) * 76, y = gy * 180 + 20 + Math.floor(k / 2) * 76;
+            if (gx === 3 && gy === 6 && k === 1) continue;
+            const g = el("g", { class: "s6-h" }, houses);
+            el("use", { href: "#house", x, y, width: 64, height: 64, fill: palette[Math.floor(rh() * palette.length)], opacity: 0.85 }, g);
+          }
+        }
+      }
+      const TX = 3 * 180 + 20 + 76 + 32, TY = 6 * 180 + 20 + 32; // target house centre
+      gsap.set("#s6-target", { x: TX, y: TY });
+
+      // S9 map (geographic projection of Guayas / Santa Elena coast)
+      const P = (lon, lat) => [(lon + 81.15) * 675, 600 + (-1.45 - lat) * 675];
+      const poly = (pts, close) => pts.map((p, i) => (i ? "L" : "M") + P(p[0], p[1]).map((v) => v.toFixed(1)).join(" ")).join("") + (close ? "Z" : "");
+      const coast = [
+        [-80.9, -0.4], [-80.83, -1.3], [-80.81, -1.56], [-80.82, -1.67], [-80.77, -1.77], [-80.76, -1.8], [-80.75, -1.84], [-80.73, -1.88], [-80.74, -1.93], [-80.75, -1.98],
+        [-80.73, -2.03], [-80.76, -2.1], [-80.85, -2.17], [-80.93, -2.2], [-81.01, -2.19], [-80.99, -2.24], [-80.9, -2.3], [-80.82, -2.34], [-80.68, -2.4],
+        [-80.5, -2.56], [-80.39, -2.63], [-80.33, -2.66], [-80.25, -2.71], [-80.25, -4.2], [-79.4, -4.2], [-79.4, -0.4],
+      ];
+      document.getElementById("s9-land").setAttribute("d", poly(coast, true));
+      document.getElementById("s9-gulf").setAttribute("d", poly([[-80.25, -2.71], [-80.12, -2.58], [-80.0, -2.46], [-79.93, -2.33], [-79.88, -2.25], [-79.86, -2.32], [-79.84, -2.45], [-79.8, -2.62], [-79.76, -4.2], [-80.3, -4.2]], true));
+      document.getElementById("s9-puna").setAttribute("d", poly([[-80.24, -2.76], [-80.1, -2.68], [-79.98, -2.74], [-79.95, -2.84], [-80.05, -2.95], [-80.22, -2.92]], true));
+      document.getElementById("s9-river").setAttribute("d", poly([[-79.8, -0.4], [-79.82, -1.35], [-79.84, -1.7], [-79.86, -1.95], [-79.865, -2.12], [-79.87, -2.26]]));
+      document.getElementById("s9-road").setAttribute("d", poly([[-79.89, -2.19], [-80.1, -2.24], [-80.38, -2.4], [-80.62, -2.27], [-80.86, -2.23], [-80.78, -2.12], [-80.74, -1.98], [-80.73, -1.88], [-80.74, -1.81]]));
+      const grid = document.getElementById("s9-grid");
+      for (let x = 0; x <= 1080; x += 90) el("line", { x1: x, y1: 0, x2: x, y2: 1920 }, grid);
+      for (let y = 0; y <= 1920; y += 90) el("line", { x1: 0, y1: y, x2: 1080, y2: y }, grid);
+      const GYE = P(-79.89, -2.19), OLON = P(-80.76, -1.8);
+      const routeD = `M${GYE[0]} ${GYE[1]} C ${GYE[0] - 120} ${GYE[1] - 420} ${OLON[0] + 260} ${OLON[1] - 330} ${OLON[0]} ${OLON[1]}`;
+      ["s9-route", "s9-route-draw", "s9-route-path"].forEach((id) => document.getElementById(id).setAttribute("d", routeD));
+      gsap.set("#s9-gye", { x: GYE[0], y: GYE[1] });
+      gsap.set("#s9-olon", { x: OLON[0], y: OLON[1] });
+      const tg = document.getElementById("s9-t-gye");
+      tg.setAttribute("x", GYE[0] - 110);
+      tg.setAttribute("y", GYE[1] + 70);
+      const to = document.getElementById("s9-t-olon");
+      to.setAttribute("x", OLON[0] - 230);
+      to.setAttribute("y", OLON[1] - 30);
+      const cw = document.getElementById("s9-coastwaves");
+      [[-80.95, -1.85], [-81.05, -2.05], [-80.95, -1.65], [-81.08, -2.4]].forEach((c, i) => {
+        const p = P(c[0], c[1]);
+        el("use", { href: "#wave", x: p[0] - 50, y: p[1], width: 100, height: 34, class: "s9-wave" }, cw);
+      });
+
+      // S11 sun rays + birds
+      const rays = document.getElementById("s11-rays");
+      for (let i = 0; i < 16; i++) {
+        const a0 = (i * Math.PI) / 8, a1 = a0 + Math.PI / 20;
+        el("path", { d: `M540 1180 L${540 + 1600 * Math.cos(a0)} ${1180 + 1600 * Math.sin(a0)} L${540 + 1600 * Math.cos(a1)} ${1180 + 1600 * Math.sin(a1)} Z` }, rays);
+      }
+      const birds = document.getElementById("s11-birds");
+      [[300, 1010, 1], [420, 950, 0.8], [700, 1060, 1.1], [820, 990, 0.7], [560, 900, 0.9]].forEach((b) => {
+        const g = el("g", { class: "s11-bird" }, birds);
+        el("path", { d: `M${b[0] - 40 * b[2]} ${b[1]} Q ${b[0] - 18 * b[2]} ${b[1] - 24 * b[2]} ${b[0]} ${b[1]} Q ${b[0] + 18 * b[2]} ${b[1] - 24 * b[2]} ${b[0] + 40 * b[2]} ${b[1]}` }, g);
+      });
+
+      // ---------- Timeline ----------
+      const tl = gsap.timeline({ paused: true });
+      const E = "power4.out";
+      const up = (sel, t, extra) => tl.fromTo(sel, { yPercent: 110 }, Object.assign({ yPercent: 0, duration: 0.7, ease: E }, extra), t);
+      const drift = (arr, t, dur, dx) => arr.forEach((c, i) => tl.fromTo(c, { x: 0 }, { x: dx * (0.5 + (i % 3) * 0.4), duration: dur, ease: "none" }, t));
+      const len = (id) => document.getElementById(id).getTotalLength();
+      const wipe = (t, sel) => {
+        tl.fromTo(sel, { yPercent: 0 }, { yPercent: -100, duration: 0.32, ease: "power3.in", immediateRender: false }, t - 0.32);
+        tl.fromTo(sel, { yPercent: -100 }, { yPercent: -200, duration: 0.38, ease: "power3.out", immediateRender: false }, t);
+      };
+
+      // S1 — 0.0 → 3.2
+      drift(cl1, 0, 3.2, -120);
+      up("#s1-k", 0.15);
+      up("#s1-a", 0.35, { duration: 0.6 });
+      up("#s1-b", 0.5, { duration: 0.6 });
+      up("#s1-c", 0.65, { duration: 0.6 });
+      tl.fromTo("#s1-strike", { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "power2.inOut" }, 1.5);
+      tl.fromTo("#s1-c", { rotation: 0 }, { rotation: -4, duration: 0.3, ease: "back.out(3)", immediateRender: false }, 1.9);
+      tl.to(["#s1-a", "#s1-b", "#s1-c", "#s1-k"], { yPercent: -110, duration: 0.4, ease: "power3.in", stagger: 0.05 }, 2.75);
+
+      // S2 — 3.2 → 6.0
+      drift(cl2, 3.2, 2.8, 160);
+      up("#s2-k", 3.3);
+      tl.fromTo("#s2-v", { yPercent: 110, scale: 0.6 }, { yPercent: 0, scale: 1, duration: 0.8, ease: "back.out(1.8)" }, 3.45);
+      const s2len = len("s2-trail");
+      tl.fromTo("#s2-trail", { strokeDashoffset: 0, opacity: 0 }, { opacity: 0.9, duration: 0.2 }, 3.5);
+      tl.fromTo("#s2-plane", { opacity: 1 }, { motionPath: { path: "#s2-trail", align: "#s2-trail", alignOrigin: [0.5, 0.5], autoRotate: true }, duration: 2.2, ease: "power1.inOut" }, 3.5);
+      tl.fromTo("#s2-v", { rotation: 0 }, { rotation: -3, yoyo: true, repeat: 3, duration: 0.25, ease: "sine.inOut", immediateRender: false }, 4.4);
+
+      // wipe into S3
+      wipe(6.0, "#wipe-a");
+
+      // S3 — 6.0 → 10.0
+      tl.fromTo(".s3-band", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power3.out", stagger: 0.07 }, 6.0);
+      up("#s3-k", 6.35);
+      tl.fromTo("#s3-cal1", { rotationX: -90, y: -60, opacity: 0, transformPerspective: 900 }, { rotationX: 0, y: 0, opacity: 1, duration: 0.7, ease: "back.out(1.6)" }, 6.45);
+      tl.fromTo("#s3-y", { scale: 0 }, { scale: 1, duration: 0.4, ease: "back.out(3)" }, 6.7);
+      tl.fromTo("#s3-cal2", { rotationX: -90, y: -60, opacity: 0, transformPerspective: 900 }, { rotationX: 0, y: 0, opacity: 1, duration: 0.7, ease: "back.out(1.6)" }, 6.8);
+      up("#s3-a", 7.3);
+      up("#s3-b", 7.6);
+      tl.fromTo(".s3-star", { scale: 0, rotation: -120, transformOrigin: "50% 50%" }, { scale: 1, rotation: 0, duration: 0.6, ease: "back.out(2.5)", stagger: 0.12 }, 7.7);
+      tl.fromTo(["#s3-cal1", "#s3-cal2"], { rotation: 0 }, { rotation: (i) => (i ? 4 : -4), duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: 2, immediateRender: false }, 8.2);
+
+      // wipe into S4
+      wipe(10.0, "#wipe-b");
+
+      // S4 — 10.0 → 15.0
+      tl.fromTo(".s4-block", { scale: 0, transformOrigin: "50% 50%" }, { scale: 1, duration: 0.5, ease: "back.out(2)", stagger: { each: 0.004, from: "start" } }, 10.0);
+      const rl = len("s4-river");
+      tl.fromTo("#s4-river", { strokeDasharray: rl, strokeDashoffset: rl }, { strokeDashoffset: 0, duration: 1.4, ease: "power2.inOut" }, 10.1);
+      tl.fromTo("#s4-river-hi", { strokeDashoffset: 0 }, { strokeDashoffset: -400, duration: 4.9, ease: "none" }, 10.1);
+      tl.fromTo("#s4-santay", { scale: 0, transformOrigin: "50% 50%" }, { scale: 1, duration: 0.5, ease: "back.out(2)" }, 11.2);
+      tl.fromTo("#s4-l1", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 11.5);
+      up("#s4-k", 10.3);
+      up("#s4-a", 10.45);
+      up("#s4-b", 10.6);
+      tl.fromTo("#s4-gye", { scale: 0, transformOrigin: "50% 100%" }, { scale: 1, duration: 0.5, ease: "back.out(3)" }, 11.4);
+      tl.fromTo("#s4-gye-label", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.5, ease: E }, 11.6);
+      tl.fromTo("#s4-pulse", { attr: { r: 20 }, opacity: 1 }, { attr: { r: 90 }, opacity: 0, duration: 1, repeat: 2, ease: "power1.out" }, 11.6);
+      const fl = len("s4-fly");
+      tl.fromTo("#s4-fly", { strokeDashoffset: 0, opacity: 0 }, { opacity: 0.8, duration: 0.3 }, 11.8);
+      tl.fromTo("#s4-plane", { opacity: 1 }, { motionPath: { path: "#s4-fly", align: "#s4-fly", alignOrigin: [0.5, 0.5], autoRotate: true }, duration: 3.1, ease: "none" }, 11.8);
+
+      // S5 — 15.0 → 19.0
+      up("#s5-k", 15.05);
+      up("#s5-a", 15.2);
+      up("#s5-b", 15.35);
+      tl.fromTo("#s5-sun", { y: 220 }, { y: 0, duration: 1.4, ease: "power2.out" }, 15.0);
+      tl.fromTo(["#s5-b1", "#s5-b2", "#s5-b3", "#s5-wheel-g"], { y: 600 }, { y: 0, duration: 0.8, ease: "back.out(1.2)", stagger: 0.14 }, 15.2);
+      tl.fromTo("#s5-city > rect", { scaleY: 0, transformOrigin: "50% 100%" }, { scaleY: 1, duration: 0.6, ease: "power3.out", stagger: 0.06 }, 15.4);
+      tl.fromTo("#s5-wheel", { rotation: 0, svgOrigin: "900 1300" }, { rotation: 140, duration: 3.8, ease: "none" }, 15.2);
+      tl.fromTo(".s5-tag", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.45, ease: "back.out(2)", stagger: 0.3 }, 16.1);
+      tl.fromTo(".s5-wl", { x: -30 }, { x: 30, duration: 3.8, ease: "sine.inOut", stagger: 0.02 }, 15.2);
+      tl.fromTo("#s5-malecon", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: E }, 17.3);
+
+      // wipe into S6
+      wipe(19.0, "#wipe-a");
+
+      // S6 — 19.0 → 22.5
+      tl.fromTo("#s6-svg", { scale: 1.35, transformOrigin: "50% 50%" }, { scale: 1, duration: 3.5, ease: "power2.out" }, 19.0);
+      tl.fromTo(".s6-h", { opacity: 0 }, { opacity: 1, duration: 0.3, stagger: { each: 0.004, from: "random" } }, 19.0);
+      tl.fromTo("#s6-card", { scale: 0.5, opacity: 0, rotation: -6 }, { scale: 1, opacity: 1, rotation: -3, duration: 0.6, ease: "back.out(2)" }, 19.15);
+      up("#s6-a", 19.3);
+      up("#s6-b", 19.42);
+      tl.fromTo("#s6-lens", { x: 150, y: 1500 }, { keyframes: [{ x: 300, y: 1050, duration: 0.6 }, { x: 860, y: 1250, duration: 0.6 }, { x: TX, y: TY, duration: 0.5 }], ease: "power1.inOut" }, 19.4);
+      tl.fromTo("#s6-ring", { attr: { r: 20 }, opacity: 0.6 }, { attr: { r: 110 }, opacity: 0, duration: 0.8, repeat: 1, ease: "power1.out" }, 21.0);
+      tl.fromTo("#s6-pin", { x: TX, y: TY - 400, opacity: 0 }, { y: TY - 6, opacity: 1, duration: 0.5, ease: "bounce.out" }, 21.05);
+      tl.fromTo("#s6-here", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(3)" }, 21.4);
+
+      // S7 — 22.5 → 26.0
+      cl7.forEach((c, i) => tl.fromTo(c, { y: 0 }, { y: 600 + (i % 3) * 300, duration: 3.5, ease: "none" }, 22.5));
+      up("#s7-a", 22.6);
+      up("#s7-b", 22.75);
+      tl.fromTo("#s7-gauge", { scale: 0, rotation: -90 }, { scale: 1, rotation: 0, duration: 0.8, ease: "back.out(1.6)" }, 22.7);
+      tl.fromTo("#s7-horizon", { rotation: 0, y: 120 }, { keyframes: [{ rotation: -22, y: 40, duration: 0.9 }, { rotation: 16, y: -30, duration: 0.9 }, { rotation: -6, y: 60, duration: 0.9 }], ease: "sine.inOut" }, 23.0);
+      tl.fromTo("#s7-c", { yPercent: 110, scale: 0.8 }, { yPercent: 0, scale: 1, duration: 0.8, ease: "back.out(1.6)" }, 23.4);
+
+      // wipe into S8
+      wipe(26.0, "#wipe-b");
+
+      // S8 — 26.0 → 28.5
+      tl.fromTo("#s8-a", { opacity: 0, rotation: -8, scale: 0.7 }, { opacity: 1, rotation: -4, scale: 1, duration: 0.5, ease: "back.out(2.5)" }, 26.1);
+      up("#s8-b", 26.4);
+      up("#s8-c", 26.6, { ease: "back.out(1.8)" });
+      tl.fromTo(".s8-dot", { y: 0 }, { y: -40, duration: 0.25, yoyo: true, repeat: 5, ease: "sine.inOut", stagger: 0.12 }, 26.8);
+
+      // wipe into S9
+      wipe(28.5, "#wipe-a");
+
+      // S9 — 28.5 → 34.0
+      tl.fromTo("#s9-svg", { scale: 1.25, transformOrigin: "60% 55%" }, { scale: 1, duration: 5.5, ease: "power2.out" }, 28.5);
+      up("#s9-k", 28.6);
+      up("#s9-a", 28.75);
+      tl.fromTo("#s9-b", { yPercent: 110, scale: 0.7 }, { yPercent: 0, scale: 1, duration: 0.8, ease: "back.out(1.8)" }, 28.9);
+      const rr = len("s9-river");
+      tl.fromTo("#s9-river", { strokeDasharray: rr, strokeDashoffset: rr }, { strokeDashoffset: 0, duration: 1, ease: "power2.out" }, 28.7);
+      tl.fromTo("#s9-gye", { scale: 0, transformOrigin: "50% 100%" }, { scale: 1, duration: 0.5, ease: "back.out(3)" }, 29.2);
+      tl.fromTo("#s9-t-gye", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 29.4);
+      tl.fromTo("#s9-gye-pulse", { attr: { r: 14 }, opacity: 1 }, { attr: { r: 70 }, opacity: 0, duration: 0.9, ease: "power1.out" }, 29.4);
+      const rl9 = len("s9-route-draw");
+      tl.fromTo("#s9-route-draw", { strokeDasharray: rl9, strokeDashoffset: rl9 }, { strokeDashoffset: 0, duration: 2.4, ease: "power1.inOut" }, 29.7);
+      tl.fromTo("#s9-plane", { opacity: 1 }, { motionPath: { path: "#s9-route-path", align: "#s9-route-path", alignOrigin: [0.5, 0.5], autoRotate: true }, duration: 2.4, ease: "power1.inOut" }, 29.7);
+      tl.fromTo("#s9-olon", { scale: 0, transformOrigin: "50% 100%" }, { scale: 1, duration: 0.6, ease: "back.out(3)" }, 32.0);
+      tl.fromTo("#s9-t-olon", { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.5, ease: E }, 32.1);
+      tl.fromTo("#s9-olon-pulse", { attr: { r: 16 }, opacity: 1 }, { attr: { r: 90 }, opacity: 0, duration: 0.9, repeat: 1, ease: "power1.out" }, 32.1);
+      tl.fromTo(".s9-wave", { opacity: 0, x: -20 }, { opacity: 1, x: 20, duration: 1.4, stagger: 0.2, ease: "sine.inOut" }, 31.4);
+      tl.fromTo("#s9-ocean", { opacity: 0 }, { opacity: 0.8, duration: 0.8 }, 29.6);
+
+      // S10 — 34.0 → 38.5
+      tl.fromTo("#s10-sun", { scale: 0.6, svgOrigin: "820 340" }, { scale: 1, duration: 1, ease: "back.out(2)" }, 34.0);
+      tl.fromTo("#s10-sand", { y: 400 }, { y: 0, duration: 0.8, ease: E }, 34.0);
+      tl.fromTo(["#s10-sea", "#s10-foam"], { x: 0 }, { x: (i) => (i ? 60 : -60), duration: 1.1, yoyo: true, repeat: 3, ease: "sine.inOut" }, 34.0);
+      up("#s10-k", 34.2);
+      up("#s10-w1", 34.35);
+      tl.fromTo("#s10-strike", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power2.inOut" }, 35.2);
+      tl.fromTo("#s10-w1", { opacity: 1 }, { opacity: 0.45, duration: 0.4, immediateRender: false }, 35.3);
+      up("#s10-p", 35.5);
+      tl.fromTo("#s10-w2", { yPercent: 110, scale: 0.7 }, { yPercent: 0, scale: 1, duration: 0.7, ease: "back.out(1.8)" }, 35.65);
+      tl.fromTo("#s10-sand", { y: 0 }, { y: 520, duration: 0.9, ease: "power3.inOut", immediateRender: false }, 35.4);
+      tl.fromTo("#s10-plane", { x: -150, y: 1100, rotation: -12 }, { x: 1250, y: 300, rotation: -22, duration: 2.6, ease: "power1.inOut" }, 35.5);
+      up("#s10-a", 36.4);
+      up("#s10-b", 36.6);
+
+      // wipe into S11
+      wipe(38.5, "#wipe-a");
+
+      // S11 — 38.5 → 41.5
+      tl.fromTo("#s11-rays", { rotation: 0, svgOrigin: "540 1180" }, { rotation: 30, duration: 3, ease: "none" }, 38.5);
+      tl.fromTo(["#s11-palm1", "#s11-palm2"], { y: 500 }, { y: 0, duration: 0.7, ease: "back.out(1.4)", stagger: 0.1 }, 38.5);
+      tl.fromTo("#s11-leaves1", { rotation: -5, svgOrigin: "256 982" }, { rotation: 5, duration: 0.8, yoyo: true, repeat: 3, ease: "sine.inOut" }, 38.6);
+      tl.fromTo("#s11-leaves2", { rotation: 5, svgOrigin: "826 1058" }, { rotation: -5, duration: 0.9, yoyo: true, repeat: 2, ease: "sine.inOut" }, 38.6);
+      tl.fromTo(".s11-bird", { x: -300, y: 80 }, { x: 260, y: -120, duration: 2.8, ease: "none", stagger: 0.08 }, 38.6);
+      tl.fromTo("#s11-a", { yPercent: 110, skewX: -12 }, { yPercent: 0, skewX: 0, duration: 0.7, ease: E }, 38.65);
+      up("#s11-b", 39.1);
+
+      // wipe into S12
+      wipe(41.5, "#wipe-b");
+
+      // S12 — 41.5 → 47.0
+      drift(cl12, 41.5, 5.5, -140);
+      up("#s12-a", 41.6);
+      up("#s12-b", 41.75);
+      up("#s12-c", 41.9, { ease: "back.out(1.6)" });
+      tl.fromTo("#s12-tag", { scale: 0, rotation: -10 }, { scale: 1, rotation: -3, duration: 0.6, ease: "back.out(2.6)" }, 42.6);
+      up("#s12-d", 42.9);
+      tl.fromTo("#s12-bubble", { y: 120, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.8)" }, 43.4);
+      const typed = "@tu_copiloto";
+      const tObj = { n: 0 };
+      tl.fromTo(tObj, { n: 0 }, { n: typed.length, duration: 1.1, ease: "none", onUpdate: () => (document.getElementById("s12-typed").textContent = typed.slice(0, Math.round(tObj.n))) }, 43.8);
+      tl.fromTo("#s12-cursor", { opacity: 1 }, { opacity: 0, duration: 0.3, yoyo: true, repeat: 9, ease: "steps(1)" }, 43.4);
+      const ll = len("s12-loop");
+      tl.fromTo("#s12-loop", { strokeDashoffset: 0, opacity: 0 }, { opacity: 0.8, duration: 0.3 }, 43.6);
+      tl.fromTo("#s12-plane", { opacity: 1 }, { motionPath: { path: "#s12-loop", align: "#s12-loop", alignOrigin: [0.5, 0.5], autoRotate: true }, duration: 3.2, ease: "power1.inOut" }, 43.6);
+      tl.fromTo("#s12-tag", { y: 0 }, { y: -14, duration: 0.4, yoyo: true, repeat: 5, ease: "sine.inOut", immediateRender: false }, 44.5);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
