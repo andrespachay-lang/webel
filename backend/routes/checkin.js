@@ -59,7 +59,7 @@ router.post('/', subida.single('foto_cedula'), async (req, res) => {
 
   // ── Validación ───────────────────────────────────────────────────────────
   const camposObligatorios = {
-    codigo_reserva, nombre, apellido, cedula, direccion, telefono,
+    nombre, apellido, cedula, direccion, telefono,
     contacto_emergencia, hora_llegada, personas,
   };
   for (const [campo, valor] of Object.entries(camposObligatorios)) {
@@ -76,19 +76,20 @@ router.post('/', subida.single('foto_cedula'), async (req, res) => {
     return res.status(400).json({ error: 'Debes aceptar las condiciones de la estancia para continuar' });
   }
 
-  // Verificar que la reserva existe y no está cancelada
-  const reserva = db.prepare(`
-    SELECT * FROM reservas WHERE codigo = ? AND estado != 'cancelada'
-  `).get(codigo_reserva);
+  // Si no viene código, generar uno único para este check-in directo
+  const codigoFinal = codigo_reserva || `DIRECTO-${Date.now()}`;
 
-  if (!reserva) {
-    return res.status(404).json({ error: 'Código de reserva no encontrado o cancelado' });
-  }
+  // Buscar reserva si hay código; si no, usar objeto vacío
+  const reserva = codigo_reserva
+    ? db.prepare(`SELECT * FROM reservas WHERE codigo = ? AND estado != 'cancelada'`).get(codigo_reserva)
+    : { habitacion: '-', fecha_entrada: '-', correo: null };
 
-  // ── Evitar check-in duplicado ────────────────────────────────────────────
-  const existente = db.prepare('SELECT id FROM checkins WHERE codigo_reserva = ?').get(codigo_reserva);
-  if (existente) {
-    return res.status(409).json({ error: 'Ya existe un check-in registrado para esta reserva' });
+  // ── Evitar check-in duplicado (solo si hay código de reserva) ────────────
+  if (codigo_reserva) {
+    const existente = db.prepare('SELECT id FROM checkins WHERE codigo_reserva = ?').get(codigoFinal);
+    if (existente) {
+      return res.status(409).json({ error: 'Ya existe un check-in registrado para esta reserva' });
+    }
   }
 
   const fotoCedula = req.file ? req.file.filename : null;
@@ -100,7 +101,7 @@ router.post('/', subida.single('foto_cedula'), async (req, res) => {
       INSERT INTO checkins (codigo_reserva, nombre, apellido, cedula, direccion, telefono, contacto_emergencia, hora_llegada, personas, solicitudes, foto_cedula, acepto_terminos)
       VALUES (@codigo_reserva, @nombre, @apellido, @cedula, @direccion, @telefono, @contacto_emergencia, @hora_llegada, @personas, @solicitudes, @foto_cedula, @acepto_terminos)
     `).run({
-      codigo_reserva,
+      codigo_reserva: codigoFinal,
       nombre,
       apellido,
       cedula,
@@ -118,17 +119,19 @@ router.post('/', subida.single('foto_cedula'), async (req, res) => {
     return res.status(500).json({ error: 'Error interno al guardar el check-in' });
   }
 
-  const checkin = db.prepare('SELECT * FROM checkins WHERE codigo_reserva = ?').get(codigo_reserva);
+  const checkin = db.prepare('SELECT * FROM checkins WHERE codigo_reserva = ?').get(codigoFinal);
   const rutaFotoCedula = fotoCedula ? path.join(__dirname, '../uploads/cedulas', fotoCedula) : null;
 
   // ── Notificaciones ───────────────────────────────────────────────────────
-  email.enviarConfirmacionCheckin(checkin, reserva).catch(e => console.error('[Email checkin]', e.message));
+  if (reserva.correo) {
+    email.enviarConfirmacionCheckin(checkin, reserva).catch(e => console.error('[Email checkin]', e.message));
+  }
   email.enviarNotificacionCheckinHotel(checkin, reserva, rutaFotoCedula).catch(e => console.error('[Email checkin hotel]', e.message));
   whatsapp.enviarWhatsApp(whatsapp.mensajeCheckin(checkin, reserva)).catch(e => console.error('[WA checkin]', e.message));
 
   return res.status(201).json({
     mensaje: '¡Check-in registrado! El anfitrión ya tiene tu información.',
-    codigo_reserva,
+    codigo_reserva: codigoFinal,
     hora_llegada,
   });
 });
