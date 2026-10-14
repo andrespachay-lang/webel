@@ -282,6 +282,77 @@
     cursor: pointer;
   }
 
+  /* Sección de pagos */
+  .pago-seccion {
+    background: var(--pacifico);
+    color: var(--crema);
+    padding: 2.5rem 1.5rem;
+  }
+  .pago-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+  }
+  .pago-titulo {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 1.3rem;
+    margin-bottom: 0.35rem;
+  }
+  .pago-titulo em { font-style: italic; color: var(--sol); }
+  .pago-sub {
+    font-size: 0.85rem;
+    color: rgba(250,246,240,0.7);
+    margin-bottom: 1.5rem;
+  }
+  .pago-bancos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .pago-banco {
+    background: rgba(250,246,240,0.08);
+    border: 1px solid rgba(250,246,240,0.15);
+    border-radius: 8px;
+    padding: 1rem 1.1rem;
+  }
+  .pago-banco-nombre {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--sol);
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+  }
+  .pago-banco table { width: 100%; border-collapse: collapse; }
+  .pago-banco td {
+    font-size: 0.82rem;
+    padding: 0.2rem 0;
+    vertical-align: top;
+  }
+  .pago-banco td:first-child {
+    color: rgba(250,246,240,0.6);
+    width: 45%;
+  }
+  .pago-banco td:last-child { font-weight: 500; }
+  .pago-wa {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: #25D366;
+    color: #fff;
+    padding: 0.85rem 1.5rem;
+    border-radius: 100px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    transition: transform 0.3s;
+  }
+  .pago-wa:hover { transform: scale(1.03); }
+  @media (max-width: 600px) {
+    .pago-bancos { grid-template-columns: 1fr; }
+  }
+
   /* Footer */
   .pie {
     text-align: center;
@@ -473,6 +544,41 @@
     <button onclick="document.getElementById('modal-terminos').classList.remove('open')">Entendido</button>
   </div>
 </div>
+
+<section class="pago-seccion">
+  <div class="pago-inner">
+    <p class="pago-titulo">¿Aún no has <em>pagado</em>?</p>
+    <p class="pago-sub">Puedes realizar tu pago por transferencia bancaria a cualquiera de estas cuentas.</p>
+
+    <div class="pago-bancos">
+      <div class="pago-banco">
+        <div class="pago-banco-nombre">Banco Pichincha</div>
+        <table>
+          <tr><td>Tipo</td><td>Cuenta de Ahorros</td></tr>
+          <tr><td>Número</td><td>3466750600</td></tr>
+          <tr><td>Titular</td><td>Víctor Pachay Alcívar</td></tr>
+          <tr><td>Cédula</td><td>1301370605</td></tr>
+        </table>
+      </div>
+      <div class="pago-banco">
+        <div class="pago-banco-nombre">Banco Guayaquil</div>
+        <table>
+          <tr><td>Tipo</td><td>Cuenta de Ahorros</td></tr>
+          <tr><td>Número</td><td>42559169</td></tr>
+          <tr><td>Titular</td><td>María Chávez</td></tr>
+          <tr><td>Cédula</td><td>0906499454</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <a href="https://wa.me/593986721666?text=Hola%2C%20quisiera%20que%20me%20env%C3%ADen%20el%20link%20de%20pago%20PayPhone%20para%20mi%20reserva." class="pago-wa" target="_blank">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+      </svg>
+      Envíame el link de pago PayPhone
+    </a>
+  </div>
+</section>
 
 <footer class="pie">
   <a href="index.html">Estación del Sol</a> · Las Núñez · Santa Elena, Ecuador ·
