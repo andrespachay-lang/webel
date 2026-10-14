@@ -10,6 +10,7 @@ const fs      = require('fs');
 const router  = express.Router();
 const email     = require('../services/email');
 const whatsapp  = require('../services/whatsapp');
+const ocr       = require('../services/ocr');
 
 // ── Configuración de Multer (subida de foto de cédula) ────────────────────────
 const almacenamiento = multer.diskStorage({
@@ -94,6 +95,23 @@ router.post('/', subida.single('foto_cedula'), async (req, res) => {
 
   const fotoCedula = req.file ? req.file.filename : null;
   const numPersonas = parseInt(personas, 10);
+
+  // ── Verificación OCR de cédula ───────────────────────────────────────────
+  const rutaFotoTemp = req.file ? path.join(__dirname, '../uploads/cedulas', req.file.filename) : null;
+  if (rutaFotoTemp) {
+    const verificacion = await ocr.verificarCedula(rutaFotoTemp);
+    if (!verificacion.ok && !verificacion.ilegible) {
+      fs.unlinkSync(rutaFotoTemp);
+      return res.status(400).json({
+        error: `No se puede completar el check-in. La fecha de nacimiento detectada indica que no cumples con la edad mínima requerida (18 años).`,
+      });
+    }
+    if (verificacion.ilegible) {
+      whatsapp.enviarWhatsApp(
+        `⚠️ *Check-in requiere revisión manual*\n\nNo se pudo leer la fecha de nacimiento de la cédula de *${nombre} ${apellido}*.\n\nPor favor revisa la foto manualmente para verificar la edad.`
+      ).catch(e => console.error('[WA OCR alerta]', e.message));
+    }
+  }
 
   // ── Guardar check-in ─────────────────────────────────────────────────────
   try {
