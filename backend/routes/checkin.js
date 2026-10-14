@@ -56,6 +56,8 @@ router.post('/', subida.single('foto_cedula'), async (req, res) => {
     personas,
     solicitudes,
     acepto_terminos,
+    correo,
+    fecha_salida,
   } = req.body;
 
   // ── Validación ───────────────────────────────────────────────────────────
@@ -116,8 +118,8 @@ router.post('/', subida.single('foto_cedula'), async (req, res) => {
   // ── Guardar check-in ─────────────────────────────────────────────────────
   try {
     db.prepare(`
-      INSERT INTO checkins (codigo_reserva, nombre, apellido, cedula, direccion, telefono, contacto_emergencia, hora_llegada, personas, solicitudes, foto_cedula, acepto_terminos)
-      VALUES (@codigo_reserva, @nombre, @apellido, @cedula, @direccion, @telefono, @contacto_emergencia, @hora_llegada, @personas, @solicitudes, @foto_cedula, @acepto_terminos)
+      INSERT INTO checkins (codigo_reserva, nombre, apellido, cedula, direccion, telefono, contacto_emergencia, hora_llegada, personas, solicitudes, foto_cedula, acepto_terminos, correo, fecha_salida)
+      VALUES (@codigo_reserva, @nombre, @apellido, @cedula, @direccion, @telefono, @contacto_emergencia, @hora_llegada, @personas, @solicitudes, @foto_cedula, @acepto_terminos, @correo, @fecha_salida)
     `).run({
       codigo_reserva: codigoFinal,
       nombre,
@@ -131,6 +133,8 @@ router.post('/', subida.single('foto_cedula'), async (req, res) => {
       solicitudes: solicitudes || null,
       foto_cedula: fotoCedula,
       acepto_terminos: 1,
+      correo: correo || null,
+      fecha_salida: fecha_salida || null,
     });
   } catch (err) {
     console.error('[Checkin] Error guardando:', err);

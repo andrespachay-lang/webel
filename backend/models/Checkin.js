@@ -64,6 +64,9 @@ function crearTablaCheckins(db) {
     direccion:           `ALTER TABLE checkins ADD COLUMN direccion TEXT NOT NULL DEFAULT ''`,
     telefono:            `ALTER TABLE checkins ADD COLUMN telefono TEXT NOT NULL DEFAULT ''`,
     contacto_emergencia: `ALTER TABLE checkins ADD COLUMN contacto_emergencia TEXT NOT NULL DEFAULT ''`,
+    correo:              `ALTER TABLE checkins ADD COLUMN correo TEXT`,
+    fecha_salida:        `ALTER TABLE checkins ADD COLUMN fecha_salida TEXT`,
+    recordatorio_enviado:`ALTER TABLE checkins ADD COLUMN recordatorio_enviado INTEGER NOT NULL DEFAULT 0`,
   };
   for (const [columna, sql] of Object.entries(nuevas)) {
     if (!columnas.includes(columna)) db.exec(sql);

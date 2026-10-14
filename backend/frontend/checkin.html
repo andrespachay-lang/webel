@@ -512,6 +512,19 @@
         </div>
       </div>
 
+      <div class="fila-2">
+        <div class="grupo" id="g-correo">
+          <label>Correo electrónico</label>
+          <input type="email" id="correo" placeholder="tuemail@ejemplo.com" />
+          <span class="error-msg">Ingresa tu correo electrónico</span>
+        </div>
+        <div class="grupo" id="g-fecha-salida">
+          <label>Fecha de salida</label>
+          <input type="date" id="fecha-salida" />
+          <span class="error-msg">Ingresa tu fecha de salida</span>
+        </div>
+      </div>
+
       <div class="grupo">
         <label>Solicitudes especiales (opcional)</label>
         <textarea id="solicitudes" rows="3" placeholder="Llegamos con bebé, necesitamos cuna / Cumpleaños / Alergias alimentarias…"></textarea>
@@ -671,10 +684,12 @@
     const cedula     = document.getElementById('cedula').value.trim();
     const direccion  = document.getElementById('direccion').value.trim();
     const telefono   = document.getElementById('telefono').value.trim();
-    const emergencia = document.getElementById('contacto-emergencia').value.trim();
-    const hora       = document.getElementById('hora-llegada').value;
-    const personas   = document.getElementById('personas').value;
-    const solicitudes = document.getElementById('solicitudes').value.trim();
+    const emergencia   = document.getElementById('contacto-emergencia').value.trim();
+    const hora         = document.getElementById('hora-llegada').value;
+    const personas     = document.getElementById('personas').value;
+    const solicitudes  = document.getElementById('solicitudes').value.trim();
+    const correo       = document.getElementById('correo').value.trim();
+    const fechaSalida  = document.getElementById('fecha-salida').value;
     const foto       = document.getElementById('foto-cedula').files[0];
     const acepta     = document.getElementById('acepto-terminos').checked;
 
@@ -708,6 +723,8 @@
       formData.append('solicitudes',         solicitudes);
       formData.append('acepto_terminos',     acepta ? 'true' : 'false');
       formData.append('foto_cedula',         foto);
+      if (correo)      formData.append('correo',       correo);
+      if (fechaSalida) formData.append('fecha_salida', fechaSalida);
 
       const resp = await fetch(`${API}/api/checkin`, {
         method: 'POST',

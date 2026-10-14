@@ -309,6 +309,38 @@ function formatearFecha(fecha) {
   return `${dia} ${meses[parseInt(mes, 10) - 1]} ${año}`;
 }
 
+// ── Recordatorio de checkout al huésped ───────────────────────────────────────
+async function enviarRecordatorioCheckout(checkin) {
+  const transporte = crearTransporte();
+
+  const contenido = `
+    <p>Hola <strong>${checkin.nombre} ${checkin.apellido}</strong>,</p>
+    <p>Te recordamos que hoy es tu día de salida. El horario de <strong>check-out es hasta las 11:00</strong>.</p>
+
+    <div class="caja-codigo" style="background:#F4ECDE;border-radius:6px;padding:20px;text-align:center;margin:24px 0;">
+      <div style="font-size:0.85rem;color:#5A6C7D;">Fecha de salida</div>
+      <div style="font-size:1.4rem;color:#1B4965;font-weight:600;margin:8px 0;">${formatearFecha(checkin.fecha_salida)}</div>
+      <div style="font-size:0.85rem;color:#5A6C7D;">Hora límite: <strong>11:00 am</strong></div>
+    </div>
+
+    <p>Por favor deja las llaves en recepción o entrégalas al anfitrión antes de salir.</p>
+    <p style="font-size:0.85rem;color:#5A6C7D;">
+      Si necesitas más tiempo o tienes alguna consulta, escríbenos con anticipación.
+    </p>
+    <a href="https://wa.me/593986721666" class="btn">Contactar por WhatsApp</a>
+
+    <p style="margin-top:24px;font-size:0.9rem;color:#5A6C7D;">
+      Esperamos que tu estancia haya sido maravillosa. ¡Hasta la próxima!
+    </p>`;
+
+  await transporte.sendMail({
+    from: `"Estación del Sol" <${process.env.EMAIL_USER}>`,
+    to: checkin.correo,
+    subject: `☀ Recordatorio de check-out hoy — Estación del Sol`,
+    html: plantillaBase(contenido),
+  });
+}
+
 module.exports = {
   enviarConfirmacionHuesped,
   enviarNotificacionHotel,
@@ -316,4 +348,5 @@ module.exports = {
   enviarNotificacionCheckinHotel,
   enviarMensajeContacto,
   enviarDatosBancarios,
+  enviarRecordatorioCheckout,
 };

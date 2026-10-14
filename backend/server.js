@@ -14,6 +14,7 @@ const Database   = require('better-sqlite3');
 
 const { crearTablaReservas } = require('./models/Reserva');
 const { crearTablaCheckins } = require('./models/Checkin');
+const { iniciarRecordatorios } = require('./services/recordatorioCheckout');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -126,6 +127,7 @@ app.listen(PORT, () => {
   console.log(`\n☀  Estación del Sol — backend corriendo en http://localhost:${PORT}`);
   console.log(`   Panel admin: GET /api/admin/reservas  (header X-Admin-Key requerido)`);
   console.log(`   Salud:       GET /api/salud\n`);
+  iniciarRecordatorios(db);
 });
 
 // Cierre limpio
