@@ -1,0 +1,32 @@
+{
+  "fecha": "ejemplo",
+  "tendencias": ["Rituales de bienestar cortos", "Slow living", "Ingredientes de origen local"],
+  "tintar": {},
+  "piezas": [
+    {"tipo": "portada", "nombre": "rituales", "args": {"archivo": "r_hoja_viva", "pequeno": "2026", "titulo": "Rituales",
+      "sub": "Pequeños gestos con plantas<br>de Ecuador", "boton": "Desliza", "op": 0.42},
+     "caption": "Pequeños gestos, todos los días. ¿Cuál es el tuyo? 🌿", "hashtags": "#EssentialLeaf #Rituales #HechoEnEcuador"},
+    {"tipo": "lista", "nombre": "roll_on_paso", "args": {"archivo": "r_espalda", "etiqueta": "Cómo usarlo", "titulo": "Tu roll-on, paso a paso",
+      "parrafo": "Diez mililitros que caben en tu bolsillo. Así lo disfrutamos nosotros:",
+      "items": ["Desliza en las muñecas", "Un toque detrás de las orejas", "Frota suave las palmas", "Acércalas y respira hondo"],
+      "cierre": "Un minuto.<br>Nada más.", "pie": "Guárdalo para tu próxima pausa.", "pos": "50% 30%", "op": 0.52}},
+    {"tipo": "venn", "nombre": "aroma_textura_ritual", "args": {"archivo": "r_ducha", "etiqueta": "Lo que buscamos", "arriba": "Lo que buscamos<br>en cada fórmula",
+      "circulos": [["Aroma", "de plantas reales"], ["Textura", "ligera, que se va"], ["Ritual", "un momento tuyo"]],
+      "abajo": "Cuando las tres se encuentran,<br>se siente.", "pos": "62% 40%", "op": 0.38}},
+    {"tipo": "infinito", "nombre": "pinas_a_tu_casa", "args": {"archivo": "r_bosque", "etiqueta": "Nuestro origen", "arriba": "De Piñas, El Oro,<br>a tu casa",
+      "sub": "y de vuelta a empezar", "lazo1": "La planta crece<br>a su tiempo", "lazo2": "La fórmula<br>la respeta", "abajo": "Cada temporada,<br>el mismo cuidado."}},
+    {"tipo": "anillo", "nombre": "dia_botanico", "args": {"archivo": "r_sombra_monstera", "etiqueta": "Tu día", "pequeno": "Crea tu", "titulo": "Día botánico",
+      "centro": "crema_serenidad", "puntos": [["Mañana", "Espíritu Cítrico en muñecas"], ["Mediodía", "agua fresca y una pausa"], ["Tarde", "Mist para pies"], ["Noche", "Crema Serenidad"]],
+      "pie": "Cuatro momentos · un mismo aroma de casa", "op": 0.3}},
+    {"tipo": "camino", "nombre": "asi_nace", "args": {"archivo": "r_madera", "etiqueta": "Proceso", "arriba": "Así nace una crema", "rotulo": "Essential Leaf",
+      "pasos": [["Elegimos la planta", "aromas que conocemos de cerca"], ["Obtenemos su aceite", "por hidrodestilación"], ["Formulamos", "sobre una base de aceite de oliva"], ["Probamos", "textura, aroma y estabilidad"], ["Llega a ti", "lista para tu ritual"]], "op": 0.42}},
+    {"tipo": "vertical", "nombre": "aplicar_crema", "args": {"archivo": "r_piel", "etiqueta": "Ritual", "intro": "Cuando aplicas tu crema,", "destaca": "deja que el ritual<br>haga lo suyo",
+      "puntos": [["Piel limpia", "recién salida de la ducha"], ["Poca cantidad", "del tamaño de una almendra"], ["Movimientos lentos", "codos, rodillas y piernas"], ["Respira", "y disfruta el aroma"]], "op": 0.5}},
+    {"tipo": "producto", "nombre": "conexion", "args": {"archivo": "r_hojas_noche", "prods": [["roll_on_conexion", "left:445px;top:300px;height:700px"]],
+      "etiqueta": "Essential Roll", "titulo": "Conexión", "detalle": "Lavanda · Menta · 10 ml", "precio": "$8,20", "op": 0.25}},
+    {"tipo": "pregunta", "nombre": "pregunta_aroma", "args": {"archivo": "r_gotas_oscuras", "etiqueta": "Preguntas", "numero": "Pregunta nº1", "temas": ["Aroma", "Ritual", "Tú"],
+      "texto": "¿Qué aroma te acompaña en la mañana?", "sub": "Elige el tuyo", "opciones": ["Cítrico, para empezar con luz", "Herbal, para despejar"], "cierre": "Cuéntanos en comentarios", "op": 0.4}},
+    {"tipo": "texto", "nombre": "siempre_diluido", "args": {"archivo": "r_hoja_contraluz", "etiqueta": "Aceites", "caps1": "Un aceite esencial", "cursiva": "siempre se disfruta",
+      "caps2": "diluido", "palabras": ["Crema", "Roll-on", "Aceite base"], "pos": "40% 50%", "op": 0.3}}
+  ]
+}
