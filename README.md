@@ -135,6 +135,12 @@ GET  /api/admin/checkins
 
 ---
 
+## MCP de CapCut (Claude Code)
+
+`.mcp.json` registra el servidor MCP `capcut` ([VectCutAPI](https://github.com/sun-guannan/VectCutAPI)), que permite a Claude Code crear borradores de CapCut para el contenido del hotel. Funciona solo en tu ordenador, con CapCut de escritorio instalado. Para instalarlo y configurarlo, consulta [docs/capcut-mcp.md](docs/capcut-mcp.md).
+
+---
+
 ## .gitignore recomendado
 
 ```

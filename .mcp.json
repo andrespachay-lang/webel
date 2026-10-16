@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "capcut": {
+      "command": "${VECTCUT_PYTHON:-python3}",
+      "args": ["${VECTCUT_DIR}/mcp_server.py"],
+      "env": {
+        "PYTHONPATH": "${VECTCUT_DIR}",
+        "DEBUG": "0"
+      }
+    }
+  }
+}
