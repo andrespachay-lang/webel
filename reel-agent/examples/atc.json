@@ -1,0 +1,107 @@
+{
+  "title": "¿Quién decide realmente por dónde vuela tu avión?",
+  "caption": "🎧 ¿Quién decide realmente por dónde vuela tu avión? Un vuelo pasa por al menos cinco controladores aéreos distintos, de la puerta de embarque a la pista de destino. Guárdalo para tu próximo vuelo.",
+  "hashtags": ["controladoraereo", "atc", "aviacion", "controldetransitoaereo", "piloto", "avgeek", "aviation", "airtrafficcontrol", "aprendeaviacion", "torredecontrol"],
+  "visualStyle": "photorealistic, cinematic aviation footage, cool blue color grade, futuristic holographic HUD infographic overlay in translucent blue and cyan, thin glowing leader lines, clean uppercase sans-serif data labels",
+  "scenes": [
+    {
+      "id": "gancho",
+      "narration": "¿Quién decide realmente por dónde vuela tu avión? No es solo el piloto.",
+      "videoPrompt": "Night interior of an air traffic control center, a controller with headset in front of glowing radar screens, holographic airspace sectors floating above the consoles labeled 'AIR TRAFFIC CONTROL', slow push-in.",
+      "camera": "push",
+      "stockQuery": "air traffic controller radar screens night",
+      "stockId": 7684127,
+      "hud": { "title": "AIR TRAFFIC CONTROL", "labels": ["24/7", "GATE TO GATE"], "shape": "rings" }
+    },
+    {
+      "id": "cadena",
+      "narration": "Cada vuelo pasa por al menos cinco controladores distintos, y cada uno vigila su propio pedazo de cielo.",
+      "videoPrompt": "Aerial view of a busy airport terminal with a control tower, holographic chain of five glowing zones linking gate, taxiway, runway, approach and en-route sky, labels 'DELIVERY', 'GROUND', 'TOWER', 'APPROACH', 'CENTER'.",
+      "camera": "pan-left",
+      "stockQuery": "busy airport terminal control tower aerial",
+      "stockId": 7691474,
+      "hud": { "title": "5 CONTROLLERS · 1 FLIGHT", "labels": ["DELIVERY → GROUND", "TOWER → APPROACH", "CENTER"], "shape": "stack" }
+    },
+    {
+      "id": "autorizacion",
+      "narration": "Primero, Entrega de Autorizaciones aprueba tu ruta, tu altitud y tu código de transpondedor.",
+      "videoPrompt": "Airliner cockpit at the gate, pilot with headset reading back a clearance, holographic flight plan route line projected over the windshield with tags 'ROUTE', 'FL350', 'SQUAWK 4721'.",
+      "camera": "push",
+      "stockQuery": "pilot in cockpit wearing headset",
+      "stockId": 7003505,
+      "hud": { "title": "CLEARANCE DELIVERY", "labels": ["ROUTE", "INITIAL ALTITUDE", "SQUAWK 4721"], "shape": "none" }
+    },
+    {
+      "id": "superficie",
+      "narration": "Luego, Control de Superficie te guía por las calles de rodaje hasta la cabecera de la pista.",
+      "videoPrompt": "Wide shot of a commercial airplane taxiing slowly across the airport, glowing green holographic taxi route painted on the taxiway, labels 'GROUND CONTROL', 'TAXI VIA A, B', 'HOLD SHORT RWY 27'.",
+      "camera": "pan-right",
+      "stockQuery": "commercial airplane taxiing airport",
+      "stockId": 8712929,
+      "hud": { "title": "GROUND CONTROL", "labels": ["TAXI VIA A, B", "HOLD SHORT RWY 27"], "shape": "box" }
+    },
+    {
+      "id": "torre",
+      "narration": "La Torre es la única que autoriza despegues y aterrizajes, y vigila unos pocos kilómetros alrededor del aeropuerto.",
+      "videoPrompt": "Airport control tower at golden hour, a translucent holographic cylinder of airspace around it labeled 'TOWER', small tag 'CLEARED FOR TAKEOFF', radar rings pulsing from the cab.",
+      "camera": "rise",
+      "stockQuery": "air traffic control tower",
+      "stockId": 6819288,
+      "hud": { "title": "TOWER", "labels": ["CLEARED FOR TAKEOFF", "≈ 5 NM"], "shape": "cylinder" }
+    },
+    {
+      "id": "salidas",
+      "narration": "Al despegar pasas a Aproximación y Salidas: con radar, ordena el tráfico que sube y baja cerca de la ciudad.",
+      "videoPrompt": "Airliner taking off and climbing away from the runway, holographic radar rings expanding from the airport, climbing path line with tags 'DEPARTURE', 'CLIMB FL120', '30–50 NM'.",
+      "camera": "rise",
+      "stockQuery": "airplane taking off from runway",
+      "stockId": 6343054,
+      "hud": { "title": "APPROACH / DEPARTURE", "labels": ["RADAR", "≈ 30–50 NM", "CLIMB FL120"], "shape": "rings" }
+    },
+    {
+      "id": "centro",
+      "narration": "En crucero te controla el Centro de Control de Área, con sectores que cubren cientos de kilómetros.",
+      "videoPrompt": "Commercial airplane cruising high in a clear blue sky, giant holographic sector boxes stretching to the horizon labeled 'AREA CONTROL CENTER', 'SECTOR 12', 'FL350'.",
+      "camera": "pan-left",
+      "stockQuery": "commercial airplane flying high blue sky",
+      "stockId": 9026382,
+      "hud": { "title": "AREA CONTROL CENTER", "labels": ["EN ROUTE", "SECTOR 12", "FL350"], "shape": "box" }
+    },
+    {
+      "id": "separacion",
+      "narration": "Su regla de oro es la separación: en ruta, al menos cinco millas de lado o mil pies de altura entre aviones.",
+      "videoPrompt": "Two airliners leaving contrails at different altitudes, holographic separation bubbles around each aircraft, vertical measure tag '1,000 FT' and horizontal measure tag '5 NM'.",
+      "camera": "push",
+      "stockQuery": "airplane contrail clear blue sky",
+      "stockId": 9026385,
+      "hud": { "title": "SEPARATION", "labels": ["5 NM", "1,000 FT"], "shape": "stack" }
+    },
+    {
+      "id": "radio",
+      "narration": "Todo se coordina por radio, con frases estándar en inglés, y el piloto repite cada instrucción.",
+      "videoPrompt": "Controller monitoring radar screens at night speaking into a headset microphone, holographic audio waveform and transcript tags 'CLIMB FL240', 'READBACK', 'VHF 121.5'.",
+      "camera": "push",
+      "stockQuery": "air traffic controller monitoring radar screens",
+      "stockId": 8651819,
+      "hud": { "title": "VHF RADIO", "labels": ["STANDARD PHRASEOLOGY", "READBACK"], "shape": "rings" }
+    },
+    {
+      "id": "llegada",
+      "narration": "Al llegar, Aproximación te alinea con la pista y la Torre te da la frase final: autorizado a aterrizar.",
+      "videoPrompt": "Airliner on final approach landing at an airport, glowing green glide path line to the runway, labels 'FINAL APPROACH', 'ILS RWY 09', 'CLEARED TO LAND'.",
+      "camera": "pull",
+      "stockQuery": "airplane landing at airport",
+      "stockId": 3684308,
+      "hud": { "title": "CLEARED TO LAND", "labels": ["FINAL APPROACH", "ILS RWY 09"], "shape": "cylinder" }
+    },
+    {
+      "id": "cierre",
+      "narration": "La próxima vez que vueles, recuerda: alguien en tierra te cuida en cada minuto. Síguenos para más aviación.",
+      "videoPrompt": "Hero shot of an airplane wing above a sea of clouds at sunset, warm light, slow drift.",
+      "camera": "pull",
+      "stockQuery": "airplane wing above clouds sunset",
+      "stockId": 9226047,
+      "hud": { "title": "", "labels": [], "shape": "none" }
+    }
+  ]
+}
