@@ -23,8 +23,8 @@ const ScriptSchema = z.object({
           .string()
           .describe("Búsqueda en inglés para video de stock vertical: 3–6 palabras de algo real y filmable."),
         hud: z.object({
-          title: z.string().describe("Título del HUD en inglés técnico y MAYÚSCULAS, p. ej. 'CLASS C AIRSPACE'."),
-          labels: z.array(z.string()).describe("0–3 etiquetas de datos de máx. 3 palabras, p. ej. 'SFC – 4,000 FT'."),
+          title: z.string().describe("Título del HUD en el idioma pedido y en MAYÚSCULAS, p. ej. 'ESPACIO AÉREO CLASE C'."),
+          labels: z.array(z.string()).describe("0–3 etiquetas de datos de máx. 3 palabras, en el idioma pedido, p. ej. 'SUPERFICIE – 4.000 PIES'."),
           shape: z
             .enum(["box", "cylinder", "dome", "rings", "stack", "none"])
             .describe("Volumen holográfico: box (bloque), cylinder (zona alrededor de aeropuerto), dome, rings (radar), stack (resumen de capas)."),
@@ -59,7 +59,8 @@ DIRECCIÓN VISUAL (lo más importante):
 
 VERSIÓN CON STOCK: además de videoPrompt, cada escena trae
 - stockQuery: lo que se buscaría en un banco de videos (sujeto real, sin HUD ni efectos), p. ej. "airplane landing runway sunset".
-- hud: el HUD que se dibuja por código encima del clip de stock (título, etiquetas y forma del volumen).
+- hud: el HUD que se dibuja por código encima del clip de stock (título, etiquetas y forma del volumen),
+  con todos sus textos en el idioma pedido (siglas como FL o ILS se mantienen).
 
 Escribe narración, título, caption y hashtags en el idioma pedido.`;
 

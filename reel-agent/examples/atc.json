@@ -1,7 +1,18 @@
 {
   "title": "¿Quién decide realmente por dónde vuela tu avión?",
   "caption": "🎧 ¿Quién decide realmente por dónde vuela tu avión? Un vuelo pasa por al menos cinco controladores aéreos distintos, de la puerta de embarque a la pista de destino. Guárdalo para tu próximo vuelo.",
-  "hashtags": ["controladoraereo", "atc", "aviacion", "controldetransitoaereo", "piloto", "avgeek", "aviation", "airtrafficcontrol", "aprendeaviacion", "torredecontrol"],
+  "hashtags": [
+    "controladoraereo",
+    "atc",
+    "aviacion",
+    "controldetransitoaereo",
+    "piloto",
+    "avgeek",
+    "aviation",
+    "airtrafficcontrol",
+    "aprendeaviacion",
+    "torredecontrol"
+  ],
   "visualStyle": "photorealistic, cinematic aviation footage, cool blue color grade, futuristic holographic HUD infographic overlay in translucent blue and cyan, thin glowing leader lines, clean uppercase sans-serif data labels",
   "scenes": [
     {
@@ -11,7 +22,14 @@
       "camera": "push",
       "stockQuery": "air traffic controller radar screens night",
       "stockId": 7684127,
-      "hud": { "title": "AIR TRAFFIC CONTROL", "labels": ["24/7", "GATE TO GATE"], "shape": "rings" }
+      "hud": {
+        "title": "CONTROL DE TRÁNSITO AÉREO",
+        "labels": [
+          "24/7",
+          "DE PUERTA A PUERTA"
+        ],
+        "shape": "rings"
+      }
     },
     {
       "id": "cadena",
@@ -20,7 +38,15 @@
       "camera": "pan-left",
       "stockQuery": "busy airport terminal control tower aerial",
       "stockId": 7691474,
-      "hud": { "title": "5 CONTROLLERS · 1 FLIGHT", "labels": ["DELIVERY → GROUND", "TOWER → APPROACH", "CENTER"], "shape": "stack" }
+      "hud": {
+        "title": "5 CONTROLADORES · 1 VUELO",
+        "labels": [
+          "AUTORIZACIÓN → SUPERFICIE",
+          "TORRE → APROXIMACIÓN",
+          "CENTRO"
+        ],
+        "shape": "stack"
+      }
     },
     {
       "id": "autorizacion",
@@ -29,7 +55,15 @@
       "camera": "push",
       "stockQuery": "pilot in cockpit wearing headset",
       "stockId": 7003505,
-      "hud": { "title": "CLEARANCE DELIVERY", "labels": ["ROUTE", "INITIAL ALTITUDE", "SQUAWK 4721"], "shape": "none" }
+      "hud": {
+        "title": "ENTREGA DE AUTORIZACIONES",
+        "labels": [
+          "RUTA",
+          "ALTITUD INICIAL",
+          "CÓDIGO 4721"
+        ],
+        "shape": "none"
+      }
     },
     {
       "id": "superficie",
@@ -38,7 +72,14 @@
       "camera": "pan-right",
       "stockQuery": "commercial airplane taxiing airport",
       "stockId": 8712929,
-      "hud": { "title": "GROUND CONTROL", "labels": ["TAXI VIA A, B", "HOLD SHORT RWY 27"], "shape": "box" }
+      "hud": {
+        "title": "CONTROL DE SUPERFICIE",
+        "labels": [
+          "RODAJE VÍA A, B",
+          "ESPERE FUERA PISTA 27"
+        ],
+        "shape": "box"
+      }
     },
     {
       "id": "torre",
@@ -47,7 +88,14 @@
       "camera": "rise",
       "stockQuery": "air traffic control tower",
       "stockId": 6819288,
-      "hud": { "title": "TOWER", "labels": ["CLEARED FOR TAKEOFF", "≈ 5 NM"], "shape": "cylinder" }
+      "hud": {
+        "title": "TORRE DE CONTROL",
+        "labels": [
+          "AUTORIZADO A DESPEGAR",
+          "≈ 5 MILLAS"
+        ],
+        "shape": "cylinder"
+      }
     },
     {
       "id": "salidas",
@@ -56,7 +104,15 @@
       "camera": "rise",
       "stockQuery": "airplane taking off from runway",
       "stockId": 6343054,
-      "hud": { "title": "APPROACH / DEPARTURE", "labels": ["RADAR", "≈ 30–50 NM", "CLIMB FL120"], "shape": "rings" }
+      "hud": {
+        "title": "APROXIMACIÓN Y SALIDAS",
+        "labels": [
+          "RADAR",
+          "≈ 30–50 MILLAS",
+          "ASCENSO FL120"
+        ],
+        "shape": "rings"
+      }
     },
     {
       "id": "centro",
@@ -65,7 +121,15 @@
       "camera": "pan-left",
       "stockQuery": "commercial airplane flying high blue sky",
       "stockId": 9026382,
-      "hud": { "title": "AREA CONTROL CENTER", "labels": ["EN ROUTE", "SECTOR 12", "FL350"], "shape": "box" }
+      "hud": {
+        "title": "CENTRO DE CONTROL DE ÁREA",
+        "labels": [
+          "EN RUTA",
+          "SECTOR 12",
+          "FL350"
+        ],
+        "shape": "box"
+      }
     },
     {
       "id": "separacion",
@@ -74,7 +138,14 @@
       "camera": "push",
       "stockQuery": "airplane contrail clear blue sky",
       "stockId": 9026385,
-      "hud": { "title": "SEPARATION", "labels": ["5 NM", "1,000 FT"], "shape": "stack" }
+      "hud": {
+        "title": "SEPARACIÓN",
+        "labels": [
+          "5 MILLAS",
+          "1.000 PIES"
+        ],
+        "shape": "stack"
+      }
     },
     {
       "id": "radio",
@@ -83,7 +154,14 @@
       "camera": "push",
       "stockQuery": "air traffic controller monitoring radar screens",
       "stockId": 8651819,
-      "hud": { "title": "VHF RADIO", "labels": ["STANDARD PHRASEOLOGY", "READBACK"], "shape": "rings" }
+      "hud": {
+        "title": "RADIO VHF",
+        "labels": [
+          "FRASEOLOGÍA ESTÁNDAR",
+          "COLACIÓN"
+        ],
+        "shape": "rings"
+      }
     },
     {
       "id": "llegada",
@@ -92,7 +170,14 @@
       "camera": "pull",
       "stockQuery": "airplane landing at airport",
       "stockId": 3684308,
-      "hud": { "title": "CLEARED TO LAND", "labels": ["FINAL APPROACH", "ILS RWY 09"], "shape": "cylinder" }
+      "hud": {
+        "title": "AUTORIZADO A ATERRIZAR",
+        "labels": [
+          "APROXIMACIÓN FINAL",
+          "ILS PISTA 09"
+        ],
+        "shape": "cylinder"
+      }
     },
     {
       "id": "cierre",
@@ -101,7 +186,11 @@
       "camera": "pull",
       "stockQuery": "airplane wing above clouds sunset",
       "stockId": 9226047,
-      "hud": { "title": "", "labels": [], "shape": "none" }
+      "hud": {
+        "title": "",
+        "labels": [],
+        "shape": "none"
+      }
     }
   ]
 }
