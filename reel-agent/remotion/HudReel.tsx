@@ -1,10 +1,11 @@
-import { AbsoluteFill, Audio, Sequence, staticFile } from "remotion";
+import { AbsoluteFill, Audio, Sequence, interpolate, staticFile, useVideoConfig } from "remotion";
 import { Background } from "./components/Background";
 import { BrandOutro, Watermark, WordCaption } from "./components/Overlay";
 import { HudOverlay } from "./components/HudOverlay";
 import type { ReelProps } from "./types";
 
-export const HudReel = ({ script, timings, music, voiceover, brand }: ReelProps) => {
+export const HudReel = ({ script, timings, music, musicVolume = 0.15, voiceover, brand }: ReelProps) => {
+  const { durationInFrames } = useVideoConfig();
   const starts = timings.reduce<number[]>((acc, t, i) => [...acc, i ? acc[i - 1] + timings[i - 1].durationInFrames : 0], []);
   const last = script.scenes.length - 1;
   const watermark = brand.name
@@ -28,7 +29,20 @@ export const HudReel = ({ script, timings, music, voiceover, brand }: ReelProps)
         );
       })}
       {voiceover && <Audio src={staticFile(voiceover)} />}
-      {music && <Audio src={staticFile(music)} volume={0.12} loop />}
+      {music && (
+        <Audio
+          src={staticFile(music)}
+          loop
+          // Entra en 0.5 s y se desvanece en los últimos 2 s.
+          volume={(f) =>
+            musicVolume *
+            interpolate(f, [0, 15, durationInFrames - 60, durationInFrames], [0, 1, 1, 0], {
+              extrapolateLeft: "clamp",
+              extrapolateRight: "clamp",
+            })
+          }
+        />
+      )}
     </AbsoluteFill>
   );
 };

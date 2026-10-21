@@ -61,6 +61,8 @@ export type ReelProps = {
   script: ReelScript;
   timings: SceneTiming[];
   music: string;
+  /** Volumen de la música de fondo (0–1). */
+  musicVolume?: number;
   /** Pista de voz continua para todo el reel (alternativa a un audio por escena), o "". */
   voiceover?: string;
   brand: Brand;

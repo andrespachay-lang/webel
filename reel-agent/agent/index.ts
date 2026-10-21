@@ -25,6 +25,7 @@ Opciones:
   --brand <nombre>       Marca del outro y marca de agua (por defecto: "AVIACIÓN EXPLICADA")
   --tagline <texto>      Línea bajo la marca (por defecto: "CIENCIA DEL VUELO")
   --music <archivo>      Música de fondo (mp3/wav), se mezcla bajo la voz
+  --music-volume <0–1>   Volumen de la música (por defecto: 0.15)
   --notes <texto>        Indicaciones extra para el guion (tono, datos, público…)
   --script <json>        Reutiliza un script.json ya generado (no llama a Claude)
   --plan                 Solo escribe guion y prompts (sin generar clips, voz ni render)
@@ -47,6 +48,7 @@ async function main() {
       brand: { type: "string", default: "AVIACIÓN EXPLICADA" },
       tagline: { type: "string", default: "CIENCIA DEL VUELO" },
       music: { type: "string" },
+      "music-volume": { type: "string", default: "0.15" },
       notes: { type: "string" },
       script: { type: "string" },
       plan: { type: "boolean", default: false },
@@ -162,7 +164,7 @@ async function main() {
   }
 
   // 4. Render
-  const props: ReelProps = { script, timings, music, voiceover, brand: { name: values.brand!, tagline: values.tagline! } };
+  const props: ReelProps = { script, timings, music, musicVolume: Number(values["music-volume"]), voiceover, brand: { name: values.brand!, tagline: values.tagline! } };
   await writeFile(path.join(outDir, "props.json"), JSON.stringify(props, null, 2));
   const outFile = path.join(outDir, `${slug}.mp4`);
   console.log("🎬 Renderizando con Remotion…");
