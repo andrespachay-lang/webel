@@ -1,0 +1,29 @@
+{
+  "name": "reel-agent",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Agente que produce reels verticales educativos con HUD holográfico (guion con Claude, voz con ElevenLabs, render con Remotion).",
+  "type": "module",
+  "scripts": {
+    "reel": "tsx agent/index.ts",
+    "studio": "remotion studio remotion/index.ts",
+    "demo": "tsx agent/index.ts --script examples/espacio-aereo.json --no-voice",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "0.137.0",
+    "@remotion/bundler": "4.0.537",
+    "@remotion/cli": "4.0.537",
+    "@remotion/renderer": "4.0.537",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "remotion": "4.0.537",
+    "zod": "4.1.12"
+  },
+  "devDependencies": {
+    "@types/node": "22.15.3",
+    "@types/react": "19.1.2",
+    "tsx": "4.19.4",
+    "typescript": "5.8.3"
+  }
+}
