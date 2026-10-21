@@ -7,7 +7,7 @@ import { writeScript } from "./script";
 import { estimateWords, speak } from "./voice";
 import { generateMedia, pool } from "./visuals";
 import { renderReel } from "./render";
-import type { ReelProps, ReelScript, SceneTiming } from "../remotion/types";
+import type { ReelProps, ReelScript, SceneTiming, Word } from "../remotion/types";
 
 const FPS = 30;
 const IMAGE_EXT = new Set([".jpg", ".jpeg", ".png", ".webp"]);
@@ -29,6 +29,8 @@ Opciones:
   --script <json>        Reutiliza un script.json ya generado (no llama a Claude)
   --plan                 Solo escribe guion y prompts (sin generar clips, voz ni render)
   --no-voice             No genera voz aunque haya ELEVENLABS_API_KEY
+  --voiceover <mp3>      Usa una narración ya grabada/generada para todo el reel (p. ej. de Magnific)
+  --timings <json>       Tiempos por palabra de esa narración: [{ "text", "start", "end" }] en segundos
   --out <carpeta>        Carpeta de salida (por defecto: output/<tema>)
 `;
 
@@ -49,6 +51,8 @@ async function main() {
       script: { type: "string" },
       plan: { type: "boolean", default: false },
       "no-voice": { type: "boolean", default: false },
+      voiceover: { type: "string" },
+      timings: { type: "string" },
       out: { type: "string" },
       help: { type: "boolean", short: "h", default: false },
     },
@@ -116,13 +120,27 @@ async function main() {
   const drawHud = values.hud === "on" || (values.hud === "auto" && !aiVideo);
 
   // 3. Voz y tiempos
-  const useVoice = !!process.env.ELEVENLABS_API_KEY && !values["no-voice"];
-  console.log(useVoice ? "🎙️  Generando voz con ElevenLabs…" : "🔇 Sin voz (falta ELEVENLABS_API_KEY o --no-voice).");
+  let voiceover = "";
+  let external: { words: Word[]; seconds: number }[] | null = null;
+  if (values.voiceover) {
+    if (!values.timings) throw new Error("--voiceover necesita --timings con los tiempos por palabra.");
+    voiceover = `audio/voiceover${path.extname(values.voiceover)}`;
+    await copyFile(values.voiceover, path.join(publicDir, voiceover));
+    external = splitVoiceover(script, JSON.parse(await readFile(values.timings, "utf8")));
+    console.log(`🎙️  Narración externa: ${values.voiceover}`);
+  }
+  const useVoice = !external && !!process.env.ELEVENLABS_API_KEY && !values["no-voice"];
+  if (!external) console.log(useVoice ? "🎙️  Generando voz con ElevenLabs…" : "🔇 Sin voz (falta ELEVENLABS_API_KEY o --no-voice).");
   const timings: SceneTiming[] = [];
   for (const [i, scene] of script.scenes.entries()) {
     const rel = `audio/${String(i + 1).padStart(2, "0")}-${slugify(scene.id)}.mp3`;
-    const speech = useVoice ? await speak(scene.narration, path.join(publicDir, rel)) : estimateWords(scene.narration);
-    const seconds = Math.max(2.5, speech.seconds + 0.3);
+    const speech = external
+      ? external[i]
+      : useVoice
+        ? await speak(scene.narration, path.join(publicDir, rel))
+        : estimateWords(scene.narration);
+    // Con narración continua, la escena dura exactamente hasta que empieza la siguiente.
+    const seconds = external ? speech.seconds : Math.max(2.5, speech.seconds + 0.3);
     const m = media[i];
     const mediaSeconds =
       m?.type === "video" ? (await getVideoMetadata(path.join(publicDir, m.rel))).durationInSeconds ?? 0 : 0;
@@ -144,13 +162,51 @@ async function main() {
   }
 
   // 4. Render
-  const props: ReelProps = { script, timings, music, brand: { name: values.brand!, tagline: values.tagline! } };
+  const props: ReelProps = { script, timings, music, voiceover, brand: { name: values.brand!, tagline: values.tagline! } };
   await writeFile(path.join(outDir, "props.json"), JSON.stringify(props, null, 2));
   const outFile = path.join(outDir, `${slug}.mp4`);
   console.log("🎬 Renderizando con Remotion…");
   await renderReel({ props, publicDir, outFile });
   const total = timings.reduce((a, t) => a + t.durationInFrames, 0) / FPS;
   console.log(`\n✅ Listo (${total.toFixed(1)} s): ${outFile}\n   Caption: ${path.join(outDir, "caption.txt")}`);
+}
+
+/**
+ * Reparte una narración continua entre las escenas contando sus palabras, y deja los tiempos
+ * relativos al inicio de cada escena. Los cortes caen justo antes de la primera palabra de cada escena.
+ */
+function splitVoiceover(script: ReelScript, raw: Word[]) {
+  // Une signos sueltos ("¿", ".") a la palabra vecina para que el conteo coincida con el guion.
+  const words: Word[] = [];
+  let prefix = "";
+  for (const w of raw) {
+    if (!/[\p{L}\p{N}]/u.test(w.text)) {
+      if (/^[¿¡]+$/.test(w.text)) prefix += w.text;
+      else if (words.length) words[words.length - 1].text += w.text;
+      continue;
+    }
+    words.push({ ...w, text: prefix + w.text });
+    prefix = "";
+  }
+  const counts = script.scenes.map((s) => s.narration.split(/\s+/).filter(Boolean).length);
+  const total = counts.reduce((a, b) => a + b, 0);
+  if (total !== words.length) {
+    throw new Error(`La narración tiene ${words.length} palabras y el guion ${total}: revisa que el texto coincida.`);
+  }
+  let k = 0;
+  const starts: number[] = [];
+  const groups: Word[][] = counts.map((n, i) => {
+    const g = words.slice(k, k + n);
+    k += n;
+    starts.push(i === 0 ? 0 : Math.round(Math.max(0, g[0].start - 0.12) * FPS) / FPS);
+    return g;
+  });
+  const end = words[words.length - 1].end + 1.5;
+  return groups.map((g, i) => {
+    const s = starts[i];
+    const e = i + 1 < starts.length ? starts[i + 1] : end;
+    return { words: g.map((w) => ({ text: w.text, start: w.start - s, end: w.end - s })), seconds: e - s };
+  });
 }
 
 async function collectMedia(dir: string, publicDir: string) {

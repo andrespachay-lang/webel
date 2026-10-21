@@ -4,7 +4,7 @@ import { BrandOutro, Watermark, WordCaption } from "./components/Overlay";
 import { HudOverlay } from "./components/HudOverlay";
 import type { ReelProps } from "./types";
 
-export const HudReel = ({ script, timings, music, brand }: ReelProps) => {
+export const HudReel = ({ script, timings, music, voiceover, brand }: ReelProps) => {
   const starts = timings.reduce<number[]>((acc, t, i) => [...acc, i ? acc[i - 1] + timings[i - 1].durationInFrames : 0], []);
   const last = script.scenes.length - 1;
   const watermark = brand.name
@@ -27,6 +27,7 @@ export const HudReel = ({ script, timings, music, brand }: ReelProps) => {
           </Sequence>
         );
       })}
+      {voiceover && <Audio src={staticFile(voiceover)} />}
       {music && <Audio src={staticFile(music)} volume={0.12} loop />}
     </AbsoluteFill>
   );
