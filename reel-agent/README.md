@@ -67,6 +67,21 @@ npm run studio
 Salida en `output/<tema>/`: `<tema>.mp4`, `caption.txt` (caption + hashtags), `script.json`,
 `prompts.md` y `public/` (clips y audios). Los clips ya generados no se vuelven a pedir al re-renderizar.
 
+## Con videos de stock de Magnific
+
+Los clips de stock no traen el HUD holográfico, así que el agente lo dibuja por código encima
+(`remotion/components/HudOverlay.tsx`): un etalonaje frío, un volumen 3D que se traza solo (`box`, `stack`,
+`cylinder`, `dome` o `rings`), un título que se escribe letra a letra y hasta 3 etiquetas con líneas guía.
+Cada escena del guion trae `stockQuery` (qué buscar), `hud` (qué dibujar) y, opcionalmente, `stockId` (el clip elegido).
+
+1. Planifica: `npm run reel -- "<tema>" --plan`.
+2. Busca y descarga los clips verticales en Magnific (a mano, o pidiéndoselo a Claude Code con la skill
+   `reel-explicativo`, que usa el conector de Magnific). Guárdalos como `01.mp4`, `02.mp4`… en orden.
+3. Renderiza: `npm run reel -- --script output/<tema>/script.json --media <carpeta>`.
+
+`examples/espacio-aereo.json` ya trae los 11 clips elegidos para el reel de clases de espacio aéreo.
+El HUD se controla con `--hud auto|on|off` (en `auto` se dibuja salvo cuando los clips son de IA).
+
 ## Costos y modelos
 
 - Cada escena es un clip de 8 s; un reel de 60 s tiene unas 9 escenas. Revisa los precios del modelo en fal.ai
@@ -82,5 +97,5 @@ Salida en `output/<tema>/`: `<tema>.mp4`, `caption.txt` (caption + hashtags), `s
 - `agent/visuals.ts`: clips e imágenes (fal.ai, API de cola)
 - `agent/voice.ts`: voz y tiempos por palabra (ElevenLabs)
 - `agent/render.ts`: render con Remotion
-- `remotion/`: composición (`HudReel`), fondo, subtítulos y marca
+- `remotion/`: composición (`HudReel`), fondo, HUD por código, subtítulos y marca
 - `examples/espacio-aereo.json`: recreación en español del reel de referencia

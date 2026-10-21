@@ -20,7 +20,8 @@ Opciones:
   --lang <idioma>        Idioma de narración y textos (por defecto: español)
   --seconds <n>          Duración objetivo en segundos (por defecto: 60)
   --visuals <modo>       video | image | none  (por defecto: video si hay FAL_KEY, si no none)
-  --media <carpeta>      Usa tus propios clips/imágenes (01.mp4, 02.jpg…) en lugar de generarlos
+  --media <carpeta>      Usa tus clips/imágenes (01.mp4, 02.jpg…), p. ej. stock de Magnific, en lugar de generarlos
+  --hud <modo>           auto | on | off  HUD holográfico por código (auto: activo salvo con clips de IA)
   --brand <nombre>       Marca del outro y marca de agua (por defecto: "AERO VEIL")
   --tagline <texto>      Línea bajo la marca (por defecto: "AVIATION EXPLAINED")
   --music <archivo>      Música de fondo (mp3/wav), se mezcla bajo la voz
@@ -40,6 +41,7 @@ async function main() {
       seconds: { type: "string", default: "60" },
       visuals: { type: "string" },
       media: { type: "string" },
+      hud: { type: "string", default: "auto" },
       brand: { type: "string", default: "AERO VEIL" },
       tagline: { type: "string", default: "AVIATION EXPLAINED" },
       music: { type: "string" },
@@ -85,6 +87,7 @@ async function main() {
 
   // 2. Visuales
   const media: ({ rel: string; type: "image" | "video" } | null)[] = script.scenes.map(() => null);
+  let aiVideo = false;
   if (values.media) {
     const own = await collectMedia(values.media, publicDir);
     own.forEach((m, i) => i < media.length && (media[i] = m));
@@ -92,6 +95,7 @@ async function main() {
     const mode = values.visuals ?? (process.env.FAL_KEY ? "video" : "none");
     if (mode === "video" || mode === "image") {
       const ext = mode === "video" ? ".mp4" : ".jpg";
+      aiVideo = mode === "video";
       console.log(`🎥 Generando ${script.scenes.length} ${mode === "video" ? "clips" : "imágenes"} con fal.ai (puede tardar)…`);
       await pool(script.scenes, 3, async (scene, i) => {
         const rel = `media/${String(i + 1).padStart(2, "0")}-${slugify(scene.id)}${ext}`;
@@ -107,6 +111,9 @@ async function main() {
       console.log("🎨 Sin visuales generados: fondo procedural (añade FAL_KEY o usa --media).");
     }
   }
+
+  // Los clips de IA ya traen el HUD dentro; stock, imágenes y fondo procedural lo reciben por código.
+  const drawHud = values.hud === "on" || (values.hud === "auto" && !aiVideo);
 
   // 3. Voz y tiempos
   const useVoice = !!process.env.ELEVENLABS_API_KEY && !values["no-voice"];
@@ -126,6 +133,7 @@ async function main() {
       media: m?.rel ?? "",
       mediaType: m?.type ?? "",
       mediaSeconds,
+      hud: drawHud,
     });
   }
 
@@ -161,7 +169,9 @@ async function collectMedia(dir: string, publicDir: string) {
 
 function promptsText(s: ReelScript) {
   const scenes = s.scenes.map(
-    (sc, i) => `## ${String(i + 1).padStart(2, "0")} · ${sc.id}\n\n**Voz:** ${sc.narration}\n\n**Prompt:** ${sc.videoPrompt}\n`,
+    (sc, i) =>
+      `## ${String(i + 1).padStart(2, "0")} · ${sc.id}\n\n**Voz:** ${sc.narration}\n\n**Prompt IA:** ${sc.videoPrompt}\n\n` +
+      `**Stock:** ${sc.stockQuery}${sc.stockId ? ` (clip elegido: ${sc.stockId})` : ""}\n\n**HUD:** ${sc.hud.title} · ${sc.hud.shape} · ${sc.hud.labels.join(" | ")}\n`,
   );
   return `# ${s.title}\n\n**Estilo común:** ${s.visualStyle}\n\nSi prefieres generar los clips tú mismo (Veo, Kling, Sora, Runway…), guárdalos como 01.mp4, 02.mp4…
 en una carpeta y renderiza con:\n\n    npm run reel -- --script <esta carpeta>/script.json --media <carpeta de clips>\n\n${scenes.join("\n")}`;

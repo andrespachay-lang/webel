@@ -19,6 +19,16 @@ const ScriptSchema = z.object({
           .string()
           .describe("Prompt en inglés del clip vertical de 8 s: sujeto, acción, cámara y HUD holográfico concreto."),
         camera: z.enum(["push", "pull", "pan-left", "pan-right", "rise"]),
+        stockQuery: z
+          .string()
+          .describe("Búsqueda en inglés para video de stock vertical: 3–6 palabras de algo real y filmable."),
+        hud: z.object({
+          title: z.string().describe("Título del HUD en inglés técnico y MAYÚSCULAS, p. ej. 'CLASS C AIRSPACE'."),
+          labels: z.array(z.string()).describe("0–3 etiquetas de datos de máx. 3 palabras, p. ej. 'SFC – 4,000 FT'."),
+          shape: z
+            .enum(["box", "cylinder", "dome", "rings", "stack", "none"])
+            .describe("Volumen holográfico: box (bloque), cylinder (zona alrededor de aeropuerto), dome, rings (radar), stack (resumen de capas)."),
+        }),
       }),
     )
     .describe("Escenas en orden. La primera es el gancho; la penúltima resume; la última cierra con CTA."),
@@ -46,6 +56,10 @@ DIRECCIÓN VISUAL (lo más importante):
   luz/hora del día. Siempre en inglés. Nunca pidas subtítulos ni logos. Las etiquetas del HUD van en inglés técnico.
 - visualStyle resume el look común (p. ej. "photorealistic, cinematic aerial cinematography, crisp daylight,
   futuristic holographic HUD infographic overlay in translucent blue and cyan, clean sans-serif labels, 9:16 vertical").
+
+VERSIÓN CON STOCK: además de videoPrompt, cada escena trae
+- stockQuery: lo que se buscaría en un banco de videos (sujeto real, sin HUD ni efectos), p. ej. "airplane landing runway sunset".
+- hud: el HUD que se dibuja por código encima del clip de stock (título, etiquetas y forma del volumen).
 
 Escribe narración, título, caption y hashtags en el idioma pedido.`;
 

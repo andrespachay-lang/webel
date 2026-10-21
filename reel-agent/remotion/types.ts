@@ -2,6 +2,17 @@
 
 export type Camera = "push" | "pull" | "pan-left" | "pan-right" | "rise";
 
+export type HudShape = "box" | "cylinder" | "dome" | "rings" | "stack" | "none";
+
+/** HUD holográfico dibujado por código encima de clips de stock (los clips de IA ya lo traen integrado). */
+export type SceneHud = {
+  /** Título grande del HUD, p. ej. "CLASS C AIRSPACE". */
+  title: string;
+  /** Hasta 3 etiquetas cortas de datos, p. ej. "SFC – 4,000 FT". */
+  labels: string[];
+  shape: HudShape;
+};
+
 export type Scene = {
   id: string;
   /** Voz en off de la escena (≤ ~7 s para que la cubra un clip de 8 s). */
@@ -10,6 +21,11 @@ export type Scene = {
   videoPrompt: string;
   /** Movimiento de cámara si la escena se resuelve con imagen fija o fondo procedural. */
   camera: Camera;
+  /** Búsqueda en inglés para stock (Magnific/Freepik): 3–6 palabras de algo filmable. */
+  stockQuery: string;
+  /** Clip de stock elegido (id de Magnific/Freepik), si ya se curó. */
+  stockId?: number;
+  hud: SceneHud;
 };
 
 export type ReelScript = {
@@ -35,6 +51,8 @@ export type SceneTiming = {
   mediaType: "image" | "video" | "";
   /** Duración del clip en segundos (para ralentizarlo si la narración es más larga). */
   mediaSeconds: number;
+  /** Dibujar el HUD por código en esta escena. */
+  hud: boolean;
 };
 
 export type Brand = { name: string; tagline: string };

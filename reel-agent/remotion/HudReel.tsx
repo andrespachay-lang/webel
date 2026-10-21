@@ -1,6 +1,7 @@
 import { AbsoluteFill, Audio, Sequence, staticFile } from "remotion";
 import { Background } from "./components/Background";
 import { BrandOutro, Watermark, WordCaption } from "./components/Overlay";
+import { HudOverlay } from "./components/HudOverlay";
 import type { ReelProps } from "./types";
 
 export const HudReel = ({ script, timings, music, brand }: ReelProps) => {
@@ -18,6 +19,7 @@ export const HudReel = ({ script, timings, music, brand }: ReelProps) => {
         return (
           <Sequence key={scene.id + i} from={starts[i]} durationInFrames={t.durationInFrames} name={scene.id}>
             <Background media={t.media} mediaType={t.mediaType} mediaSeconds={t.mediaSeconds} camera={scene.camera} seed={i} />
+            {t.hud && scene.hud && <HudOverlay hud={scene.hud} />}
             {i !== last && brand.name && <Watermark name={watermark} />}
             {i === last && brand.name && <BrandOutro brand={brand} />}
             <WordCaption words={t.words} />
