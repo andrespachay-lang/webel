@@ -19,7 +19,7 @@ tema ──► Claude (guion + prompts de video) ──► fal.ai (clips Veo/Kli
 | Estructura | Gancho (pregunta + creencia rota) → un elemento por escena → resumen en "torre" → plano hero + CTA | Está en el prompt de sistema de `agent/script.ts` |
 | Voz | Narración continua, frases cortas, tono documental | ElevenLabs `with-timestamps` (una pista por escena) |
 | Subtítulos | Una palabra, amarillo `#f2ff3d`, borde negro grueso, a ~76 % de la altura | `WordCaption` en `remotion/components/Overlay.tsx` |
-| Marca | Marca de agua discreta + "AERO VEIL / AVIATION EXPLAINED" en el cierre | `--brand` / `--tagline` |
+| Marca | Marca de agua discreta + nombre y lema del canal en el cierre | `--brand` / `--tagline` (por defecto "AVIACIÓN EXPLICADA") |
 | Ritmo | Cortes secos cada 5–12 s, ~110 s en total | Cada escena dura lo que su narración; el clip se ralentiza hasta 0.65× o se repite |
 
 ## Instalación

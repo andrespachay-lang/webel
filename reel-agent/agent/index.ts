@@ -22,8 +22,8 @@ Opciones:
   --visuals <modo>       video | image | none  (por defecto: video si hay FAL_KEY, si no none)
   --media <carpeta>      Usa tus clips/imágenes (01.mp4, 02.jpg…), p. ej. stock de Magnific, en lugar de generarlos
   --hud <modo>           auto | on | off  HUD holográfico por código (auto: activo salvo con clips de IA)
-  --brand <nombre>       Marca del outro y marca de agua (por defecto: "AERO VEIL")
-  --tagline <texto>      Línea bajo la marca (por defecto: "AVIATION EXPLAINED")
+  --brand <nombre>       Marca del outro y marca de agua (por defecto: "AVIACIÓN EXPLICADA")
+  --tagline <texto>      Línea bajo la marca (por defecto: "CIENCIA DEL VUELO")
   --music <archivo>      Música de fondo (mp3/wav), se mezcla bajo la voz
   --notes <texto>        Indicaciones extra para el guion (tono, datos, público…)
   --script <json>        Reutiliza un script.json ya generado (no llama a Claude)
@@ -42,8 +42,8 @@ async function main() {
       visuals: { type: "string" },
       media: { type: "string" },
       hud: { type: "string", default: "auto" },
-      brand: { type: "string", default: "AERO VEIL" },
-      tagline: { type: "string", default: "AVIATION EXPLAINED" },
+      brand: { type: "string", default: "AVIACIÓN EXPLICADA" },
+      tagline: { type: "string", default: "CIENCIA DEL VUELO" },
       music: { type: "string" },
       notes: { type: "string" },
       script: { type: "string" },

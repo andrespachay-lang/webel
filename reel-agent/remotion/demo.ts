@@ -133,5 +133,5 @@ export const demoProps: ReelProps = {
   script: demoScript,
   timings,
   music: "",
-  brand: { name: "AERO VEIL", tagline: "AVIATION EXPLAINED" },
+  brand: { name: "AVIACIÓN EXPLICADA", tagline: "CIENCIA DEL VUELO" },
 };
