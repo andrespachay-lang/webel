@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Página no encontrada — Hotel Estación del Sol</title>
+<meta name="robots" content="noindex" />
+<link rel="icon" href="/images/isotipo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pacifico: #1B4965;
+    --crema: #FAF6F0;
+    --sol: #D4A574;
+    --carbon: #2C3E50;
+    --carbon-suave: #5A6C7D;
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--sans);
+    background: var(--crema);
+    color: var(--carbon);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.25rem;
+    text-align: center;
+    line-height: 1.7;
+  }
+  main { max-width: 34rem; }
+  .kicker {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sol);
+    margin-bottom: 1.25rem;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(2rem, 6vw, 3rem);
+    line-height: 1.15;
+    color: var(--pacifico);
+    margin-bottom: 1.25rem;
+  }
+  h1 em { font-style: italic; }
+  p { color: var(--carbon-suave); margin-bottom: 2rem; }
+  .acciones { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+  a.btn {
+    display: inline-block;
+    padding: 0.85rem 1.6rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--pacifico);
+  }
+  a.btn-primario { background: var(--pacifico); color: var(--crema); }
+  a.btn-secundario { color: var(--pacifico); }
+</style>
+</head>
+<body>
+<main>
+  <div class="kicker">Error 404</div>
+  <h1>Esta página se fue <em>con la marea.</em></h1>
+  <p>No encontramos lo que buscabas. Vuelve al inicio o escríbenos y te ayudamos con tu reserva.</p>
+  <div class="acciones">
+    <a class="btn btn-primario" href="/">Volver al inicio</a>
+    <a class="btn btn-secundario" href="https://wa.me/593986721666">WhatsApp</a>
+  </div>
+</main>
+</body>
+</html>

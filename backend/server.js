@@ -15,9 +15,18 @@ const Database   = require('better-sqlite3');
 const { crearTablaReservas } = require('./models/Reserva');
 const { crearTablaCheckins } = require('./models/Checkin');
 const { iniciarRecordatorios } = require('./services/recordatorioCheckout');
+const { soloAdmin } = require('./middleware/auth');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
+
+// El sitio está detrás del CDN y del proxy de Hostinger. Sin esto, Express ve la IP
+// del proxy y el límite de peticiones trata a todos los visitantes como uno solo.
+// TRUST_PROXY = número de proxies delante de la app (ajustable sin tocar el código).
+app.set('trust proxy', Number(process.env.TRUST_PROXY) || 2);
+app.disable('x-powered-by');
+
+const DOMINIO_CANONICO = 'hotelestaciondelsol.com';
 
 // ── Base de datos ─────────────────────────────────────────────────────────────
 const dbPath = process.env.DATABASE_URL || './datos/estacion_del_sol.db';
@@ -65,11 +74,36 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Sirve archivos estáticos del frontend
-app.use(express.static(path.join(__dirname, 'frontend')));
+// Cabeceras de seguridad
+app.use((req, res, next) => {
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'camera=(self), microphone=(), geolocation=()');
+  next();
+});
 
-// Sirve archivos subidos — solo accesible con la API key de admin en producción
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// www → dominio sin www (una sola dirección oficial)
+app.use((req, res, next) => {
+  if (req.hostname === `www.${DOMINIO_CANONICO}` && (req.method === 'GET' || req.method === 'HEAD')) {
+    return res.redirect(301, `https://${DOMINIO_CANONICO}${req.originalUrl}`);
+  }
+  next();
+});
+
+// Sirve archivos estáticos del frontend.
+// Las páginas HTML siempre se revalidan; imágenes y demás recursos se guardan 7 días.
+app.use(express.static(path.join(__dirname, 'frontend'), {
+  extensions: ['html'], // /checkin también abre checkin.html (por si un enlace o QR va sin extensión)
+  setHeaders: (res, archivo) => {
+    const esDocumento = /\.(html|xml|txt)$/i.test(archivo);
+    res.setHeader('Cache-Control', esDocumento ? 'no-cache' : 'public, max-age=604800');
+  },
+}));
+
+// Archivos subidos (cédulas y comprobantes de pago): solo con la clave de administrador.
+app.use('/uploads', soloAdmin, express.static(path.join(__dirname, 'uploads')));
 
 // ── Rate limiting ─────────────────────────────────────────────────────────────
 const limiteGeneral = rateLimit({
@@ -86,8 +120,17 @@ const limiteReservas = rateLimit({
   message: { error: 'Límite de reservas alcanzado desde esta IP' },
 });
 
+const limiteDatosBancarios = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hora
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Ya enviamos los datos varias veces. Intenta más tarde o escríbenos por WhatsApp.' },
+});
+
 app.use('/api', limiteGeneral);
 app.use('/api/reservas', limiteReservas);
+app.use('/api/enviar-datos-bancarios', limiteDatosBancarios);
 
 // ── Rutas ─────────────────────────────────────────────────────────────────────
 app.use('/api/reservas',            require('./routes/reservas'));
@@ -105,12 +148,12 @@ app.get('/api/salud', (req, res) => {
 // Ruta de disponibilidad (acceso directo desde el frontend)
 app.use('/api/disponibilidad', require('./routes/reservas'));
 
-// Sirve el frontend para cualquier ruta no-API (SPA fallback)
-app.get('*', (req, res) => {
-  if (!req.path.startsWith('/api')) {
-    return res.sendFile(path.join(__dirname, 'frontend/index.html'));
+// Cualquier otra ruta no existe: 404 real (antes devolvía la portada con código 200)
+app.use((req, res) => {
+  if (req.path.startsWith('/api')) {
+    return res.status(404).json({ error: 'Endpoint no encontrado' });
   }
-  res.status(404).json({ error: 'Endpoint no encontrado' });
+  res.status(404).sendFile(path.join(__dirname, 'frontend/404.html'));
 });
 
 // ── Manejo de errores global ──────────────────────────────────────────────────

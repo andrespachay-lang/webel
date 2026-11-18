@@ -29,13 +29,13 @@
 {
   "@context": "https://schema.org",
   "@type": "Hotel",
-  "name": "Estación del Sol",
-  "alternateName": "Hotel Las Núñez",
+  "name": "Hotel Estación del Sol",
+  "alternateName": "Estación del Sol",
   "description": "Hotel boutique frente al mar en Las Núñez, Santa Elena, Ecuador. Habitaciones con vista al mar, a la montaña y a la piscina en la Ruta del Spondylus.",
   "url": "https://hotelestaciondelsol.com",
   "logo": "https://hotelestaciondelsol.com/images/isotipo.png",
   "telephone": "+593986721666",
-  "email": "estaciondelsol.ec@gmail.com",
+  "email": "arena@hotelestaciondelsol.com",
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "Las Núñez",
@@ -45,8 +45,8 @@
   },
   "geo": {
     "@type": "GeoCoordinates",
-    "latitude": -2.2261,
-    "longitude": -80.9005
+    "latitude": -1.7422197,
+    "longitude": -80.7764969
   },
   "checkinTime": "15:00",
   "checkoutTime": "12:00",
@@ -59,7 +59,10 @@
     { "@type": "LocationFeatureSpecification", "name": "WiFi", "value": true },
     { "@type": "LocationFeatureSpecification", "name": "Estacionamiento", "value": true }
   ],
+  "hasMap": "https://maps.app.goo.gl/87Ysik7g8vhBffsv7",
   "sameAs": [
+    "https://www.instagram.com/estaciondelsol.ec/",
+    "https://www.facebook.com/estaciondelsol.ec/",
     "https://wa.me/593986721666"
   ]
 }
@@ -2741,9 +2744,9 @@
       <div class="section-kicker" data-i18n="resenas_kicker">Lo que dicen nuestros huéspedes</div>
       <h2 class="section-title" data-i18n="resenas_titulo">Cinco estrellas, <em>tantas historias.</em></h2>
       <div class="resenas-rating">
-        <span class="resenas-stars">★★★★★</span>
-        <span class="resenas-score">5.0</span>
-        <span class="resenas-count" data-i18n="resenas_count">· Basado en 5 reseñas</span>
+        <span class="resenas-stars">★★★★☆</span>
+        <span class="resenas-score">4.4</span>
+        <span class="resenas-count" data-i18n="resenas_count">· 51 reseñas en Google</span>
       </div>
     </div>
 
@@ -3300,7 +3303,7 @@ const i18n = {
 
     resenas_kicker: 'Lo que dicen nuestros huéspedes',
     resenas_titulo: 'Cinco estrellas, <em>tantas historias.</em>',
-    resenas_count: '· Basado en 5 reseñas',
+    resenas_count: '· 51 reseñas en Google',
 
     ubic_kicker: 'Dónde estamos',
     ubic_titulo: 'En el corazón de la <em>Ruta del Spondylus.</em>',
@@ -3578,7 +3581,7 @@ const i18n = {
 
     resenas_kicker: 'What our guests say',
     resenas_titulo: 'Five stars, <em>so many stories.</em>',
-    resenas_count: '· Based on 5 reviews',
+    resenas_count: '· 51 Google reviews',
 
     ubic_kicker: 'Where we are',
     ubic_titulo: 'At the heart of the <em>Spondylus Route.</em>',
@@ -3854,7 +3857,7 @@ const i18n = {
 
     resenas_kicker: 'Was unsere Gäste sagen',
     resenas_titulo: 'Fünf Sterne, <em>so viele Geschichten.</em>',
-    resenas_count: '· Basierend auf 5 Bewertungen',
+    resenas_count: '· 51 Google-Bewertungen',
 
     ubic_kicker: 'Wo wir sind',
     ubic_titulo: 'Im Herzen der <em>Spondylus-Route.</em>',
@@ -4226,6 +4229,7 @@ function avanzarPromoBar() {
 }
 
 function iniciarPromoBarRotativa() {
+  if (!ES_TEMPORADA_BALLENAS) return; // fuera de temporada queda fijo el mensaje del descuento
   setInterval(avanzarPromoBar, 5000);
 }
 
@@ -4299,6 +4303,8 @@ document.getElementById('newsletter-form').addEventListener('submit', (e) => {
 });
 
 /* ═════════ HERO — SLIDES ═════════ */
+// El slide y el mensaje de ballenas solo se muestran en temporada (junio a septiembre).
+const ES_TEMPORADA_BALLENAS = [5, 6, 7, 8].includes(new Date().getMonth());
 const HERO_SLIDES = [
   {
     bg: "linear-gradient(180deg, rgba(27,73,101,0.3) 0%, rgba(27,73,101,0.7) 100%), url('https://images.unsplash.com/photo-1516370873344-fb7c61054fa9?w=2000&q=80')",
@@ -4308,7 +4314,7 @@ const HERO_SLIDES = [
     bg: "linear-gradient(rgba(10,40,60,0.55), rgba(10,40,60,0.55)), url('https://images.unsplash.com/photo-1568430462989-44163eb1752f?w=2000&q=80')",
     kicker: 'hero2_kicker', titulo: 'hero2_titulo', tagline: 'hero2_tagline',
   },
-];
+].filter((slide) => slide.kicker !== 'hero2_kicker' || ES_TEMPORADA_BALLENAS);
 let heroSlideIdx = 0;
 let heroActiveLayer = 0;
 let heroSlideTimer = null;
@@ -4362,6 +4368,10 @@ function iniciarHeroSlides() {
     dotsCont.innerHTML = HERO_SLIDES.map((_, i) =>
       `<button type="button" class="hero-dot ${i === 0 ? 'active' : ''}" onclick="irAHeroSlide(${i})" aria-label="Slide ${i + 1}"></button>`
     ).join('');
+  }
+  if (HERO_SLIDES.length < 2) {
+    if (dotsCont) dotsCont.innerHTML = '';
+    return;
   }
   // El primer slide ya está pintado en el HTML estático; solo precargamos el resto.
   reiniciarHeroAutoplay();
