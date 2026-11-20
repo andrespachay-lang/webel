@@ -376,6 +376,12 @@
         </div>
       </div>
 
+      <div class="grupo" id="g-correo">
+        <label>Correo electrónico</label>
+        <input type="email" id="correo" placeholder="tuemail@ejemplo.com" />
+        <span class="error-msg">Ingresa tu correo electrónico</span>
+      </div>
+
       <div class="grupo" id="g-foto">
         <label>Foto de cédula o pasaporte (lado frontal)</label>
         <div class="zona-archivo" id="zona-archivo" onclick="document.getElementById('foto-cedula').click()">
@@ -527,6 +533,7 @@
     const direccion = document.getElementById('direccion').value.trim();
     const telefono  = document.getElementById('telefono').value.trim();
     const emergencia = document.getElementById('contacto-emergencia').value.trim();
+    const correo    = document.getElementById('correo').value.trim();
     const foto      = document.getElementById('foto-cedula').files[0];
     const acepta    = document.getElementById('acepto-terminos').checked;
 
@@ -542,6 +549,7 @@
     marcar('g-direccion',  !direccion);
     marcar('g-telefono',   !telefono);
     marcar('g-emergencia', !emergencia);
+    marcar('g-correo',     !correo || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo));
     marcar('g-foto',       !foto);
     marcar('g-terminos',   !acepta);
 
@@ -557,6 +565,7 @@
     const direccion  = document.getElementById('direccion').value.trim();
     const telefono   = document.getElementById('telefono').value.trim();
     const emergencia = document.getElementById('contacto-emergencia').value.trim();
+    const correo     = document.getElementById('correo').value.trim();
     const hora       = document.getElementById('hora-llegada').value;
     const personas   = document.getElementById('personas').value;
     const solicitudes = document.getElementById('solicitudes').value.trim();
@@ -564,7 +573,7 @@
     const acepta     = document.getElementById('acepto-terminos').checked;
 
     // Verificar datos del paso 1 por si acaso
-    if (!nombre || !apellido || !cedula || !direccion || !telefono || !emergencia || !foto || !acepta) {
+    if (!nombre || !apellido || !cedula || !direccion || !telefono || !emergencia || !correo || !foto || !acepta) {
       irAPaso(1);
       validarPaso1();
       return;
@@ -593,6 +602,9 @@
       formData.append('solicitudes',         solicitudes);
       formData.append('acepto_terminos',     acepta ? 'true' : 'false');
       formData.append('foto_cedula',         foto);
+      formData.append('correo',              correo);
+      const fechaSalida = document.getElementById('fecha-salida') ? document.getElementById('fecha-salida').value : '';
+      if (fechaSalida) formData.append('fecha_salida', fechaSalida);
 
       const resp = await fetch(`${API}/api/checkin`, {
         method: 'POST',
